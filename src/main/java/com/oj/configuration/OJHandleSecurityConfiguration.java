@@ -16,7 +16,7 @@ public class OJHandleSecurityConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        String[] excludes = new String[]{"/login", "/", "/css/**", "/js/**", "/fonts/**"};
+        String[] excludes = new String[]{"/login/**", "/", "/css/**", "/js/**", "/fonts/**", "/error/**", "/static/**"};
         registry.addInterceptor(new OJHandleSecurity()).addPathPatterns("/**").excludePathPatterns(excludes);
     }
 }
