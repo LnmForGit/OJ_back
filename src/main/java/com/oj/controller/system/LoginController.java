@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,9 +86,10 @@ public class LoginController {
     @ResponseBody
     public boolean resetPassword(HttpServletRequest request){
         String newPassword = request.getParameter("newPassword");
+        String id = StringUtils.isEmpty(request.getParameter("id"))?request.getSession().getAttribute("user_id").toString():request.getParameter("id");
         try {
             //通过请求中的新密码并结合session中的用户ID对用户密码进行更新
-            loginService.resetPassword(request.getSession().getAttribute("user_id").toString(), newPassword);
+            loginService.resetPassword(id, newPassword);
             return true;
         }catch (Exception e){
             log.error(e.getMessage());

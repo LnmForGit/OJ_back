@@ -1,6 +1,5 @@
 package com.oj.mapper.system;
 
-import com.oj.mapper.provider.UserProvider;
 import com.oj.mapper.provider.system.LoginProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -9,7 +8,11 @@ import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @author lixu
+ * @Time 2019年3月9日 15点21分
+ * @Description 登陆功能对应数据库操作的功能接口
+ */
 @Mapper
 public interface LoginMapper {
     //通过登录名和密码检索数据库

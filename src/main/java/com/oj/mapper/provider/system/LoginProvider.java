@@ -1,6 +1,5 @@
 package com.oj.mapper.provider.system;
 
-import com.oj.entity.User;
 import com.oj.frameUtil.OJPWD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,13 +1,21 @@
 package com.oj.service.serviceImpl.system;
 
+import com.oj.entity.system.Auth;
 import com.oj.mapper.system.AuthMapper;
 import com.oj.service.system.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author lixu
+ * @Time 2019年3月17日 11点16分
+ * @Description 权限功能相关功能Service接口
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
     @Autowired(required = false)
@@ -33,8 +41,8 @@ public class AuthServiceImpl implements AuthService {
     private String drawLeftPage(List<Map<String, String>> authList){
         StringBuffer leftHtml = new StringBuffer();
         for (Map<String, String> auth: authList){
-            //若权限url为‘#’代表为父权限
-            if ("#".equals(auth.get("auth_url"))){
+            //若"auth_parent"字段为空代表为父权限
+            if (null == auth.get("auth_parent")){
                 leftHtml.append("<li class=''><a href='#'><i class='"+auth.get("auth_ico")+"'></i>");
                 leftHtml.append("<span class='nav-label'>"+auth.get("auth_name")+"</span><span class='fa arrow'></span></a>");
                 leftHtml.append("<ul class='nav nav-second-level collapse' aria-expanded='false' style='height: 0px;'>");
@@ -50,5 +58,79 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         return leftHtml.toString();
+    }
+
+    /**
+     * 获取权限信息列表接口功能实现
+     * @return
+     */
+    @Override
+    public List<Map> getAuthMaplist() {
+        return mapper.getAuthMaplist();
+    }
+
+    /**
+     * 保存权限信息接口功能实现
+     * @param auth
+     */
+    @Transactional
+    @Override
+    public void authSave(Auth auth) {
+        //若"auth_parent"字段为""则将其置为空防止错误
+        if ("".equals(auth.getAuth_parent())){
+            auth.setAuth_parent(null);
+        }
+        //保存新权限
+        mapper.authSave(auth);
+        //新权限成功保存后将新权限绑定给超级管理员
+        mapper.roleAuthSave(auth.getId());
+    }
+
+    /**
+     * 权限更新接口功能实现
+     * @param auth
+     */
+    @Override
+    public void authUpdate(Auth auth) {
+        mapper.authUpdate(auth);
+    }
+
+    /**
+     * 通过id获取权限信息接口功能实现
+     * @param id
+     * @return
+     */
+    @Override
+    public Map getAuthById(String id) {
+        return mapper.getAuthById(id).get(0);
+    }
+
+    /**
+     * 权限删除接口功能实现
+     * @param id
+     */
+    @Transactional
+    @Override
+    public void authDelete(String id) {
+        List<String> authIdList = new ArrayList<>();
+        authIdList.add(id);
+        //获取当前权限和子权限的Id列表
+        authIdList.addAll(mapper.getChildAuthIds(id));
+        for (String authId : authIdList){
+            //通过权限Id解除改权限与角色的绑定
+            mapper.authRoleDelete(authId);
+            //通过权限Id删除权限
+            mapper.authDelete(authId);
+        }
+    }
+
+    /**
+     * 获取权限Id列表接口功能实现
+     * @param id
+     * @return
+     */
+    @Override
+    public List<String> getAuthIds(String id) {
+        return mapper.getAuthIds(id);
     }
 }

@@ -8,7 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @author lixu
+ * @Time 2019年3月17日 11点16分
+ * @Description 登陆验证相关功能Service接口实现类
+ */
 @Service
 public class LoginServiceImpl implements LoginService {
     @Autowired(required = false)
