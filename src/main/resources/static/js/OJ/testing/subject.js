@@ -125,20 +125,20 @@ function selectParentChecked(datas,row,id,pid){
 // }
 function resetAuthInfoDialog() {
     $("#myModal5 input").val("");
-   // $('#dialogAuthGroup').css("display", "block");
-   // $('#dialogAuthUrl').removeAttr("readonly");
+    $('#dialogAuthGroup').css("display", "block");
     $("#myModal5 input").removeClass("error");
     $("#myModal5 label.error").remove()
 }
 function add(id,name) {
+    debugger;
     resetAuthInfoDialog();
     if(id!=''){
         $('#dialogPAuthName').val(name)
         $('#dialogAuthParentId').val(id)
     }else{
-        // $('#dialogAuthUrl').val("#")
-        // $('#dialogAuthUrl').attr("readonly", "true")
-        // $('#dialogAuthGroup').css("display", "none");
+
+
+         $('#dialogAuthGroup').css("display", "none");
     }
 }
 function del(id) {
