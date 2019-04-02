@@ -11,6 +11,7 @@ public interface SubjectMapper {
     @Select("SELECT * FROM teach_subject")
     public List<Map> getSubjectMaplist();
 
+
     //插入一条新主题
     @Insert("insert into teach_subject(name,description) values( #{subject_name},#{subject_parent})")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
