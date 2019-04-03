@@ -16,7 +16,7 @@ public class ClassProvider {
         StringBuffer sql = new StringBuffer();
         /*SELECT class.id, class.name, major.name as major_name, grade.name as grade_name FROM (teach_class class LEFT JOIN teach_major major ON class.major_id = major.id) LEFT JOIN teach_grade grade ON class.grade_id = grade.id ORDER BY class.id DESC*/
 
-        sql.append(" SELECT class.id, class.name, major.name as major_name, class.major_id as major_id, grade.name as grade_name, class.grade_id as grade_id FROM (teach_class class LEFT JOIN teach_major major ON class.major_id = major.id) LEFT JOIN teach_grade grade ON class.grade_id = grade.id ");
+        sql.append(" SELECT class.id, class.name, IFNULL(major.name, ' ') as major_name, class.major_id as major_id, IFNULL(grade.name, ' ') as grade_name, class.grade_id as grade_id FROM (teach_class class LEFT JOIN teach_major major ON class.major_id = major.id) LEFT JOIN teach_grade grade ON class.grade_id = grade.id ");
         sql.append(" WHERE class.id != '0' ");
         if (!StringUtils.isEmpty(info.get("id"))){
             sql.append(" AND class.id = '"+info.get("id")+"' ");
