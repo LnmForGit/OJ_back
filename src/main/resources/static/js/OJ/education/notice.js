@@ -1,5 +1,6 @@
 $(function() {
     queryNoticeInfo();
+    loadSummernote();
 });
 function resetNoticeInfoDialog() {
     $("#myModal5 input").val("");
@@ -112,8 +113,7 @@ function showContent(id) {
                 "id" : id
             },
             success:function (result){
-                var ue = UE.getEditor('dialogNoticeContent');
-                ue.setContent(result.content);
+                $("#dialogNoticeContent").code(result.content)
                 $("#lable1").hide()
                 $("#lable2").hide()
                 $("#dialogNoticeTitle").hide()
@@ -142,18 +142,35 @@ function showEditNotice(id) {
                 "id" : id
             },
             success:function (result){
-                var ue = UE.getEditor('dialogNoticeContent');
-                ue.setContent(result.content);
+                $("#dialogNoticeContent").code(result.content)
                 $("#dialogNoticeTitle").val(result.title)
                 $("#dialogNoticeAuthor").val(result.author)
             }
         })
     }else{
         $("#dialogTitle").html("添加通知")
-        var ue = UE.getEditor('dialogNoticeContent');
-        ue.setContent("");
+        $("#dialogNoticeContent").code("")
     }
 }
+
+function loadSummernote() {
+    $("#dialogNoticeContent").summernote({
+        height: 200,
+        minHeight: 200,
+        maxHeight: 200,
+        lang: 'zh-CN',
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['view', ['fullscreen', 'codeview']]
+        ]
+    })
+}
+
 function deleteNotice(id) {
     swal({
             title: "确认删除?",
@@ -192,8 +209,6 @@ function deleteNotice(id) {
 }
 //新增或更新IP信息
 function saveOrUpdateNoticeInfo() {
-    var ue = UE.getEditor('dialogNoticeContent');
-    var content = ue.getContent()
     if(validform().form()) {
         $.ajax({
             type: "POST",
@@ -204,7 +219,7 @@ function saveOrUpdateNoticeInfo() {
                 "id" : $("#dialogNoticeId").val(),
                 "title" : $("#dialogNoticeTitle").val(),
                 "author" : $("#dialogNoticeAuthor").val(),
-                "content" : content,
+                "content" : $("#dialogNoticeContent").code(),
                 "time" : Date.parse(new Date())/1000
             }),
             success:function (result){
