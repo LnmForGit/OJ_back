@@ -1,5 +1,6 @@
 $(function(){
     var leftPage = $("#leftPage").html()
+    // console.log(leftPage)
     $("#side-menu").append(leftPage)
     //菜单点击J_iframe
     $(".J_menuItem").on('click',function(){
@@ -56,7 +57,9 @@ function saveNewPassword() {
                 }else{
                     swal("修改失败！", "密码修改失败", "error");
                 }
-
+            },
+            error:function (e) {
+                console.log(e)
             }
         })
     }
