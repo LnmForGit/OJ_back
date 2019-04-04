@@ -110,7 +110,7 @@ public class ImportServicelmpl implements ImportService {
         //Pattern p=Pattern.compile("^[0-9]*[1-9][0-9]*$");
         //Map<String, String> map=null;
         //Matcher m=p.matcher(bot);
-        if(null==account || null==name ) throw new Exception("学号、姓名都不能为空");
+        if(null==account || null==name || account.equals("") || name.equals("")) throw new Exception("学号、姓名都不能为空");
         if( account.getBytes().length>64) throw new Exception("学号不符合不能超过64位");
         if(name.getBytes().length>50) throw new Exception("姓名长度不能超过50位");
         return new Student(account, " ", name, classId);
