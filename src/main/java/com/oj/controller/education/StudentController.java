@@ -158,7 +158,7 @@ public class StudentController {
             InputStream inputStream = file.getInputStream();
             if(null==inputStream)
                 System.out.println("#inputStream is null");
-            List<List<Object>> list = importService.getBankListByExcel(inputStream, file.getOriginalFilename());
+            //List<List<Object>> list = importService.getBankListByExcel(inputStream, file.getOriginalFilename());
             inputStream.close();
         }catch (Exception e){
             map.put("reuslt", "failed");

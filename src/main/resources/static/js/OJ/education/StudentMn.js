@@ -270,7 +270,7 @@ function saveNewPassword() {
 }
 //批量添加学生时，展示预览信息
 function showStudentInfList() {
-
+    $('#CLDtbody').html("");
     var className = $('#dialogClassNameB').find('option:selected').text();
     var obj = document.getElementById('upFileX')//$('#upFileX');
     if($('#upFileX').val()==''){
@@ -280,7 +280,7 @@ function showStudentInfList() {
     console.log($('#upFileX').val());
 
     $('#CLDuserId').val( className );
-    $('#CLDtbody').html("");
+
     var str='';
     str="<thead>" + "<tr>" + "<th width=\"30%\">学号</th>\n" + "<th width=\"30%\">姓名</th>\n" + "<th width=\"30%\">班级</th>\n" + "<th width=\"10%\">状态</th>\n" + "</tr>\n" + "</thead>";
     $('#CLDtbody').append(str);
@@ -291,16 +291,20 @@ function showStudentInfList() {
     var reader = new FileReader();
     var wb;
     reader.onload = function(e) {
+
         var data = e.target.result;
         wb = XLSX.read(data, {
             type: 'binary'
         });
         var JData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]);
         NewStudentNum = JData.length; //全局变量NewStudentNum 保存着当前学生集的数量
+        var Taccount, Tname;
         for(var i=0; i<JData.length; i++){
+            Taccount = (JData[i]['account']==undefined?'':JData[i]['account']);
+            Tname = (JData[i]['name']==undefined?'':JData[i]['name']);
             str="<tr>"
-            str+="<td><input type='text' id='nStuAccount"+i+"' value='"+JData[i]['account']+"' /></td>";
-            str+="<td><input type='text' id='nStuName"+i+"' value='"+JData[i]['name']+"' /></td>";
+            str+="<td><input type='text' id='nStuAccount"+i+"' value='"+Taccount+"' /></td>";
+            str+="<td><input type='text' id='nStuName"+i+"' value='"+Tname+"' /></td>";
             str+="<td><span id='nStuClass"+i+"' >"+className+" </span></td>";
             str+="<td><span id='nStuState"+i+"' >"+'待确定'+"</span></td>";
             str+="</tr>"
