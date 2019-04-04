@@ -143,12 +143,18 @@ function saveOrUpdateIpInfo() {
 }
 
 function validform() {
+    jQuery.validator.addMethod("regex", //addMethod第1个参数:方法名称
+        function(value,element,params){//addMethod第2个参数:验证方法，参数（被验证元素的值，被验证元素，参数）
+            var exp = new RegExp(params);//实例化正则对象，参数为传入的正则表达式
+            return exp.test(value);         //测试是否匹配
+        },"格式错误");
     var icon = "<i class='fa fa-times-circle'></i>";
     return $("#dialogIpForm").validate({
         rules: {
             dialogIp: {
                 required: true,
-                maxlength: 16
+                maxlength: 16,
+                regex:/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.?(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])?$/
             },
             dialogIplocation: {
                 required: true,
@@ -158,7 +164,8 @@ function validform() {
         messages: {
             dialogIp: {
                 required: icon + "IP不能为空",
-                maxlength: icon + "IP最大长度为16"
+                maxlength: icon + "IP最大长度为16",
+                regex: icon + "IP格式错误"
             },
             dialogIplocation: {
                 required: icon + "IP位置不能为空",
