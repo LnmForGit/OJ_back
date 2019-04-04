@@ -46,22 +46,4 @@ public interface ClassMapper {
     //获取学生列表
     @Select("select students.account as student_account, students.name as student_name from teach_students students, teach_class class where students.class_id = class.id and class.id = #{id} order by students.account;")
     public List<Map> getStudentMapByClassList(String id);
-    /*
-
-    //通过课程id删除课程关联班级信息
-    @Delete("delete from teach_course_class where course_id = #{course_id}")
-    public void courseClassDelete(@Param("course_id") String course_id);
-
-    //删除课程
-    @Delete("delete from teach_course where id = #{id}")
-    public void courseDelete(String id);
-
-    //获取班级列表
-    //@Select("select b.id as class_id, b.name as class_name from teach_course a, teach_class b where b.id = ( select b.id from teach_course_class c where c.course_id = a.id and c.class_id = b.id ) order by b.id;")
-    @Select("SELECT * FROM teach_class a LEFT JOIN (SELECT course_id, class_id FROM teach_course_class WHERE course_id =#{id}) b ON a.id = b.class_id ORDER BY a.id DESC")
-    public List<Map> getClassMapByCourseList(String id);
-
-    //保存课程班级表
-    @Insert("insert into teach_course_class (course_id, class_id) values(#{course_id}, #{class_id})")
-    public void saveCourseClassList(@Param("course_id") String course_id, @Param("class_id") String class_id);*/
 }
