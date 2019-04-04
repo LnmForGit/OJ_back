@@ -296,7 +296,8 @@ function showStudentInfList() {
         wb = XLSX.read(data, {
             type: 'binary'
         });
-        var JData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[1]]);
+        //wb.SheetNames[a]表示读取的是excel中的第几张表(下标从0开始)
+        var JData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
         NewStudentNum = JData.length; //全局变量NewStudentNum 保存着当前学生集的数量
         var Taccount, Tname;
         for(var i=0; i<JData.length; i++){
