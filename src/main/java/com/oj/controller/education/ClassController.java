@@ -62,6 +62,7 @@ public class ClassController {
         return List;
     }
 
+    //保存或更新班级信息
     @PostMapping("/saveOrUpdateClass")
     @ResponseBody
     public Map<String, String> saveOrUpdateClass(@RequestBody Class clas)
@@ -79,6 +80,7 @@ public class ClassController {
         }
     }
 
+    //删除班级信息
     @PostMapping("/classDelete")
     @ResponseBody
     public Map<String, String> classDelete(HttpServletRequest request){
@@ -94,72 +96,11 @@ public class ClassController {
         }
     }
 
+    //通过班级查找学生列表
     @PostMapping("/getStudentMapByClassList")
     @ResponseBody
     public List<Map> getStudentMapByClassList(HttpServletRequest request)
     {
         return classService.getStudentMapByClassList(request.getParameter("id"));
     }
-    /*
-    //通过课程ID查找课程信息接口
-    @PostMapping("/getCourseById")
-    @ResponseBody
-    public Map getCourseById(HttpServletRequest request){
-        return classService.getCourseById(request.getParameter("id").toString());
-    }
-    //通过课程名查找课程信息接口
-    @PostMapping("/getCourseByName")
-    @ResponseBody
-    public Map getCourseByName(HttpServletRequest request){
-        return courseService.getCourseByName(request.getParameter("name").toString());
-    }
-
-
-    @PostMapping("/saveOrUpdateCourse")
-    @ResponseBody
-    public Map<String, String> saveOrUpdateCourse(@RequestBody Course course)
-    {
-        Map<String, String> map = new HashMap<>();
-        try {
-            courseService.saveOrUpdateCourse(course);
-            map.put("flag", "1");
-            return map;
-        } catch (Exception e){
-            map.put("flag", "0");
-            map.put("message", e.getMessage());
-            log.error(e.getMessage());
-            return map;
-        }
-    }
-    @PostMapping("/courseDelete")
-    @ResponseBody
-    public Map<String, String> courseDelete(HttpServletRequest request){
-        Map<String, String> map = new HashMap<>();
-        try {
-            courseService.courseDelete(request.getParameter("id"));
-            map.put("flag", "1");
-            return map;
-        }catch (Exception e){
-            map.put("flag", "0");
-            log.error(e.getMessage());
-            return map;
-        }
-    }
-
-
-    @PostMapping("/saveCourseClassList")
-    @ResponseBody
-    public Map<String, String> saveCourseClassList(@RequestBody Map<String, Object> param){
-        Map<String, String> map = new HashMap<>();
-        try {
-            courseService.saveCourseClassList(param);
-            map.put("flag", "1");
-            return map;
-        }catch (Exception e){
-            map.put("flag", "0");
-            log.error(e.getMessage());
-            return map;
-        }
-    }*/
-
 }

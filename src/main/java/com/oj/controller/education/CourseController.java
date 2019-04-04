@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Zhengtong
+ * @author zt
  * @Time 2019年4月1日 12点35分
  * @Description 课程管理控制类
  */
@@ -56,6 +56,7 @@ public class CourseController {
         return courseService.getCourseByName(request.getParameter("name").toString());
     }
 
+    //查找课程信息
     @PostMapping("/getCourseMapList")
     @ResponseBody
     public List<Map> getCourseMapList(@RequestBody Map<String, String> param, HttpServletRequest request)
@@ -64,6 +65,7 @@ public class CourseController {
         return list;
     }
 
+    //保存或更新课程信息
     @PostMapping("/saveOrUpdateCourse")
     @ResponseBody
     public Map<String, String> saveOrUpdateCourse(@RequestBody Course course)
@@ -80,6 +82,7 @@ public class CourseController {
             return map;
         }
     }
+    //课程信息的删除
     @PostMapping("/courseDelete")
     @ResponseBody
     public Map<String, String> courseDelete(HttpServletRequest request){
@@ -95,6 +98,7 @@ public class CourseController {
         }
     }
 
+    //根据课程号查找对应班级信息
     @PostMapping("/getClassMapByCourseList")
     @ResponseBody
     public List<Map> getClassMapByCourseList(HttpServletRequest request)
@@ -102,6 +106,7 @@ public class CourseController {
         return courseService.getClassMapByCourseList(request.getParameter("id"));
     }
 
+    //课程绑定班级的保存
     @PostMapping("/saveCourseClassList")
     @ResponseBody
     public Map<String, String> saveCourseClassList(@RequestBody Map<String, Object> param){

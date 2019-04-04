@@ -18,11 +18,4 @@ public interface ClassService {
     public void classDelete(String id);
     //获取学生列表
     public List<Map> getStudentMapByClassList(String id);
-    /*
-    public Map getCourseById(String id);
-    public Map getCourseByName(String name);
-    //课程删除
-    public void courseDelete(String id);
-    //保存课程绑定班级的信息
-    public void saveCourseClassList(Map<String, Object> param);*/
 }
