@@ -1,6 +1,8 @@
 package com.oj.service.education;
 
 import com.oj.entity.education.Student;
+import com.oj.entity.other.BulkAddStudentPackage;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.util.List;
@@ -24,6 +26,9 @@ public interface StudentService {
 
     //##新增学生
     public int addNewStudent(Student student) throws Exception;
+    //##批量添加学生
+    @Transactional(rollbackFor=Exception.class)
+    public int addMoreNewStudent(BulkAddStudentPackage basp) throws Exception;
 
     //##删除学生
     //通过学生编号删除学生
