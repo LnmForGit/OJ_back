@@ -29,6 +29,7 @@ public class NoticeProvider {
             sql.append(" AND time > '"+notice.getTime()+"' and time < '"+t+"'");
         }
         sql.append(" ) t1, ( SELECT @i := 0 ) t2 ");
+        sql.append(" order by time desc");
         log.info(sql.toString());
         return sql.toString();
     }

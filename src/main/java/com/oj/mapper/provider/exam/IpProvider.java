@@ -26,6 +26,7 @@ public class IpProvider {
             sql.append(" AND ip like '%"+ip.getIp()+"%' ");
         }
         sql.append(" ) t1, ( SELECT @i := 0 ) t2 ");
+        sql.append(" order by id desc");
         log.info(sql.toString());
         return sql.toString();
     }
