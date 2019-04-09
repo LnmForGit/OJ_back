@@ -378,6 +378,10 @@ function showStudentInfListB(JsonData) {
         str+="</tr>"
         $('#CLDtbody').append(str);
     }
+    if(false && $('#WTF_001').height()>500){
+        $('#WTF_001').height(500);
+        $('#WTF_001').css('overflow-y', 'auto');
+    }
 }
 //批量添加学生账号(方案二)
 function saveStudentListB(){
@@ -387,7 +391,7 @@ function saveStudentListB(){
         return ;
     }
     NewStudentList.classId=$('#dialogClassNameB').find('option:selected').val();
-    console.log(NewStudentList);
+    //console.log(NewStudentList);
         $.ajax({
             type: "POST",
             url: "/studentMn/bulkAddNewStudent",
@@ -414,7 +418,7 @@ function saveStudentListB(){
 function ConvertExcelToJsonArray(){ //将input file组件所选择的excel文件的内容读取出来，并以Json对象的形式将数据返回
 
     $('#CLDtbody').html("");
-
+    //$('#WTF_001').height(50);
     var file = document.getElementById('upFileX')//$('#upFileX');
     if($('#upFileX').val()==''){
         swal('未选择文件','请选择要读取的excel文件');
@@ -477,6 +481,7 @@ function ConverArrayToJson(data){  //将数组转换未指定json对象
         i++;
         str+='], "Num":"'+(j-1)+'" }'+(data[i]!=undefined?', ':'');
         result+=str;
+        //break; //只读第一张表
     }
     result+=']';
     //console.log('jsong string:\n'+result);
