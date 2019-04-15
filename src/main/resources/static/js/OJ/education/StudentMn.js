@@ -366,8 +366,8 @@ function showStudentInfListB(JsonData) {
 
     var JData = JsonData.data;
     //JsonData.classId=$('#dialogClassNameB').find('option:selected').val();
-    console.log(JData);
-    console.log(JData[0].account)
+    //console.log(JData);
+    //console.log(JData[0].account)
     for(var i=0; i<JData.length; i++){
         var Taccount = (JData[i]['account']==undefined?'':JData[i]['account']);
         var Tname = (JData[i]['name']==undefined?'':JData[i]['name']);
@@ -390,6 +390,8 @@ function saveStudentListB(){
         swal('未选择班级','请先选择班级');
         return ;
     }
+    if(!checkStudentList(NewStudentList))
+        return ;
     NewStudentList.classId=$('#dialogClassNameB').find('option:selected').val();
     //console.log(NewStudentList);
         $.ajax({
@@ -414,7 +416,23 @@ function saveStudentListB(){
         });
 
 }
-
+function checkStudentList(t){
+    var XTypeRule = /^[0-9]*$/;
+    var i=0; t=t.data;
+    //console.log(t);
+    for(;i<t.length;i++){
+        //console.log(t[i].account.length+'>'+t[i].account);
+        //console.log(t[i].name.length+'>'+t[i].name);
+        if(!XTypeRule.test(t[i].account)  || t[i].account.length!=10) {
+            swal('学号' + t[i].account + '格式不正确', '请确保为10位全数字格式', 'error');
+            return false;
+        }else if(t[i].name.length>50 || t[i].name.length<1){
+            swal('姓名' + t[i].name + '格式不正确', '请确保不大于50个字符长度', 'error');
+            return false;
+        }
+    }
+    return true;
+}
 function ConvertExcelToJsonArray(){ //将input file组件所选择的excel文件的内容读取出来，并以Json对象的形式将数据返回
 
     $('#CLDtbody').html("");
