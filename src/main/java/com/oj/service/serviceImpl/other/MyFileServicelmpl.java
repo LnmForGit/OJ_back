@@ -35,6 +35,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class MyFileServicelmpl implements MyFileService {
     @Autowired(required = false)
     private MyFileMapper mapper;
+    public String rootPath = "E:/学习笔记/OJ平台重构/testUpload/";
 
     public List<Map> getAdminSelectInfo()
     {
@@ -70,7 +71,6 @@ public class MyFileServicelmpl implements MyFileService {
                 String id = request.getSession().getAttribute("user_id").toString();
 
                 //判断是否有该用户的文件目录，无则创建以此来让文件能够顺利存储到该用户目录下
-                String rootPath = "E:/学习笔记/OJ平台重构/testUpload/";
                 String []list = new File(rootPath).list();
                 int pathLength = list.length;
                 boolean createFlag = false;
@@ -188,7 +188,7 @@ public class MyFileServicelmpl implements MyFileService {
         String userId = request.getSession().getAttribute("user_id").toString();
         String id = request.getParameter("id");
         String fileName = mapper.getFileNameById(id);
-        File filePath = new File("E:/学习笔记/OJ平台重构/testUpload/" + userId + "/" + fileName);
+        File filePath = new File(rootPath + userId + "/" + fileName);
         filePath.delete();
         mapper.fileDelete(id);
     }
