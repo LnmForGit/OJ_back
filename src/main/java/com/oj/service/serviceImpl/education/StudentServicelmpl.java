@@ -1,11 +1,14 @@
 package com.oj.service.serviceImpl.education;
 
 import com.oj.entity.education.Student;
+import com.oj.entity.other.BulkAddStudentPackage;
+import com.oj.entity.other.NewStu;
 import com.oj.frameUtil.OJPWD;
 import com.oj.mapper.education.StudentMapper;
 import com.oj.service.education.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +43,23 @@ public class StudentServicelmpl implements StudentService {
 
         Map<String, String> map = mapper.getTheStudentByAccount(student.getAccount());
         if(null!=map && map.size()>0)
-            throw new Exception("该学号已存在");
+            throw new Exception("学号"+student.getAccount()+"已存在");
         return mapper.addNewStudent(student);
+    }
+
+    @Override
+    @Transactional(rollbackFor=Exception.class)
+    public int addMoreNewStudent(BulkAddStudentPackage basp) throws Exception{
+
+        //多low哦
+        for(NewStu ns : basp.getData()){
+            try {
+                addNewStudent(new Student(ns.getAccount(), " ", ns.getName(), basp.getClassId()));
+            }catch(Exception e){
+                throw new Exception(e.getMessage());
+            }
+        }
+        return 0;
     }
 
     @Override

@@ -204,7 +204,7 @@
                                 <label class="col-sm-2 control-label">上传excel表格：</label>
                                 <div class="col-sm-5">
                                     <form id="infoLogoForm" enctype='multipart/form-data'>
-                                        <input type="file"  id='upFileX' name="file" accept=" .xls, .xlsx "placeholder="请选择文件" onchang="showStudentInfList(this)">
+                                        <input type="file"  id='upFileX' name="file" accept=" .xls, .xlsx "placeholder="请选择文件" onchang=" ">
                                     </form>
                                 </div>
                             </div>
@@ -215,7 +215,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" id="closeUserInfoDialogB" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#courseListDialog' onclick="showStudentInfList()">提交</button>
+                <button type="button" class="btn btn-primary" data-toggle='modal' data-target='#courseListDialog' onclick="ConvertExcelToJsonArray()">提交</button>
             </div>
         </div>
     </div>
@@ -270,24 +270,23 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title">信息预览</h4>
             </div>
-            <div class="modal-body">
+            <div id='WTF_001' class="modal-body" style="height:500px; overflow-y:auto; " >
                 <input type="text" hidden id="CLDuserId">
-                <table id="CLDtbody" class="table table-striped table-bordered table-hover dataTables-example">
-                    <thead>
-                    <tr>
-                        <!-- <th width="2%"><input id="btSelectAll" name="btSelectAll" type="checkbox"></th> -->
-                        <th width="30%">学号</th>
-                        <th width="30%">姓名</th>
-                        <th width="30%">班级</th>
-                        <th width="10%">状态</th>
-                    </tr>
-                    </thead>
-                    <!-- <tbody id="CLDtbody"></tbody> -->
-                </table>
+                <table id="CLDtbody" class="table table-striped table-bordered table-hover dataTables-example" >
+                <thead>
+                <tr >
+                    <!-- <th width="2%"><input id="btSelectAll" name="btSelectAll" type="checkbox"></th> -->
+                    <th width="33%">学号</th>
+                    <th width="34%">姓名</th>
+                    <th width="33%">班级</th>
+                </tr>
+                </thead>
+                <!-- <tbody id="CLDtbody"></tbody> -->
+            </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" onclick=" saveStudentList() ">保存</button>
+                <button type="button" class="btn btn-primary" onclick=" saveStudentListB() ">保存</button>
             </div>
         </div>
     </div>

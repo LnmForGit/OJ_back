@@ -1,6 +1,9 @@
 $(function() {
     queryNoticeInfo();
+    //加载文本编辑器
     loadSummernote();
+    // 加载时间选择器
+    loadLayerDate();
 });
 function resetNoticeInfoDialog() {
     $("#myModal5 input").val("");
@@ -29,7 +32,14 @@ function formatDate (date) {
     var time = y+'-'+m+'-'+d+' '+hour+':'+min;
     return time;
 }
-
+function loadLayerDate() {
+    var startTime;
+    var endTime;
+    laydate({
+        elem: '#noticeTime', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+        event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+    });
+}
 function formatDate1 (date) {
     var tt = new Date(date)
     var date= new Date(Date.parse(tt));
