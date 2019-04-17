@@ -89,7 +89,7 @@ public class MyFileServicelmpl implements MyFileService {
                     createPath.mkdirs();
                 }
 
-                String route = "E:/学习笔记/OJ平台重构/testUpload/"+id+"/"+file.getOriginalFilename();
+                String route = rootPath+id+"/"+file.getOriginalFilename();
                 System.out.println(route);
                 File targetfile = new File(route);
                 out = new FileOutputStream(targetfile);
