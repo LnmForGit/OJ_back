@@ -44,16 +44,16 @@ public class CourseServiceImpl implements CourseService {
     }
     public void saveOrUpdateCourse(Course course) throws Exception
     {
-        //若课程id为空，为保存
-        if (StringUtils.isEmpty(course.getId())){
-            //若当前课程号已经存在，则抛出课程已存在的异常
-            if(mapper.getCourseByName(course.getName()).size()>0){
-                throw new Exception("当前课程已存在!");
-            }else{
-                mapper.save(course);
-            }
+        if(mapper.getCourseByName(course.getName()).size()>0){
+            throw new Exception("当前课程名称已存在!");
         }else{
-            mapper.update(course);
+            //若课程id为空，为保存
+            if (StringUtils.isEmpty(course.getId())){
+                //若当前课程号已经存在，则抛出课程已存在的异常
+                    mapper.save(course);
+            }else{
+                mapper.update(course);
+            }
         }
     }
 

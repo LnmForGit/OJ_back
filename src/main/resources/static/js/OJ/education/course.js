@@ -148,7 +148,7 @@ function saveOrUpdateCourseInfo() {
                     queryCourseInfo();
                     //关闭模态窗口
                     $('#myModal5').modal('hide');
-                    swal("保存成功！", "success");
+                    swal("保存成功！","", "success");
                 }else{
                     swal("保存失败！", result.message, "error");
                 }
@@ -243,9 +243,9 @@ function saveCld() {
                 //关闭模态窗口
                 $('#courseClassShowDialog').modal('hide');
                 queryCourseInfo();
-                swal("保存成功！", "success");
+                swal("保存成功！","", "success");
             }else{
-                swal("保存失败！", "error");
+                swal("保存失败！","", "error");
             }
         }
     });

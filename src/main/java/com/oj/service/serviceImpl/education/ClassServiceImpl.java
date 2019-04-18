@@ -41,16 +41,16 @@ public class ClassServiceImpl implements ClassService {
     //保存或更新班级
     public void saveOrUpdateClass(Class clas) throws Exception
     {
-        //若班级id为空，为保存
-        if (StringUtils.isEmpty(clas.getId())){
-            //若当前班级号已经存在，则抛出班级已存在的异常
-            if(mapper.getClassByName(clas.getName()).size()>0){
-                throw new Exception("当前班级已存在!");
-            }else{
-                mapper.save(clas);
-            }
+        //若当前班级号已经存在，则抛出班级已存在的异常
+        if(mapper.getClassByName(clas.getName()).size()>0){
+            throw new Exception("当前班级名称已存在!");
         }else{
-            mapper.update(clas);
+            //若班级id为空，为保存
+            if (StringUtils.isEmpty(clas.getId())){
+                    mapper.save(clas);
+            }else{
+                mapper.update(clas);
+            }
         }
     }
 

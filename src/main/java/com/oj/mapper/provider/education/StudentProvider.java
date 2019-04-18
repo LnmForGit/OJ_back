@@ -22,7 +22,7 @@ public class StudentProvider {
             sql.append(" AND stu.name LIKE '%"+inf.get("student_name")+"%' ");
         if(!StringUtils.isEmpty(inf.get("class_id")))
             sql.append(" AND cla.id = '"+inf.get("class_id")+"' ");
-        sql.append(" ORDER by stu.account ");
+        sql.append(" ORDER by stu.account DESC");
         log.info(sql.toString());
         return sql.toString();
 
