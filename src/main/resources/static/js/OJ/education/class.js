@@ -166,7 +166,7 @@ function saveOrUpdateClassInfo() {
                     queryClassInfo();
                     //关闭模态窗口
                     $('#myModal5').modal('hide');
-                    swal("保存成功！", "success");
+                    swal("保存成功！","", "success");
                 }else{
                     swal("保存失败！", result.message, "error");
                 }

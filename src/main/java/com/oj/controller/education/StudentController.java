@@ -2,6 +2,7 @@ package com.oj.controller.education;
 
 
 import com.oj.entity.education.Student;
+import com.oj.entity.other.BulkAddStudentPackage;
 import com.oj.service.education.StudentService;
 import com.oj.service.other.ImportService;
 import com.oj.service.serviceImpl.other.ImportServicelmpl;
@@ -81,6 +82,26 @@ public class StudentController {
             return map;
         }
     }
+
+    //批量添加学生
+    @PostMapping("/bulkAddNewStudent")
+    @ResponseBody
+    public Map<String, String> bulkAddNewStudent(@RequestBody BulkAddStudentPackage param, HttpServletRequest request){
+        ImportServicelmpl Iservice = new ImportServicelmpl();
+        Map<String, String> map = new HashMap<>();
+        try {
+            service.addMoreNewStudent(param);
+            //System.out.println(param.getClassId()+", "+param.getData());
+            map.put("result", "succeed");
+            return map;
+        }catch (Exception e){
+            map.put("result", "failed");
+            map.put("message", e.getMessage());
+            log.error(e.getMessage());
+            return map;
+        }
+    }
+
     //通过指定学生编号删除对应学生账号
     @PostMapping("/deleteTheStudent")
     @ResponseBody

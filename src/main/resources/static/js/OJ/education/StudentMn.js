@@ -1,7 +1,7 @@
 
 //全局变量
 var NewStudentNum =0; //批量增加学生时，学生的总数
-
+var NewStudentList; //批量添加学生的数据
 
 $(document).ready(function () {
     queryStudentInfo();
@@ -183,9 +183,9 @@ function saveOrUpdateStudentInfo() {
                     queryStudentInfo();
                     //关闭模态窗口
                     $('#myModal5').modal('hide');
-                    swal("保存成功！", "success");
+                    swal("保存成功！", "", "success");
                 }else{
-                    swal("保存失败！", result.message);
+                    swal("保存失败！", result.message, "error");
                 }
             }
         });
@@ -268,7 +268,7 @@ function saveNewPassword() {
         })
     }
 }
-//批量添加学生时，展示预览信息
+//批量添加学生时，展示预览信息(方案一)
 function showStudentInfList() {
     $('#CLDtbody').html("");
     var className = $('#dialogClassNameB').find('option:selected').text();
@@ -277,7 +277,7 @@ function showStudentInfList() {
         swal('未选择文件','请选择要读取的excel文件');
         return ;
     }
-    console.log($('#upFileX').val());
+    //console.log($('#upFileX').val());
 
     $('#CLDuserId').val( className );
 
@@ -315,7 +315,7 @@ function showStudentInfList() {
     }
     reader.readAsBinaryString(f);
 }
-//批量添加学生账号
+//批量添加学生账号(方案一)
 function saveStudentList(){
     var classId = $('#dialogClassNameB').val();
     if(classId == ''){
@@ -354,8 +354,169 @@ function saveStudentList(){
             }
         });
     }
+}
+//批量添加学生时，展示预览信息(方案二)
+function showStudentInfListB(JsonData) {
+
+    var className = $('#dialogClassNameB').find('option:selected').text();
+    $('#CLDuserId').val( className );
+    var str='';
+    str="<thead>" + "<tr>" + "<th width=\"33%\">学号</th>\n" + "<th width=\"34%\">姓名</th>\n" + "<th width=\"33%\">班级</th>\n" + "</tr>\n" + "</thead>";
+    $('#CLDtbody').append(str);
+
+    var JData = JsonData.data;
+    //JsonData.classId=$('#dialogClassNameB').find('option:selected').val();
+    //console.log(JData);
+    //console.log(JData[0].account)
+    for(var i=0; i<JData.length; i++){
+        var Taccount = (JData[i]['account']==undefined?'':JData[i]['account']);
+        var Tname = (JData[i]['name']==undefined?'':JData[i]['name']);
+        str="<tr>"
+        str+="<td><span id='nStuAccount"+i+"' >"+Taccount+"</span></td>";
+        str+="<td><span id='nStuName"+i+"' >"+Tname+"</span></td>";
+        str+="<td><span id='nStuClass"+i+"' >"+className+" </span></td>";
+        str+="</tr>"
+        $('#CLDtbody').append(str);
+    }
+    if(false && $('#WTF_001').height()>500){
+        $('#WTF_001').height(500);
+        $('#WTF_001').css('overflow-y', 'auto');
+    }
+}
+//批量添加学生账号(方案二)
+function saveStudentListB(){
+    var classId = $('#dialogClassNameB').val();
+    if(classId == ''){
+        swal('未选择班级','请先选择班级');
+        return ;
+    }
+    if(!checkStudentList(NewStudentList))
+        return ;
+    NewStudentList.classId=$('#dialogClassNameB').find('option:selected').val();
+    //console.log(NewStudentList);
+        $.ajax({
+            type: "POST",
+            url: "/studentMn/bulkAddNewStudent",
+            async:false,
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            data:JSON.stringify(NewStudentList),
+            success:function (result){
+                var strState;
+                strState = '#nStuState'+result.elementId;
+                if(result.result == "succeed"){
+                    swal("添加成功！", "批量添加成功", "success");
+                    //关闭模态窗口
+                    //$('#myModal5').modal('hide');
+                }else{
+                    swal("添加失败！", result.message, "error")
+                    //swal("保存失败！", result.message);
+                }
+            }
+        });
 
 }
+function checkStudentList(t){
+    var XTypeRule = /^[0-9]*$/;
+    var i=0; t=t.data;
+    //console.log(t);
+    for(;i<t.length;i++){
+        //console.log(t[i].account.length+'>'+t[i].account);
+        //console.log(t[i].name.length+'>'+t[i].name);
+        if(!XTypeRule.test(t[i].account)  || t[i].account.length!=10) {
+            swal('学号' + t[i].account + '格式不正确', '请确保为10位全数字格式', 'error');
+            return false;
+        }else if(t[i].name.length>50 || t[i].name.length<1){
+            swal('姓名' + t[i].name + '格式不正确', '请确保不大于50个字符长度', 'error');
+            return false;
+        }
+    }
+    return true;
+}
+function ConvertExcelToJsonArray(){ //将input file组件所选择的excel文件的内容读取出来，并以Json对象的形式将数据返回
+
+    $('#CLDtbody').html("");
+    //$('#WTF_001').height(50);
+    var file = document.getElementById('upFileX')//$('#upFileX');
+    if($('#upFileX').val()==''){
+        swal('未选择文件','请选择要读取的excel文件');
+        return ;
+    }
+    if(!file.files) {
+        return;
+    }
+    var reader = new FileReader();
+    var sheet_name_list;
+    var result = [];
+    var data;
+    var workbook;
+    var ans;
+    reader.readAsBinaryString(file.files[0]);
+    reader.onloadend = function (evt) {
+        var i=0, temp;
+        if(evt.target.readyState == FileReader.DONE){
+            temp = reader.result;
+            workbook = XLSX.read(temp, { type: 'binary' });
+        }
+        sheet_name_list = workbook.SheetNames;
+        while(sheet_name_list[i]!=undefined){
+            data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[i]], {header:1}); //sheet_name_list所指定的下标，代表的就是excel文件里的第几张表(下标从0开始)
+            result[i]=data;
+            i++;
+
+        }
+        //console.log("Array:\n");
+        //console.log(result);
+        ans = ConverArrayToJson(result);
+        NewStudentList=ans[0];
+        showStudentInfListB(NewStudentList);
+    }
+
+    return ans;
+}
+
+function ConverArrayToJson(data){  //将数组转换未指定json对象
+    //console.log(data[0]);
+    var result ;
+    var i=0, j=0;
+    var temp;
+    var str;
+
+    result='[';
+    while(data[i]!=undefined){
+        //console.log('flagA');
+        str='{"classId":"?", "data":[';
+        j=1;
+        while(data[i][j][0]!=undefined && data[i][j][1]!=undefined){
+            temp='{"account":"'+data[i][j][0]+'", "name":"'+data[i][j][1]+'"}';
+            j++;
+            temp+=(data[i][j][0]!=undefined && data[i][j][1]!=undefined)?', ':'';
+            str+=temp;
+        }
+        if(data[i][j][0]!=undefined || data[i][j][1]!=undefined){
+            swal("表格数据异常提醒", "表"+(i+1)+"第"+(j+1)+"行存在缺少项，若无错，请忽略！")
+        }
+        i++;
+        str+='], "Num":"'+(j-1)+'" }'+(data[i]!=undefined?', ':'');
+        result+=str;
+        //break; //只读第一张表
+    }
+    result+=']';
+    //console.log('jsong string:\n'+result);
+    result=JSON.parse(result);
+    //console.log(result[1]);
+    return result;
+}
+
+
+
+
+/*
+文件依赖于: xlsx.full.min.js
+
+xielanning 2019/4/9
+
+*/
 
 //excel文件上传的调用(暂废)
 function upFile() {
@@ -379,4 +540,5 @@ function upFile() {
         }
     });
 }
+
 

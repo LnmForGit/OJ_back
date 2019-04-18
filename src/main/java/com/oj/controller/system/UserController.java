@@ -61,6 +61,8 @@ public class UserController {
     @ResponseBody
     public Map<String, String> saveOrUpdateUser(@RequestBody User user){
         Map<String, String> map = new HashMap<>();
+        System.out.println("check username: " + user.getName() + " check userid : " + user.getId());
+        System.out.println(user.getId());
         try {
             userService.saveOrUpdateUser(user);
             map.put("flag", "1");
