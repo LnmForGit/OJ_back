@@ -7,16 +7,64 @@ import java.util.Map;
 
 public class SubmitStatusProvider {
     private Logger log = LoggerFactory.getLogger(this.getClass());
+
     public String getQuerySql(Map<String,Object> params){
         Map<String, String> info = (Map<String, String>)params.get("condition");
         StringBuffer sql = new StringBuffer();
-        sql.append("select a.problem_id,a.name,b.state_name,c.language_name,a.submit_time,a.submit_memory,a.submit_code_length,a.submit_date\n" +
-                "from (SELECT  a.problem_id,b.name,a.submit_state,a.submit_language,a.submit_time,a.submit_memory,a.submit_code_length,a.submit_date  FROM teach_submit_code as a ,teach_students as b where a.user_id=b.id order by a.submit_date desc limit 100)as a\n" +
-                "join teach_submit_state as b on a.submit_state=b.id\n" +
-                "join teach_submit_language as c on a.submit_language=c.id\n" +
-                "order by a.submit_date desc");
+        sql.append(" 	SELECT			 ");
+        sql.append(" 			a.problem_id,	 ");
+        sql.append(" 			b.NAME,	 ");
+        sql.append(" 			a.submit_state,	 ");
+        sql.append(" 			a.submit_language,	 ");
+        sql.append(" 			a.submit_time,	 ");
+        sql.append(" 			a.submit_memory,	 ");
+        sql.append(" 			a.submit_code_length,	 ");
+        sql.append(" 			FROM_UNIXTIME(a.submit_date) as submit_date	 ");
+        sql.append(" 		FROM		 ");
+        sql.append(" 			teach_submit_code AS a,	 ");
+        sql.append(" 			teach_students AS b 	 ");
+        sql.append(" 		WHERE		 ");
+        sql.append(" 			a.user_id = b.id 	 ");
+        if(!StringUtils.isEmpty(info.get("problem_id"))){
+            sql.append("		AND a.problem_id like '%"+info.get("problem_id")+"%' ");
+        }
+        if(!StringUtils.isEmpty(info.get("account"))){
+            sql.append("		AND b.name like '%"+info.get("account")+"%' ");
+        }
+        if(!StringUtils.isEmpty(info.get("submit_state"))){
+            sql.append("		AND a.submit_state = '"+info.get("submit_state")+"' ");
+        }
+        sql.append(" 		ORDER BY		 ");
+        sql.append(" 			a.submit_date DESC 	 ");
+        sql.append(" 			LIMIT "+info.get("start")+","+info.get("count")+"	 ");
         log.info(sql.toString());
         return sql.toString();
 
     }
+
+    public String selectRecordsFiltered(Map<String,Object> params){
+        Map<String, String> info = (Map<String, String>)params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        sql.append(" 	SELECT	count(*)		 ");
+        sql.append(" 		FROM		 ");
+        sql.append(" 			teach_submit_code AS a,	 ");
+        sql.append(" 			teach_students AS b 	 ");
+        sql.append(" 		WHERE		 ");
+        sql.append(" 			a.user_id = b.id 	 ");
+        if(!StringUtils.isEmpty(info.get("problem_id"))){
+            sql.append("		AND a.problem_id like '%"+info.get("problem_id")+"%' ");
+        }
+        if(!StringUtils.isEmpty(info.get("account"))){
+            sql.append("		AND b.name like '%"+info.get("account")+"%' ");
+        }
+        if(!StringUtils.isEmpty(info.get("submit_state"))){
+            sql.append("		AND a.submit_state = '"+info.get("submit_state")+"' ");
+        }
+        sql.append(" 		ORDER BY		 ");
+        sql.append(" 			a.submit_date DESC 	 ");
+
+        log.info(sql.toString());
+        return sql.toString();
+    }
+
 }
