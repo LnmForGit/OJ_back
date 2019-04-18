@@ -41,7 +41,7 @@ function getExperInfo() {
                 "columnDefs": [{
                     "render" : function(data, type, row) {
                         var a = "";
-                        a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>"
+                        a += "<button type='button' class='btn btn-primary' onclick='showIp(\""+row.id+"\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='openAddExper(\""+row.id+"\")' title='编辑' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil'></i>&nbsp;编辑</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='判分' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-refresh'></i>&nbsp;判分</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
@@ -103,4 +103,8 @@ function deleteExper(id) {
                 swal("已取消", "你取消了删除实验操作", "error");
             }
         });
+}
+function showIp(tid) {
+    //console.log(tid);
+    window.location.href = "/experimentMn/showIp/"+tid;
 }
