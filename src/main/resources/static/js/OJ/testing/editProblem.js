@@ -5,20 +5,13 @@ $(document).ready(function () {
 
 });
 
-var icon = "<i class='fa fa-times-circle'></i>";
-var rank;
-//重置form内的标签
-function resetForm() {
-    $(".form-horizontal input").val("");
-    $(".form-horizontal select").val("");
-    queryProblemsInfo();
-}
-
+caseResult = -1;
+var rank = 1;
 
 //题目编辑详情
 function editProblem(){
     var id = getUrlParam("id");
-    if(id != null && id != ""){
+    if(id != "0" ){
         $("#dialogTitle").html("编辑题目")
         // $("#dialogProblemId").val(id)
         $.ajax({
@@ -31,7 +24,10 @@ function editProblem(){
             },success:function (result){
                 $("#dialogProblemId").id,
                 $("#dialogProblemName").val(result[0].name)
-                $('#problemSubject').html('<option value="' + result[0].subjectid + '">' + result[0].subject + '</option>').trigger("change");
+                if(result[0].subjectid == '0')
+                    $('#problemSubject').html('<option value="' + 40 + '">' + "其他" + '</option>').trigger("change");
+                else
+                    $('#problemSubject').html('<option value="' + result[0].subjectid + '">' + result[0].subject + '</option>').trigger("change");
                 if(result[0].public == "")
                     $("#dialogProblemPublic").attr("checked", false);
                 else
@@ -56,14 +52,57 @@ function editProblem(){
                         rank = obj.fromNumber;
                     }
                 });
-                 $("#dialogCodeLanguage").val("GCC")
+                $("#dialogCodeLanguage").val("GCC")
+                $("#dialogProblemCode").val(result[0].exam_code);
+                if(result[0].is_show_exepl == "")
+                    $("#dialogCodePublic").attr("checked", false);
+                else
+                    $("#dialogCodePublic").attr("checked", true);
             }
         })
+        getProblemTestData(id)
     }else{
         $("#dialogTitle").html("新建题目");
+        $("#dialogProblemRank").ionRangeSlider({
+            min: 1,
+            max: 5,
+            from: 0,
+            type: 'single',
+            step: 1,
+            prettify: false,
+            hasGrid: true,
+            onFinish: function(obj){        // function-callback, is called once, after slider finished it's work
+                rank = obj.fromNumber;
+            }
+        });
     }
+
 }
 
+function getProblemTestData(id){
+    $.ajax({
+        type: "POST",
+        url: "/caseMn/getCase",
+        dataType: "json",
+        async:false,
+        data:{
+            "id" : id
+        },success:function (result){
+            var i = 1;
+            for( ; i < result.length; i++){
+                newTest();
+            }
+            var arr_in=$("textarea[name='dialogProblemInTest']");
+            var arr_out=$("textarea[name='dialogProblemOutTest']");
+            var arr_id=$("input[name='dialogProblemTestId']");
+            for(i=0;i<result.length;i++){
+               $(arr_in[i]).val(result[i].in_put);
+               $(arr_out[i]).val(result[i].out_put);
+               $(arr_id[i]).attr("value",result[i].id)
+            }
+        }
+    })
+}
 
 //初始化题目详情编辑器
 function loadSummernote() {
@@ -90,14 +129,15 @@ function loadSummernote() {
 function newTest(){
 
     var newTest = '<div class="row">\n' +
+        '<input type="hidden" name="dialogProblemTestId" id="dialogProblemTestId" value="0">' +
         '                                    <div class="col-sm-2"></div>\n' +
         '                                    <div class="col-sm-4">\n' +
-        '                                         <textarea id="dialogProblemInTest" name="dialogProblemInTest" placeholder="输入用例" class="form-control" rows="6"></textarea>\n' +
+        '                                         <textarea id="dialogProblemInTest" name="dialogProblemInTest" placeholder="输入用例" class="form-control" rows="6" style="resize:none;"></textarea>\n' +
         '                                    </div>\n' +
         '                                    <div class="col-sm-4">\n' +
-        '                                        <textarea id="dialogProblemOutTest" name="dialogProblemOutTest" placeholder="输出用例" class="form-control" rows="6"></textarea>\n' +
+        '                                        <textarea id="dialogProblemOutTest" name="dialogProblemOutTest" placeholder="输出用例" class="form-control" rows="6" style="resize:none;"></textarea>\n' +
         '                                    </div>\n' +
-        '                                     <button class="btn btn-white col-md-1" onclick="deleteTest(this)">删除用例</button>\n' +
+        '                                     <input type="button" class="btn btn-primary col-md-1" onclick="deleteTest(this)" value="删除">\n' +
         '                                </div>';
 
 
@@ -106,7 +146,49 @@ function newTest(){
 
 //删除测试用例
 function deleteTest(Obj) {
-    Obj.parentNode.parentNode.removeChild(Obj.parentNode);
+     var id =  $(Obj).siblings("input").attr("value")
+      if(id != 0)
+         deleteProblemTestCase(id,Obj)
+    if(id == 0)
+       Obj.parentNode.parentNode.removeChild(Obj.parentNode);
+}
+
+//从数据库删除测试用例
+function deleteProblemTestCase(id,Obj){
+    swal({
+            title: "确认删除?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确认",
+            cancelButtonText: "取消",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: "POST",
+                    url: "/caseMn/caseDelete",
+                    dataType: "json",
+                    async:false,
+                    data:{
+                        "id" : id
+                    },
+                    success:function (result){
+                        if(result.flag == "1"){
+                            swal("删除成功！", "测试数据已被删除", "success");
+                            Obj.parentNode.parentNode.removeChild(Obj.parentNode);
+                        }else{
+                            swal("删除失败！", "测试数据暂时不能被删除", "error");
+                        }
+                    }
+                })
+            }else {
+                swal("已取消", "你取消了删除操作", "error");
+            }
+        });
 }
 
 //获取url中的参数
@@ -140,11 +222,11 @@ function saveOrUpdateProblem() {
         },
         messages: {
             dialogProblemName: {
-                required: icon + "题目名称不能为空",
-                minlength: icon + "题目名称最长为40"
+                required: "题目名称不能为空",
+                minlength: "题目名称最长为40",
             },
             dialogProblemSubject: {
-                required: icon + "请选择题目类别",
+                required: "请选择题目类别",
             },
         }
     }).form()){
@@ -152,6 +234,7 @@ function saveOrUpdateProblem() {
             type: "POST",
             url: "/problemsMn/saveOrUpdateProblem",
             dataType: "json",
+            async: false,
             contentType: "application/json;charset=UTF-8",
             data:JSON.stringify({
                 "id" : id,
@@ -169,12 +252,15 @@ function saveOrUpdateProblem() {
                 "time" : timestamp,
                 "author" : $("#user").val(),
                 "kind" : 1,
-                "test_data_id" :1,
-                "submit_id" : 1
+                "test_data_id" :0,
+                "submit_id" : 1,
+                "exam_code" : $("#dialogProblemCode").val(),
+                "is_show_exepl" : $("#dialogCodePublic").is(':checked') ? "on" : ""
 
             }),
             success:function (result){
-                if(result.flag == 1){
+                saveOrUpdateTestData();
+                if(result.flag == 1 && caseResult == 1){
                     swal({
                         title: "保存成功！",
                         type: "success",
@@ -186,9 +272,45 @@ function saveOrUpdateProblem() {
                 }else{
                     swal("保存失败！", result.message, "error");
                 }
+                caseResult == -1;
             }
         });
     }
+}
+
+function saveOrUpdateTestData(){
+    var problem_id = getUrlParam("id");
+    var timestamp = Date.parse( new Date() ).toString();
+    timestamp = timestamp.substr(0,10);
+    var cases = [];
+    var arr_in=$("textarea[name='dialogProblemInTest']");
+    var arr_out=$("textarea[name='dialogProblemOutTest']");
+    var arr_id=$("input[name='dialogProblemTestId']");
+    for(var i=0; i<arr_id.length; i++){
+        var c = new Object();
+        c.problem_id = problem_id
+
+        c.id = $(arr_id[i]).attr("value")
+        c.in_put= $(arr_in[i]).val()
+        c.out_put = $(arr_out[i]).val()
+        c.description = " "
+        c.time =  timestamp
+        cases.push(c);
+    }
+    $.ajax({
+        type: "POST",
+        url: "/caseMn/saveOrUpdateCase",
+        dataType: "json",
+        async: false,
+        data: JSON.stringify(cases)  ,
+        traditional:true,
+        contentType: "application/json;charset=UTF-8",
+        success:function (result){
+            if(result.flag == 1){
+               caseResult = 1;
+            }
+        }
+    });
 }
 
 //初始化题目类型下拉框

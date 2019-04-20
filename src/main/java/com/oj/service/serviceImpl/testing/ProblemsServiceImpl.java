@@ -44,7 +44,7 @@ public class ProblemsServiceImpl implements ProblemsService {
     //问题更新或保存
     public void saveOrUpadateProblem(Problem problem) throws Exception{
         //如果问题不已经存在则添加
-        System.out.println(problem.getId());
+        //System.out.println(problem.getId());
         if(problem.getId().equals("0")){
             mapper.insert(problem);
         }
@@ -68,3 +68,5 @@ public class ProblemsServiceImpl implements ProblemsService {
 
 
 }
+
+
