@@ -22,7 +22,7 @@ public interface MyFileMapper {
     @Select("select * from teach_myfile where name = #{name}")
     public List<Map> getFileByName(@Param("name") String name);
     //存储文件信息
-    @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size})")
+    @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size, flag) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size}, #{flag})")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
     public int save(MyFile M);
     //删除文件信息
@@ -34,6 +34,12 @@ public interface MyFileMapper {
     //根据文件ID获取存储路径
     @Select("select route from teach_myfile where id = #{id}")
     public String getPathById(String id);
+    //根据文件ID获取状态
+    @Select("select name, flag from teach_myfile where id = #{id}")
+    public List<Map> getFileNameAndNameById(String id);
+    //更新状态
+    @Update("update teach_myfile set flag=#{flag} where id = #{id}")
+    public void saveFileFlag(String id, String flag);
 
     /*
     //通过ClassProvider类中的getQuerySql()方法动态构建查询语句

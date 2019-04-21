@@ -69,7 +69,8 @@
                                     <th width="10%">上传者</th>
                                     <th width="10%">上传时间</th>
                                     <th width="10%">大小</th>
-                                    <th width="40%">操作</th>
+                                    <th width="10%">状态</th>
+                                    <th width="30%">操作</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -82,6 +83,50 @@
         </div>
     </div>
     <!--弹窗布局开始-->
+
+
+    <div class="modal inmodal fade" id="Edit" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="Title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form method="get" id="fileInfo" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-9 droppable sortable ui-droppable ui-sortable" style="width: 100%">
+                                <div class="form-group draggable ui-draggable dropped">
+                                    <label class="col-sm-2 control-label">文件名：</label>
+                                    <div class="col-sm-5">
+                                        <input id="dialogFileName" name="dialogFileName" type="text"  aria-required="true" aria-invalid="false" class="form-control">
+                                        <input id="dialogFileId" type="text" hidden>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-9 droppable sortable ui-droppable ui-sortable" style="width: 100%">
+                                <div class="form-group draggable ui-draggable dropped">
+                                    <label class="col-sm-2 control-label">状态：</label>
+                                    <div class="col-sm-5">
+                                        <select id="fileFlag" name="fileFlag" class="form-control"  aria-required="true" aria-invalid="false">
+                                            <option value="0">请选择</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" id="closeFileInfoDialog" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFileFlag()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -101,8 +146,18 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div class="modal-title">上传进度</div>
-                                <div class="modal-body">
+                                <div class="form-group draggable ui-draggable dropped">
+                                    <label class="col-sm-2 control-label">状态：</label>
+                                    <div class = "col-sm-5">
+                                        <select id="dialogFlag" name="dialogFlag" class="form-control"  aria-required="true" aria-invalid="false">
+                                            <option value="">请选择</option>
+                                            <option value="0">教师文件</option>
+                                            <option value="1">公共资源</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group draggable ui-draggable dropped">
+                                    <label class="col-sm-2 control-label">上传进度：</label>
                                     <div class="col-lg-5"
                                          style="padding-left: 0; padding-right: 0; margin-bottom: 0;">
                                         <div class="progress progress-striped active" style="">
@@ -112,7 +167,7 @@
                                         </div>
                                     </div>
                                     <!-- 显示上传速度 -->
-                                    <div id="showInfo" class="col-lg-2">0KB/s</div>
+                                    <div id="showInfo">0KB/s</div>
                                 </div>
                             </div>
                         </div>

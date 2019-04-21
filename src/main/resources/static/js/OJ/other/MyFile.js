@@ -36,7 +36,8 @@ function queryMyFileInfo() {
                 result[i].upload_time = date.getFullYear() + '-' + (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-' + date.getDate();
                 var fileSize = getSize(result[i].size);
                 result[i].size = fileSize;
-
+                if(result[i].flag==0)result[i].flag = "教师文件";
+                else result[i].flag = "公共文件";
             }
             var dataTable = $('#fileInfoTable');
             if ($.fn.dataTable.isDataTable(dataTable)) {
@@ -57,17 +58,80 @@ function queryMyFileInfo() {
                     "data" : "upload_time"
                 },{
                     "data" : "size"
+                },{
+                    "data" : "flag"
                 }],
                 "columnDefs": [{
                     "render" : function(data, type, row) {
                         var a = "";
+                        a += "<button type='button' class='btn btn-primary' onclick='showEditFile(\""+row.id+"\")' data-toggle='modal' data-target='#Edit' title='编辑' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil-square-o'></i>&nbsp;编辑</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='downloadFile(\""+row.id+"\")' data-toggle='modal' title='下载' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-list'></i>&nbsp;下载</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteFile(\""+row.id+"\")' data-toggle='modal' data-target='dropdown' title='删除' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil-square-o'></i>&nbsp;删除</button>"
                         return a;
                     },
-                    "targets" :5
+                    "targets" :6
                 }]
             });
+        }
+    })
+}
+
+function showEditFile(id)
+{
+    resetMyFileInfoDialog();
+    $("#Title").html("状态编辑");
+    $("#dialogFileName").attr("readonly",true);
+    $("#dialogFileId").val(id);
+    //alert(id);
+    $.ajax({
+        type: "POST",
+        url: "/myFile/fileFlag",
+        dataType: "json",
+        data:{
+            "id" : id
+        },
+        success:function (result){
+            //alert(result[0].name);
+            //alert(result[0].flag);
+            $("#dialogFileName").val(result[0].name);
+            $("#fileFlag").empty();
+            var roleSelectInfo = "";
+            roleSelectInfo += "<option value='0'>"+"教师文件"+"</option>"
+            roleSelectInfo += "<option value='1'>"+"公共文件"+"</option>"
+            $("#fileFlag").append(roleSelectInfo);
+            if(result[0].flag == 0)
+            {
+                $("#fileFlag").val(0);
+            }
+            else
+            {
+                $("#fileFlag").val(1);
+            }
+        }
+    })
+}
+
+function saveFileFlag()
+{
+    var id = $("#dialogFileId").val();
+    var flag = $("#fileFlag").val();
+    $.ajax({
+        type: "POST",
+        url: "/myFile/saveFileFlag",
+        dataType: "json",
+        data:{
+            "id" : id,
+            "flag" : flag,
+        },
+        success:function (result){
+            if(result.flag == 1){
+                queryMyFileInfo();
+                //关闭模态窗口
+                $('#Edit').modal('hide');
+                swal("保存成功！","", "success");
+            }else{
+                swal("保存失败！", result.message, "error");
+            }
         }
     })
 }
@@ -84,11 +148,16 @@ var oloaded;//已上传文件大小
 var xhr;
 
 //上传文件类
-function uploadFile() {
+function uploadFile(id) {
     //alert($('#uploadFile').val());
     if($('#uploadFile').val()=='')
     {
         swal('未选择文件','请选择文件');
+        return ;
+    }
+    var flag = $('#dialogFlag').val();
+    if(flag == ''){
+        swal('未选择状态','请先选择状态');
         return ;
     }
     var formData = new FormData();
@@ -106,12 +175,12 @@ function uploadFile() {
         url: "/myFile/checkFileName",
         dataType: "json",
         data: {
-            name: FileName
+            name: FileName,
         },
         success:function (result){
             if(result.flag == "1"){
                 showProgress();
-                var uploadGo = "/myFile/uploadMyFile";
+                var uploadGo = "/myFile/uploadMyFile?flag="+flag;
                 xhr = new XMLHttpRequest();
                 xhr.open("post", uploadGo, true);
                 xhr.onloadstart = function() {
@@ -123,7 +192,6 @@ function uploadFile() {
                 xhr.addEventListener("error", uploadFailed, false);
                 xhr.addEventListener("abort", uploadCanceled, false);
                 xhr.send(formData);
-
                 queryMyFileInfo();
                 //swal("上传成功！", "", "success");
             }else{
@@ -231,6 +299,7 @@ function deleteFile(id) {
 function downloadFile(id) {
     window.location.href="/myFile/downloadFile?id="+id;
 }
+
 
 
 function setProgress(w) {
