@@ -44,7 +44,7 @@ function getTestInfo() {
                         a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='openAddTest(\""+row.id+"\")' title='编辑' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil'></i>&nbsp;编辑</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='判分' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-refresh'></i>&nbsp;判分</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
+                        a += "<button type='button' class='btn btn-primary' onclick='goPagetestScore(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='相似' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eye'></i>&nbsp;相似</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteTest(\""+row.id+"\")' title='删除' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-trash'></i>&nbsp;删除</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='复制' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-copy'></i>&nbsp;复制</button>"
@@ -104,3 +104,11 @@ function deleteTest(id) {
             }
         });
 }
+
+function goPagetestScore(t){
+
+    window.location.href = "/testMn/testScore/"+t;
+
+}
+
+//祈祷大慈大悲的各路神仙，保佑我一定要相信科学，不要迷信!!!!!

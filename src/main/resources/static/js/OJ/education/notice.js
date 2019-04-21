@@ -33,6 +33,7 @@ function formatDate (date) {
     return time;
 }
 function loadLayerDate() {
+    $('#noticeTime').val(laydate.now(0, 'YYYY-MM-DD'));
     var startTime;
     var endTime;
     laydate({
