@@ -137,7 +137,7 @@ function newTest(){
         '                                    <div class="col-sm-4">\n' +
         '                                        <textarea id="dialogProblemOutTest" name="dialogProblemOutTest" placeholder="输出用例" class="form-control" rows="6" style="resize:none;"></textarea>\n' +
         '                                    </div>\n' +
-        '                                     <input type="button" class="btn btn-primary col-md-1" onclick="deleteTest(this)" value="删除">\n' +
+        '                                     <input type="button" class="btn btn-primary" onclick="deleteTest(this)" value="删除">\n' +
         '                                </div>';
 
 
