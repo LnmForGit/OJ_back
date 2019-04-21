@@ -360,28 +360,57 @@ function showStudentInfListB(JsonData) {
 
     var className = $('#dialogClassNameB').find('option:selected').text();
     $('#CLDuserId').val( className );
-    var str='';
-    str="<thead>" + "<tr>" + "<th width=\"33%\">学号</th>\n" + "<th width=\"34%\">姓名</th>\n" + "<th width=\"33%\">班级</th>\n" + "</tr>\n" + "</thead>";
-    $('#CLDtbody').append(str);
+
 
     var JData = JsonData.data;
-    //JsonData.classId=$('#dialogClassNameB').find('option:selected').val();
-    //console.log(JData);
-    //console.log(JData[0].account)
+    /*
+    for(var i =0 ; i<JData.length;i++){
+        JData[i].className = className;
+    }
+    */
+    var dataTable = $('#CLDtbody');
+    dataTable.html("");
+    /*
+    if ($.fn.dataTable.isDataTable(dataTable)) {
+        dataTable.DataTable().destroy();
+    }
+    */
+    //var str='';
+    //str="<thead>" + "<tr>" + "<th width='33%'>学号</th>\n" + "<th width='34%'>姓名</th>\n" + "<th width='33%'>班级</th>\n" + "</tr>\n" + "</thead>";
+    //$('#CLDtbody').append(str);
+    /*
+    dataTable.DataTable({
+        "paging": false,
+        "serverSide": false,
+        "autoWidth" : false,
+        "bSort": false,
+        "scrollY": "300px",
+        "scrollCollapse": "true",
+        "data" : JData,
+        "columns" : [{
+            "data" : "account", "title" : "学号"
+        },{
+            "data" :"name", "title" : "姓名"
+        },{
+            "data" : 'className', "title" : "班级"
+        },]
+    });
+    */
+    //var str='';
+    //str="<thead>" + "<tr>" + "<th width=\"33%\">学号</th>\n" + "<th width=\"34%\">姓名</th>\n" + "<th width=\"33%\">班级</th>\n" + "</tr>\n" + "</thead>";
+    //$('#CLDtbody').append(str);
+
     for(var i=0; i<JData.length; i++){
         var Taccount = (JData[i]['account']==undefined?'':JData[i]['account']);
         var Tname = (JData[i]['name']==undefined?'':JData[i]['name']);
         str="<tr>"
-        str+="<td><span id='nStuAccount"+i+"' >"+Taccount+"</span></td>";
-        str+="<td><span id='nStuName"+i+"' >"+Tname+"</span></td>";
-        str+="<td><span id='nStuClass"+i+"' >"+className+" </span></td>";
+        str+="<td width='33%'><span id='nStuAccount"+i+"' >"+Taccount+"</span></td>";
+        str+="<td width='34%'><span id='nStuName"+i+"' >"+Tname+"</span></td>";
+        str+="<td width='33%'><span id='nStuClass"+i+"' >"+className+" </span></td>";
         str+="</tr>"
         $('#CLDtbody').append(str);
     }
-    if(false && $('#WTF_001').height()>500){
-        $('#WTF_001').height(500);
-        $('#WTF_001').css('overflow-y', 'auto');
-    }
+    $('#AmountNewStudent').text('新增账号总数:'+JData.length)
 }
 //批量添加学生账号(方案二)
 function saveStudentListB(){
