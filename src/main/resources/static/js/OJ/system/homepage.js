@@ -159,7 +159,7 @@ function showpending() {
                 else if(result[i].state=="正在进行")
                 {
                     //var s = "<h2 style='color: #131e26;background-color: #2D93CA'>正在进行</h2>"
-                    var s = "<span class=\"label label-info\">正在进行</span>";
+                    var s = "<span class=\"label label-info\">进行中</span>";
                 }
                 else if(result[i].state=="未开始")
                 {
