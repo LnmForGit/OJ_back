@@ -77,65 +77,68 @@
                         </div>
                         <div class="row">
                             <div class="form-group  col-sm-12">
-                                    <label class=" control-label col-sm-2">数据描述</label>
+                                    <label class=" control-label col-sm-2">数据描述:</label>
                                 <div class="col-sm-5">
-                                    <textarea id="dialogProblemInType" name="dialogProblemInType" placeholder="输入数据描述" class="form-control" rows="6"></textarea>
+                                    <textarea id="dialogProblemInType" name="dialogProblemInType" placeholder="输入数据描述" class="form-control" rows="6" style="resize:none;"></textarea>
                                 </div>
                                 <div class="col-sm-5">
-                                    <textarea id="dialogProblemOutType" name="dialogProblemOutType" placeholder="输出数据描述" class="form-control" rows="6"></textarea>
+                                    <textarea id="dialogProblemOutType" name="dialogProblemOutType" placeholder="输出数据描述" class="form-control" rows="6" style="resize:none;"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group  col-sm-12">
-                                    <label class="control-label col-sm-2">展示用例</label><br>
+                                    <label class="control-label col-sm-2">展示用例:</label><br>
                                 <div class="col-sm-5">
-                                     <textarea id="dialogProblemInSample" name="dialogProblemInSample" placeholder="输入用例描述" class="form-control" rows="6"></textarea>
+                                     <textarea id="dialogProblemInSample" name="dialogProblemInSample" placeholder="输入用例描述" class="form-control" rows="6" style="resize:none;"></textarea>
                                 </div>
                                 <div class="col-sm-5">
-                                    <textarea id="dialogProblemOutSample" name="dialogProblemOutSample" placeholder="输出用例描述" class="form-control" rows="6"></textarea>
+                                    <textarea id="dialogProblemOutSample" name="dialogProblemOutSample" placeholder="输出用例描述" class="form-control" rows="6" style="resize:none;"></textarea>
                                 </div>
                             </div>
                         </div>
                             <div class="form-group  col-sm-12 " id="parentTest">
                                 <div class="row">
-                                    <label class="control-label col-sm-2">测试用例</label>
-                                    <span class="btn btn-white col-sm-2" onclick="newTest()">添加</span>
+                                    <label class="control-label col-sm-2">测试用例:</label>
+                                    <span class="btn btn-primary " onclick="newTest()">添加</span>
                                 </div>
                                 <div class="row">
+                                    <input type="hidden" name="dialogProblemTestId" id="dialogProblemTestId" value="0">
                                     <div class="col-sm-2"></div>
                                     <div class="col-sm-4">
-                                         <textarea id="dialogProblemInTest" name="dialogProblemInTest" placeholder="输入用例" class="form-control" rows="6"></textarea>
+                                         <textarea id="dialogProblemInTest" name="dialogProblemInTest" placeholder="输入用例" class="form-control" rows="6" style="resize:none;"></textarea>
                                     </div>
                                     <div class="col-sm-4">
-                                        <textarea id="dialogProblemOutTest" name="dialogProblemOutTest" placeholder="输出用例" class="form-control" rows="6"></textarea>
+                                        <textarea id="dialogProblemOutTest" name="dialogProblemOutTest" placeholder="输出用例" class="form-control" rows="6" style="resize:none;"></textarea>
                                     </div>
-                                     <button class="btn btn-white col-md-1" onclick="deleteTest(this)">删除用例</button>
+                                     <input type="button" class="btn btn-primary " onclick="deleteTest(this)" value="删除">
                                 </div>
 
                             </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12">
-                                <label class="col-sm-2 control-label ">范例代码</label><br>
-                                <div class="form-group col-sm-10">
-                                    <label class="col-sm-1 control-label">是否公开：</label>
-                                    <div class="col-sm-1">
-                                        <input type="checkbox" id="dialogCodePublic" name="dialogCodePublic" class="form-control"  aria-required="true" aria-invalid="false" value="" ></label>
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <label class="col-sm-2 control-label ">范例代码:</label><br>
+                                    <div class="col-sm-4">
+                                        <label class="control-label">公开</label>
+                                        <input type="checkbox" id="dialogCodePublic" name="dialogCodePublic"   aria-required="true" aria-invalid="false" value="" ></label>
                                     </div>
-                                    <label class="col-sm-1 control-label">测试代码：</label>
-                                    <div class="col-sm-2">
-                                        <select id="dialogCodeLanguage" name="dialogCodeLanguage" class="form-control"  aria-required="true" aria-invalid="false">
-                                            <option value="G++" >G++</option>
-                                            <option value="GCC" >GCC</option>
-                                        </select>
+                                    <div class="col-sm-6">
+                                        <label class="col-sm-3 control-label">测试</label>
+                                        <div class="col-sm-3">
+                                            <select id="dialogCodeLanguage" name="dialogCodeLanguage" class="form-control"  aria-required="true" aria-invalid="false">
+                                                <option value="G++" >G++</option>
+                                                <option value="GCC" >GCC</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-9">
-                                <textarea id="dialogProblemCode" name="dialogProblemCode" placeholder="范例代码" class="form-control" rows="6"></textarea>
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-9">
+                                    <textarea id="dialogProblemCode" name="dialogProblemCode" placeholder="范例代码" class="form-control" rows="6" style="resize:none;"></textarea>
+                                </div>
                             </div>
-                        </div>
                         <div class="modal-footer">
                             <input type="hidden" th:value="${session.user_name}" id="user">
                             <a href="/problemsMn/"><button type="button" class="btn btn-white"  data-dismiss="modal">关闭</button></a>

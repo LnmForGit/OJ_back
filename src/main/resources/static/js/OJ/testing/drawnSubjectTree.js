@@ -1,6 +1,5 @@
-$(function () {
-    $("#id_label_single").select2();
-});
+
+
 var datas=[];
 var data=[];
 var callback=function(result,param){
@@ -34,6 +33,10 @@ var callback=function(result,param){
     // });
 }
 function draw(param){
+    console.log(data);
+    $(function () {
+        $("#"+param).select2();
+    });
     $("#"+param).select2({
         data: data,
         placeholder:'请选择',
@@ -50,7 +53,6 @@ function draw(param){
             console.log(result)
 
             callback(result,param);
-            debugger
         }
     })
 

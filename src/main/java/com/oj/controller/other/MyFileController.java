@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +51,13 @@ public class MyFileController {
         return myfileService.getFileMapList(param);
     }
 
-    @PostMapping("/uploadMyFile")
+    @RequestMapping("/uploadMyFile")
     @ResponseBody
     public Map<String, String> uploadMyFile(HttpServletRequest request, @RequestParam("file") MultipartFile file)
     {
         Map<String, String> map = new HashMap<>();
+        System.out.println("flag = " + request.getParameter("flag"));
+        System.out.println("session id" + request.getSession().getAttribute("user_id").toString());
         try {
             myfileService.uploadMyFile(request, file);
             map.put("flag", "1");
@@ -111,5 +114,32 @@ public class MyFileController {
         String id = request.getParameter("id");
         //System.out.println("id : " + id);
         myfileService.downloadFile(id, response);
+    }
+
+    @PostMapping("/fileFlag")
+    @ResponseBody
+    public List<Map> fileFlag(HttpServletRequest request)
+    {
+        String id = request.getParameter("id");
+        //System.out.println(id);
+        //System.out.println(myfileService.fileFlag(id));
+        return myfileService.fileFlag(id);
+    }
+
+    @PostMapping("/saveFileFlag")
+    @ResponseBody
+    public Map<String, String> saveFileFlag(String id, String flag)
+    {
+        Map<String, String> map = new HashMap<>();
+        try {
+            myfileService.saveFileFlag(id, flag);
+            map.put("flag", "1");
+            return map;
+        } catch (Exception e){
+            map.put("flag", "0");
+            map.put("message", e.getMessage());
+            log.error(e.getMessage());
+            return map;
+        }
     }
 }
