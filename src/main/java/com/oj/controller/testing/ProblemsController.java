@@ -1,7 +1,6 @@
 package com.oj.controller.testing;
 
 import com.oj.entity.testing.Problem;
-import com.oj.service.serviceImpl.testing.ProblemsServiceImpl;
 import com.oj.service.testing.ProblemsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,7 @@ public class ProblemsController {
     //依赖注入ProblemService
     @Autowired
     private ProblemsService problemsService;
+
 
     @RequestMapping("/")
     //返回question.html页面
@@ -82,7 +82,6 @@ public class ProblemsController {
     @ResponseBody
     public Map<String, String> saveOrUpdateProblem(@RequestBody Problem problem){
         Map<String, String> map = new HashMap<>();
-        System.out.println("----------------------------------------");
         try {
             problemsService.saveOrUpadateProblem(problem);
             map.put("flag", "1");
@@ -97,7 +96,8 @@ public class ProblemsController {
     @PostMapping("getProblemDetails")
     @ResponseBody
     public List<Map> getProblemDetails(HttpServletRequest request){
-        return problemsService.getProblemDetails(request.getParameter("id"));
+        List<Map> p = problemsService.getProblemDetails(request.getParameter("id"));
+        return p;
     }
     @PostMapping("analyzeProblem")
     @ResponseBody

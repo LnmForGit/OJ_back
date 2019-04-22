@@ -28,7 +28,7 @@ public interface ProblemsMapper {
     //更新题目
     @Update("update teach_problems set  name=#{name},subjectid=#{subjectid},public=#{isPublic}, description=#{description}, intype=#{intype}, " +
            "outtype=#{outtype}, insample=#{insample}, outsample=#{outsample},author=#{author}, maxtime=#{maxtime},maxmemory=#{maxmemory}," +
-            "rank=#{rank} where id = #{id}")
+            "rank=#{rank},exam_code=#{exam_code},is_show_exepl=#{is_show_exepl} where id = #{id}")
      int update(Problem problem);
     //删除题目
     @Delete("delete from teach_problems where id = #{id}")
@@ -36,9 +36,9 @@ public interface ProblemsMapper {
 
     //增加题目
     @Insert("insert into teach_problems (name,description,kind,intype,outtype,insample,outsample,author,time,subjectid,maxtime," +
-            "maxmemory,public,rank,test_data_id,submit_id) " +
+            "maxmemory,public,rank,test_data_id,submit_id,exam_code,is_show_exepl) " +
             "values (#{name},#{description},#{kind},#{intype},#{outtype},#{insample},#{outsample},#{author}," +
-            "#{time},#{subjectid},#{maxtime},#{maxmemory},#{isPublic},#{rank},#{test_data_id},#{submit_id})" )
+            "#{time},#{subjectid},#{maxtime},#{maxmemory},#{isPublic},#{rank},#{test_data_id},#{submit_id},#{exam_code},#{is_show_exepl})" )
      int insert(Problem problem);
 
 

@@ -43,7 +43,7 @@ public class Problem {
     //题目星级：teach_problems表中rank字段
     private String rank;
     //is_show_exepl
-//    private String isShowExepl;
+    private String is_show_exepl;
 //    //show_test
 //    private String showTest;
 
@@ -190,5 +190,13 @@ public class Problem {
 
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public String getIs_show_exepl() {
+        return is_show_exepl;
+    }
+
+    public void setIs_show_exepl(String is_show_exepl) {
+        this.is_show_exepl = is_show_exepl;
     }
 }
