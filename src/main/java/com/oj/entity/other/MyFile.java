@@ -17,6 +17,8 @@ public class MyFile {
     private String route;
     //大小
     private long size;
+    //标记（是公开还是私有）
+    private int flag;
 
     public String getId()
     {
@@ -47,6 +49,8 @@ public class MyFile {
         return size;
     }
 
+    public int getFlag(){return flag;}
+
     public void setId(String Course_id)
     {
         this.id = Course_id;
@@ -68,10 +72,11 @@ public class MyFile {
         this.route = route;
     }
     public void setSize(long size){this.size = size;}
+    public void setFlag(int flag){this.flag = flag;}
 
     public String toString()
     {
-        return name + " - " + upload_time + " - " + uploader_id + " - " + route;
+        return name + " - " + upload_time + " - " + uploader_id + " - " + route + " - " + flag;
     }
 
 }

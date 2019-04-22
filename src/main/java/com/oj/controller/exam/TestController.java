@@ -61,6 +61,12 @@ public class TestController {
         model.addAttribute("info", info);
         return "exam/addTest";
     }
+    @RequestMapping("/testScore/{id}")
+    public String testScore(@PathVariable String id, Model model){
+        System.out.println("flag:"+id);
+        return "exam/testScore";
+
+    }
 
     //获取考试信息
     @PostMapping("/getTestInfo")

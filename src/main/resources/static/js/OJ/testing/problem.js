@@ -4,11 +4,11 @@ $(document).ready(function () {
 });
 
 var icon = "<i class='fa fa-times-circle'></i>";
-var rank;
+
 //重置form内的标签
 function resetForm() {
     $(".form-horizontal input").val("");
-    $(".form-horizontal select").val("");
+    $(".form-horizontal select").val("").trigger("change");
     queryProblemsInfo();
 }
 
@@ -32,8 +32,6 @@ function queryProblemsInfo() {
                 "serverSide": false,
                 "autoWidth" : false,
                 "bSort": false,
-                //     "filter": false,
-                //     "destroy": true,
                 "data" : result,
                 "columns" : [{
                     "data" : "id"

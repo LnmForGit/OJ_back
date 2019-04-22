@@ -22,15 +22,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.Date;
 
-/*
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-*/
-
 @Service
 public class MyFileServicelmpl implements MyFileService {
     @Autowired(required = false)
@@ -47,6 +38,17 @@ public class MyFileServicelmpl implements MyFileService {
         return mapper.getFileMapList(param);
     }
 
+    //根据文件ID获取文件名
+    public List<Map> fileFlag(String id)
+    {
+        return mapper.getFileNameAndNameById(id);
+    }
+
+    //保存状态
+    public void saveFileFlag(String id, String flag)
+    {
+        mapper.saveFileFlag(id, flag);
+    }
 
     //检查文件名字
     public void checkFileName(String name) throws Exception
@@ -69,6 +71,7 @@ public class MyFileServicelmpl implements MyFileService {
             {
                 in = file.getInputStream();
                 String id = request.getSession().getAttribute("user_id").toString();
+                int flag = Integer.valueOf(request.getParameter("flag"));
 
                 //判断是否有该用户的文件目录，无则创建以此来让文件能够顺利存储到该用户目录下
                 String []list = new File(rootPath).list();
@@ -100,6 +103,7 @@ public class MyFileServicelmpl implements MyFileService {
                 M.setUploader_id(id);
                 M.setRoute(route);
                 M.setSize(file.getSize());
+                M.setFlag(flag);
                 System.out.println(M);
                 mapper.save(M);
             }
@@ -194,51 +198,3 @@ public class MyFileServicelmpl implements MyFileService {
     }
 
 }
-
-
-/*
- * @author xielanning
- * @Time 2019年4月4日 10点41分
- * @Description 处理前端传来的excel文件
- */
-/*
-public class MyFileServicelmpl implements ImportService {
-
-    private StudentService service = new StudentServicelmpl();
-
-
-
-    //检查对应字符串是否符号规范，并返回一个student对象
-    public Student checkB(String account, String name, String classId ) throws Exception{
-
-        //Pattern p=Pattern.compile("^[0-9]*[1-9][0-9]*$");
-        //Map<String, String> map=null;
-        //Matcher m=p.matcher(bot);
-        if(null==account || null==name || account.equals("") || name.equals("")) throw new Exception("学号、姓名都不能为空");
-        if( account.getBytes().length>64) throw new Exception("学号不符合不能超过64位");
-        if(name.getBytes().length>50) throw new Exception("姓名长度不能超过50位");
-        return new Student(account, " ", name, classId);
-
-    }
-    public Student check(String account, String name, String className ) throws Exception{
-        //暂时未用到的函数
-        Pattern p=Pattern.compile("^[0-9]*[1-9][0-9]*$");
-        //Map<String, String> map=null;
-        //Matcher m=p.matcher(bot);
-        if(null==account || null==name || null==className) throw new Exception("学号、姓名和班级名称都不能为空");
-        System.out.println("#length:"+account.getBytes().length);
-        if( account.getBytes().length>64) throw new Exception("学号不符合不能超过64位");
-        if(name.getBytes().length>50) throw new Exception("姓名长度不能超过50位");
-        if(className.getBytes().length>40) throw new Exception("班级长度不能超过40位");
-        System.out.println("#flag2");
-        if(null==service)
-            System.out.println("#service is null");
-        className = service.getTheClassIdByName(className); //这里有问题！！！！
-        System.out.println("#flag1");
-        if(null==className) throw new Exception("未找到对应名称的班级");
-        System.out.println("#flag");
-        return new Student(account, " ", name, className);
-
-    }
-}
-*/

@@ -22,6 +22,10 @@ public interface MyFileService {
     public void downloadFile(String id, HttpServletResponse response);
     //检查文件名字
     public void checkFileName(String name) throws Exception;
+    //根据文件ID获取状态
+    public List<Map> fileFlag(String id);
+    //保存状态
+    public void saveFileFlag(String id, String flag);
     /*
     //获取年级下拉信息
     public List<Map> getGradeSelectInfo();
