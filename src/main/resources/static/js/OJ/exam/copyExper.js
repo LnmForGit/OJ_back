@@ -2,13 +2,13 @@
 var selectedQueList = [];
 var selectedClassList = [];
 var selectedJroomList = [];
-if (experInfo.id != 'add' ){
+
     selectedQueList = experInfo.selectedQueList;
     selectedClassList = experInfo.selectedClassList;
-    selectedJroomList = experInfo.selectedJroomList;
-    experInfo.experInfo.start = formatTime(experInfo.experInfo.start);
-    experInfo.experInfo.end = formatTime(experInfo.experInfo.end);
-}
+    //selectedJroomList = experInfo.selectedJroomList;
+    //experInfo.experInfo.start = formatTime(experInfo.experInfo.start);
+    //experInfo.experInfo.end = formatTime(experInfo.experInfo.end);
+    console.log(selectedClassList);
 toastr.options = {
     "closeButton": true,
     "debug": false,
@@ -51,17 +51,11 @@ $(document).ready(function () {
 function loadLayerDate() {
     var startTime;
     var endTime;
-    if (experInfo.id != 'add'){
-        startTime = experInfo.experInfo.start;
-        endTime = experInfo.experInfo.end;
-        $('#experStartTime').val(startTime);
-        $('#experEndTime').val(endTime);
-    }else{
-        startTime = laydate.now();
-        endTime = laydate.now();
-        $('#experStartTime').val(laydate.now(0, 'YYYY-MM-DD hh:mm:ss'));
-        $('#experEndTime').val(laydate.now(7, 'YYYY-MM-DD hh:mm:ss'));
-    };
+
+    startTime = laydate.now();
+    endTime = laydate.now();
+    $('#experStartTime').val(laydate.now(0, 'YYYY-MM-DD hh:mm:ss'));
+    $('#experEndTime').val(laydate.now(7, 'YYYY-MM-DD hh:mm:ss'));
 
     //日期范围限制
     var start = {
@@ -250,6 +244,7 @@ function loadPreSelectClass() {
             if ($.fn.dataTable.isDataTable(dataTable)) {
                 dataTable.DataTable().destroy();
             }
+
             dataTable.DataTable({
                 "paging": false,
                 "serverSide": false,

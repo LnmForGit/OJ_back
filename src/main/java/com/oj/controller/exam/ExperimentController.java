@@ -52,7 +52,39 @@ public class ExperimentController {
         model.addAttribute("info", info);
         return "exam/addExper";
     }
+    @RequestMapping("/copyExper/{id}")
+    //@ResponseBody
+    public String copyExper(@PathVariable String id, Model model,HttpServletRequest request){
+        Map<String, Object> info = new HashMap<>();
+        //ID
+        info.put("id", "add");
+        //如果为编辑，加入被编辑的实验的参数
+            //实验信息
+            info.put("experInfo", experimentService.getExperInfoById(id));
+            //已选择试题信息
+            info.put("selectedQueList", experimentService.getSelectedQueListById(id));
+            //已选择班级信息
+            info.put("selectedClassList", experimentService.loadPreSelectClass(request.getSession().getAttribute("user_id").toString()));
+            //已选择机房信息
+            //info.put("selectedJroomList", experimentService.getSelectedJroomListById(id));
 
+        model.addAttribute("info", info);
+        return "exam/copyExper";
+    }
+    @RequestMapping("/showIp/{tid}")
+    public String showIp(@PathVariable String tid, Model model){
+        Map<String, Object> info = new HashMap<>();
+        //ID
+        info.put("tid",tid);
+        model.addAttribute("info", info);
+        return "exam/showIp";
+    }
+    @PostMapping("/getIpInfoList")
+    @ResponseBody
+    public List<Map> getIpInfoList(@RequestBody Map<String, String> param, HttpServletRequest request){
+        //String experName = request.getParameter("experName");
+        return experimentService.getIpInfoById(param);
+    }
     //获取实验信息
     @PostMapping("/getExperInfo")
     @ResponseBody

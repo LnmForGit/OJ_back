@@ -36,7 +36,9 @@ public interface ExperimentMapper {
     //通过ID获取实验信息
     @Select("SELECT id, name, FROM_UNIXTIME(start) as start, FROM_UNIXTIME(end) as end, is_ip, only_ip, description  FROM teach_test WHERE id = #{id}")
     public Map getExperInfoById(String id);
-
+    //通过ID获得IP信息
+    @SelectProvider(type=ExperimentProvider.class, method = "getIpInfoSql")
+    public List<Map> getIpInfoById(@Param("condition")Map<String, String> params);
     //通过ID获取已选择试题信息
     @Select("SELECT b.id, b.name, a.score FROM teach_test_problems a INNER JOIN teach_problems b on a.pid = b.id WHERE a.tid = #{id} ORDER BY b.id")
     public List<Map> getSelectedQueListById(String id);
@@ -75,6 +77,6 @@ public interface ExperimentMapper {
     @Delete("DELETE FROM teach_test where id = #{id}")
     public void deleteExper(String id);
 
-    @Update("UPDATE teach_test SET name=#{name}, start=#{start}, end=#{end}, description=#{description}, only_ip=#{onlyIp}, is_ip=#{isIp} where id=#{id}")
+    @Update("UPDATE teach_test SET name=#{name}, start=UNIX_TIMESTAMP(#{start}), end=UNIX_TIMESTAMP(#{end}), description=#{description}, only_ip=#{onlyIp}, is_ip=#{isIp} where id=#{id}")
     public void updateExper(Experiment experInfo);
 }
