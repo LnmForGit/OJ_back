@@ -183,7 +183,7 @@ function showpending() {
                     "            <h3>开始时间:"+formatDate(result[i].start_time)+"<br>"+
                     "                结束时间:"+formatDate(result[i].end_time)+"<br>查看<a href='#' style='position:relative;right:0px;bottom:0px;color: #0d8ddb'>成绩</a></h3>\n" +
                     "        </div>\n" +
-                    "    </div></li>"
+                    "    </div></li>";
                 // document.getElementById("notes").innerHTML += "<li>\n" +
                 //     "                <div>\n" +s+
                 //     "                    <h3><a href='"+str+"' style='position:relative;left: 10px;\n" +
