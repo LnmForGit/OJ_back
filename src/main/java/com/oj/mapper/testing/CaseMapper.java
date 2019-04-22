@@ -27,4 +27,12 @@ public interface CaseMapper {
     @Delete("delete from teach_test_data where id = #{id}")
     void deleteCase(String id);
 
+    //插入一条测试信息
+    @Insert("INSERT INTO teach_test_data (problem_id,in_put,out_put,TIME,description) " +
+            "SELECT id ,#{in_put},#{out_put},#{time},#{description} FROM `teach_problems` ORDER BY id DESC LIMIT 1 ;")
+    int addCaseWithoutProblemId(Case c);
+
+    //根据题目删除测试用例
+    @Delete("delete from teach_test_data where problem_id = #{id}")
+    void deleteCaseByProblem(String id);
 }
