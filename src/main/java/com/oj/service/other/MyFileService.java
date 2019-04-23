@@ -13,7 +13,7 @@ public interface MyFileService {
     //获取教师下拉信息
     public List<Map> getAdminSelectInfo();
     // 获取文件列表
-    public List<Map> getFileMapList(Map<String, String> param);
+    public List<Map> getFileMapList(Map<String, String> param, String id);
     //上传文件
     public void uploadMyFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception;
     //删除文件
@@ -21,7 +21,7 @@ public interface MyFileService {
     //下载文件
     public void downloadFile(String id, HttpServletResponse response);
     //检查文件名字
-    public void checkFileName(String name) throws Exception;
+    public void checkFileName(String name, String id) throws Exception;
     //根据文件ID获取状态
     public List<Map> fileFlag(String id);
     //保存状态
