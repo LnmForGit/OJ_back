@@ -12,7 +12,23 @@ function formatDate (date) {
     var hour = date.getHours();
     var min = date.getMinutes();
     var scend = date.getSeconds();
-    var time = y+'-'+m+'-'+d+' '+hour+':'+min+':'+scend;
+    if(m<10)
+        var mm = '0'+m;
+    else
+        var mm = m;
+    if(d<10)
+        var dd = '0'+d;
+    else
+        var dd = d;
+    if(hour<10)
+        var hhour = '0'+hour;
+    else
+        var hhour = hour;
+    if(min<10)
+        var mmin = '0'+min;
+    else
+        var mmin = min;
+    var time = y+'-'+mm+'-'+dd+' '+hhour+':'+mmin;
     return time;
 }
 function showhomepage() {
@@ -145,26 +161,40 @@ function showpending() {
         }),
         success: function (result) {
             var len = result.length;
-            if(len>8)
+            if(len>3)
             {
-                len = 5;
+                len = 3;
             }
             for(var i=0;i<len;i++)
             {
                 if(result[i].state=="已结束")
                 {
-                    //var s = "<h2 style='color: #9999cc;background-color: #aa6659'>已结束</h2>";
                     var s = "<span class=\"label label-danger\">已结束</span>";
+                    if(result[i].NAME[0]=="实")
+                    {
+                        var ss = "<a href='/experimentMn/experimentScore/"+result[i].id+"'>查看成绩</a>";
+                    }
+                    else
+                    {
+                        var ss = "<a href='/testMn/testScore/"+result[i].id+"'>查看成绩</a>";
+                    }
                 }
                 else if(result[i].state=="正在进行")
                 {
-                    //var s = "<h2 style='color: #131e26;background-color: #2D93CA'>正在进行</h2>"
                     var s = "<span class=\"label label-info\">进行中</span>";
+                    if(result[i].NAME[0]=="实")
+                    {
+                        var ss = "<a href='/experimentMn/experimentScore/"+result[i].id+"'>查看成绩</a>";
+                    }
+                    else
+                    {
+                        var ss = "<a href='/testMn/testScore/"+result[i].id+"'>查看成绩</a>";
+                    }
                 }
                 else if(result[i].state=="未开始")
                 {
-                    //var s = "<h2 style='color: #131e26;background-color: #4cae4c'>未开始</h2>"
                     var s = "<span class=\"label label-warning\">未开始</span>";
+                    var ss = "";
                 }
                 var str = "";
                 if(result[i].NAME[0]=="实")
@@ -175,23 +205,15 @@ function showpending() {
                 {
                     str = "/testMn/"
                 }
-                document.getElementById("notes").innerHTML +="<li><div class=\"ibox\">\n" +
-                    "        <div class=\"ibox-title\">\n" +s+
+                document.getElementById("notes").innerHTML +="<td><div class='ibox' style='height: 200px;padding: 10px'>\n" +
+                    "        <div class='ibox-title'>\n" +s+
                     "            <h3><a href='"+str+"'>"+result[i].NAME+"</a></h3>\n" +
                     "        </div>\n" +
-                    "        <div class=\"ibox-content\">\n" +
+                    "        <div class='ibox-content'>\n" +
                     "            <h3>开始时间:"+formatDate(result[i].start_time)+"<br>"+
-                    "                结束时间:"+formatDate(result[i].end_time)+"<br>查看<a href='#' style='position:relative;right:0px;bottom:0px;color: #0d8ddb'>成绩</a></h3>\n" +
+                    "                结束时间:"+formatDate(result[i].end_time)+"<br>"+ss+"</h3>\n" +
                     "        </div>\n" +
-                    "    </div></li>";
-                // document.getElementById("notes").innerHTML += "<li>\n" +
-                //     "                <div>\n" +s+
-                //     "                    <h3><a href='"+str+"' style='position:relative;left: 10px;\n" +
-                //     "    top: 0px;color: #2d6ca1'>"+result[i].NAME+"</a></h3>\n" +
-                //     "                    <h4>开始时间:"+formatDate(result[i].start_time)+"<br>"+
-                //     "结束时间:"+formatDate(result[i].end_time)+"<br>查看<a href='#' style='position:relative;right:0px;bottom:0px;color: #2d6ca1'>成绩</a></h4>\n" +
-                //     "                </div>\n" +
-                //     "            </li>";
+                    "    </div></td>";
             }
         }
     })
