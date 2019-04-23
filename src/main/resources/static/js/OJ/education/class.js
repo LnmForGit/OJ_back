@@ -228,9 +228,9 @@ function classStudentShow(id) {
             //alert(JSON.stringify(result[0].name));
             var innerHtml = ''
             for (i = 0; i < result.length; i++){
-                innerHtml += "<tr><td>"
+                innerHtml += "<tr><td width='30%'>"
                 innerHtml += result[i].student_account+"</td>"
-                innerHtml += "</td><td>"+result[i].student_name+"</td></tr>"
+                innerHtml += "</td><td width='70%'>"+result[i].student_name+"</td></tr>"
             }
             $('#CLDtbody').append(innerHtml)
         }

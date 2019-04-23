@@ -4,6 +4,7 @@ import com.oj.entity.other.MyFile;
 import com.oj.mapper.provider.other.MyFileProvider;
 import org.apache.ibatis.annotations.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +18,10 @@ public interface MyFileMapper {
     //通过MyFileProvider类中的getQuerySql()方法动态构建查询语句
     @SelectProvider(type = MyFileProvider.class, method = "getQuerySql")
     //查询文件列表返回Map类型List
-    public List<Map> getFileMapList(@Param("condition") Map<String, String> param);
+    public List<Map> getFileMapList(@Param("condition") Map<String, String> param, String id);
     //通过name获取对应的文件信息
-    @Select("select * from teach_myfile where name = #{name}")
-    public List<Map> getFileByName(@Param("name") String name);
+    @Select("select * from teach_myfile where name = #{name} and uploader_id = #{id}")
+    public List<Map> getFileRouteByName(String name, String id);
     //存储文件信息
     @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size, flag) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size}, #{flag})")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
