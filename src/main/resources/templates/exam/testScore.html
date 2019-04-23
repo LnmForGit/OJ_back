@@ -8,42 +8,46 @@
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-sm-12">
+
+        <div class="col-sm-6" >
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>考试成绩查询</h5>
+                <div style="width:100%; height:50px;">
+                    <h5>考试信息</h5>
                 </div>
                 <div class="ibox-content">
-                    <form method="get" class="form-horizontal">
-                        <div class="form-group">
-                            <div class="col-md-4 droppable sortable ui-droppable ui-sortable">
-                                <div class="form-group draggable ui-draggable dropped">
-                                    <div class="col-sm-7">
-                                        <table class="table table-striped table-bordered table-hover dataTables-example">
-                                            <tr >
-                                                <td style="width:50%; height:400px; ">
-                                                    <div style="border:1px solid; width:300px; height:400px; " >
-                                                        考试简要信息<br/>
-                                                        (UI布局是一件非常让人头秃的事情!!!)
-                                                    </div>
-                                                </td>
-                                                <td style="width:50%; height:400px; ">
-                                                    <div style="border:1px solid; width:600px; height:400px; ">
-                                                        <div id="scorePie" style="width:600px; height:400px; "></div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </table>
-
-                                    </div>
+                    <div class="ibox-title">
+                        <span >考试信息</span>
+                    </div>
+                    <table style="width:100%;">
+                        <tr>
+                            <td style="width:50%; height:300px; border:1px solid; ">
+                                <div style="width:100%; height:100%; ">
+                                    <span>题目信息</span>
                                 </div>
-                            </div>
-
-                        </div>
-                    </form>
+                            </td>
+                            <td style="width:50%; height:300px; border:1px solid; ">
+                                <div style="width:100%; height:100%; ">
+                                    <span>班级信息</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
+        <div class="col-sm-6" >
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>考试简要</h5>
+                    <div class="ibox-tools">
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="echarts" id="echarts-pie-chart" style="height:350px; "></div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="row">
         <div class="col-sm-12">
@@ -66,10 +70,10 @@
                         <thead>
                         <tr>
                             <th width="10%">学号</th>
-                            <th width="10%">姓名</th>
+                            <th width="15%">姓名</th>
                             <th width="10%">班级</th>
-                            <th width="30">已提交题目</th>
-                            <th width="30">对应分数</th>
+                            <th width="5%">总分</th>
+                            <th width="50%">试题对应分数</th>
                             <th width="10%">操作</th>
                         </tr>
                         </thead>
@@ -82,6 +86,7 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="@{js/plugins/echarts/echarts-all.js}"></script>
 <script type="text/javascript" th:src="@{/js/OJ/exam/echarts.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/OJ/exam/testScore.js}"></script>
 </body>

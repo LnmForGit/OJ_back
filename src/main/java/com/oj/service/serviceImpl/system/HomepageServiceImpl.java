@@ -28,8 +28,10 @@ public class HomepageServiceImpl implements HomepageService
         long nowtime = Calendar.getInstance().getTimeInMillis();
         for(int i=0;i<len;i++)
         {
-            long starttime = (int)l.get(i).get("start_time")*1000;
-            long endtime = (int)l.get(i).get("end_time")*1000;
+            long starttime = (int)l.get(i).get("start_time");
+            long endtime = (int)l.get(i).get("end_time");
+            starttime*=1000;
+            endtime*=1000;
             if(starttime<nowtime&&nowtime<endtime)
             {
                 l.get(i).put("state","正在进行");

@@ -73,7 +73,10 @@ public class ExperimentServiceImpl implements ExperimentService {
     public Map getExperInfoById(String id) {
         return mapper.getExperInfoById(id);
     }
-
+    @Override
+    public List<Map> getIpInfoById(Map<String, String> param) {
+        return mapper.getIpInfoById(param);
+    }
     /**
      * 通过ID获取已选择试题列表接口功能实现
      * @param id

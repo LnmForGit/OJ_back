@@ -26,7 +26,8 @@ public interface ExperimentService {
 
     //通过ID获取当前实验信息
     public Map getExperInfoById(String id);
-
+    //通过ID获得当前所有的IP
+    public List<Map> getIpInfoById(Map<String, String> param);
     //通过ID获取已选择试题列表
     public List<Map> getSelectedQueListById(String id);
 

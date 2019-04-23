@@ -65,4 +65,19 @@ public class CaseController {
             return map;
         }
     }
+
+    @PostMapping("caseDeleteByProblem")
+    @ResponseBody
+    public Map<String, String> problemDeleteByProblem(HttpServletRequest request){
+        Map<String, String> map = new HashMap<>();
+        try {
+            caseService.CaseDeleteByProblem(request.getParameter("id"));
+            map.put("flag", "1");
+            return map;
+        }catch (Exception e){
+            map.put("flag", "0");
+            log.error(e.getMessage());
+            return map;
+        }
+    }
 }
