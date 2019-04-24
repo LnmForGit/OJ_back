@@ -4,6 +4,7 @@ $(document).ready(function () {
 });
 
 var icon = "<i class='fa fa-times-circle'></i>";
+var caseResult = -1;
 
 //重置form内的标签
 function resetForm() {
@@ -87,25 +88,43 @@ function deleteProblem(id) {
                 $.ajax({
                     type: "POST",
                     url: "/problemsMn/problemDelete",
-                    // contentType: "application/json;charset=UTF-8",
+                    async: false,
                     dataType: "json",
                     data:{
                         "id" : id
                     },
                     success:function (result){
-                        if(result.flag == "1"){
+                        deleteProblemTest(id);
+                        if(result.flag == "1" && caseResult == 1){
                             queryProblemsInfo();
                             swal("删除成功！", "题目已被删除", "success");
                         }else{
                             swal("删除失败！", "题目暂时不能被删除", "error");
                         }
-
+                        caseResult = -1;
                     }
                 })
             }else {
                 swal("已取消", "你取消了删除题目操作", "error");
             }
         });
+}
+
+//删除题目的同时删除其测试用例
+function deleteProblemTest(id){
+    $.ajax({
+        type: "POST",
+        url: "/caseMn/caseDeleteByProblem",
+        async: false,
+        dataType: "json",
+        data:{
+            "id" : id
+        },
+        success:function (result){
+            caseResult = 1;
+        }
+    })
+
 }
 
 //跳转题目编辑详情模态窗口

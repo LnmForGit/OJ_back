@@ -5,7 +5,6 @@ $(document).ready(function () {
 
 });
 
-caseResult = -1;
 var rank = 1;
 
 //题目编辑详情
@@ -75,6 +74,7 @@ function editProblem(){
                 rank = obj.fromNumber;
             }
         });
+        $("#dialogProblemTestId").attr("value", 1);
     }
 
 }
@@ -127,9 +127,9 @@ function loadSummernote() {
 
 //添加新的测试用例
 function newTest(){
-
+    var id = getUrlParam("id") == 0 ? 1 : 0;
     var newTest = '<div class="row">\n' +
-        '<input type="hidden" name="dialogProblemTestId" id="dialogProblemTestId" value="0">' +
+        '<input type="hidden" name="dialogProblemTestId" id="dialogProblemTestId" value=' + id + '>' +
         '                                    <div class="col-sm-2"></div>\n' +
         '                                    <div class="col-sm-4">\n' +
         '                                         <textarea id="dialogProblemInTest" name="dialogProblemInTest" placeholder="输入用例" class="form-control" rows="6" style="resize:none;"></textarea>\n' +
@@ -204,32 +204,23 @@ function saveOrUpdateProblem() {
     var id = getUrlParam("id");
     var timestamp = Date.parse( new Date() ).toString();
     timestamp = timestamp.substr(0,10);
-    if($("#dialogProblemInfo").validate({
-        rules: {
-            dialogProblemName: {
-                required: true,
-                maxlength: 40
-            },
-            problemSubject: {
-                required: true,
-            },
-            dialogProblemMaxTime: {
-                required: true
-            },
-            dialogProblemMaxMemory: {
-                required: true
-            },
-        },
-        messages: {
-            dialogProblemName: {
-                required: "题目名称不能为空",
-                minlength: "题目名称最长为40",
-            },
-            dialogProblemSubject: {
-                required: "请选择题目类别",
-            },
-        }
-    }).form()){
+    if($("#dialogProblemName").val() == ""){
+        toastr.error("","题目名称不能为空");
+        return;
+    }else if($("#dialogProblemName").val().length >= 40){
+        toastr.error("","题目名称最长为40");
+        return;
+    }else if($("#problemSubject").val() <= 0){
+        toastr.error("","请选择题目类别");
+        return;
+    }else if($("#dialogProblemMaxTime").val() == ""){
+        toastr.error("","最大时间不能为空");
+        return;
+    }else if($("#dialogProblemMaxMemory").val() == ""){
+        toastr.error("","最大内存不能为空");
+        return;
+    }
+
         $.ajax({
             type: "POST",
             url: "/problemsMn/saveOrUpdateProblem",
@@ -259,23 +250,13 @@ function saveOrUpdateProblem() {
 
             }),
             success:function (result){
-                saveOrUpdateTestData();
-                if(result.flag == 1 && caseResult == 1){
-                    swal({
-                        title: "保存成功！",
-                        type: "success",
-                        confirmButtonText:"确认",
-                    },function (isConfirm) {
-                            if(isConfirm)
-                                window.location.href="/problemsMn/";
-                        })
+                if(result.flag == 1 ){
+                    saveOrUpdateTestData();
                 }else{
                     swal("保存失败！", result.message, "error");
                 }
-                caseResult == -1;
             }
         });
-    }
 }
 
 function saveOrUpdateTestData(){
@@ -289,7 +270,6 @@ function saveOrUpdateTestData(){
     for(var i=0; i<arr_id.length; i++){
         var c = new Object();
         c.problem_id = problem_id
-
         c.id = $(arr_id[i]).attr("value")
         c.in_put= $(arr_in[i]).val()
         c.out_put = $(arr_out[i]).val()
@@ -306,8 +286,17 @@ function saveOrUpdateTestData(){
         traditional:true,
         contentType: "application/json;charset=UTF-8",
         success:function (result){
-            if(result.flag == 1){
-               caseResult = 1;
+            if(result.flag == 1 ){
+                swal({
+                    title: "保存成功！",
+                    type: "success",
+                    confirmButtonText:"确认",
+                },function (isConfirm) {
+                    if(isConfirm)
+                        window.location.href="/problemsMn/";
+                })
+            }else{
+                swal("保存失败！", result.message, "error");
             }
         }
     });

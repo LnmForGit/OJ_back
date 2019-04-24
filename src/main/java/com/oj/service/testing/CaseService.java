@@ -16,4 +16,7 @@ public interface CaseService {
     //根据题目id获取测试数据
     List<Map> getCase(String id);
 
+    //根据题目删除测试数据
+    void CaseDeleteByProblem(String id);
+
 }

@@ -21,7 +21,7 @@ public interface MyFileService {
     //下载文件
     public void downloadFile(String id, HttpServletResponse response);
     //检查文件名字
-    public void checkFileName(String name) throws Exception;
+    public void checkFileName(String name, String id) throws Exception;
     //根据文件ID获取状态
     public List<Map> fileFlag(String id);
     //保存状态

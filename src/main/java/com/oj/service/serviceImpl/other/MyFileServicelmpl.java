@@ -35,6 +35,7 @@ public class MyFileServicelmpl implements MyFileService {
 
     public List<Map> getFileMapList(Map<String, String> param)
     {
+        System.out.println(param.toString());
         return mapper.getFileMapList(param);
     }
 
@@ -51,9 +52,9 @@ public class MyFileServicelmpl implements MyFileService {
     }
 
     //检查文件名字
-    public void checkFileName(String name) throws Exception
+    public void checkFileName(String name, String id) throws Exception
     {
-        if(mapper.getFileByName(name).size()>0){
+        if(mapper.getFileRouteByName(name, id).size() > 0){
             throw new Exception("当前文件名已存在!");
         }
     }
@@ -61,10 +62,6 @@ public class MyFileServicelmpl implements MyFileService {
     //上传文件
     public void uploadMyFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception
     {
-        //若当前文件名已经存在，则抛出文件已存在的异常
-        if(mapper.getFileByName(file.getOriginalFilename()).size()>0){
-            throw new Exception("当前文件名已存在!");
-        }else{
             InputStream in = null;
             OutputStream out = null;
             try
@@ -137,7 +134,6 @@ public class MyFileServicelmpl implements MyFileService {
                     }
                 }
             }
-        }
     }
 
     public void downloadFile(String id, HttpServletResponse response)

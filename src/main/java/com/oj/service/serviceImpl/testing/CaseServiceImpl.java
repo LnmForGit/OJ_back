@@ -25,12 +25,14 @@ public class CaseServiceImpl implements CaseService {
     //测试数据更新或保存
     public void saveOrUpadateCase(Case[] c){
         //如果问题不已经存在则添加
-        System.out.println(c[0].getId());
         for(int i = 0; i < c.length; i++){
             if(c[i].getId().equals("0")){
                 mapper.addCase(c[i]);
             }
-            //否则更新
+            else if(c[i].getId().equals("1")){
+                mapper.addCaseWithoutProblemId(c[i]);
+                System.out.println("新增题目");
+            } //否则更新
             else{
                 mapper.alterCase(c[i]);
             }
@@ -42,5 +44,10 @@ public class CaseServiceImpl implements CaseService {
     public List<Map> getCase(String id){
         //System.out.println(id);
         return mapper.getProblemById(id);
+    }
+
+    @Override
+    public void CaseDeleteByProblem(String id) {
+        mapper.deleteCaseByProblem(id);
     }
 }
