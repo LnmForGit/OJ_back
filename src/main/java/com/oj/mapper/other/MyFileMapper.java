@@ -18,7 +18,7 @@ public interface MyFileMapper {
     //通过MyFileProvider类中的getQuerySql()方法动态构建查询语句
     @SelectProvider(type = MyFileProvider.class, method = "getQuerySql")
     //查询文件列表返回Map类型List
-    public List<Map> getFileMapList(@Param("condition") Map<String, String> param, String id);
+    public List<Map> getFileMapList(@Param("condition") Map<String, String> param);
     //通过name获取对应的文件信息
     @Select("select * from teach_myfile where name = #{name} and uploader_id = #{id}")
     public List<Map> getFileRouteByName(String name, String id);

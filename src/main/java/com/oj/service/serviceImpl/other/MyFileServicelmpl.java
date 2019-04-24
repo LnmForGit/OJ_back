@@ -33,10 +33,10 @@ public class MyFileServicelmpl implements MyFileService {
         return mapper.getAdminSelectInfo();
     }
 
-    public List<Map> getFileMapList(Map<String, String> param, String id)
+    public List<Map> getFileMapList(Map<String, String> param)
     {
-        System.out.println(id);
-        return mapper.getFileMapList(param, id);
+        System.out.println(param.toString());
+        return mapper.getFileMapList(param);
     }
 
     //根据文件ID获取文件名

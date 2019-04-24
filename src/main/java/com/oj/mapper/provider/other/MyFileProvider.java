@@ -25,12 +25,12 @@ public class MyFileProvider {
         if (!StringUtils.isEmpty(info.get("uploader_id"))){
             sql.append(" AND myfile.uploader_id = "+info.get("uploader_id")+" ");
         }
-        String id = params.get("id").toString();
+        String id = info.get("id");
         //System.out.println("id : "+id);
         if(!id.equals("2"))sql.append(" AND uploader_id = "+id+" ");
         sql.append(" AND myfile.uploader_id = admin.id order by myfile.upload_time desc");
         System.out.println(sql);
-        //System.out.println(params.toString());
+        System.out.println("params : " + params.toString());
         log.info(sql.toString());
         return sql.toString();
     }
