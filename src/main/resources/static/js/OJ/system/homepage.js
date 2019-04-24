@@ -205,7 +205,7 @@ function showpending() {
                 {
                     str = "/testMn/"
                 }
-                document.getElementById("notes").innerHTML +="<td><div class='ibox' style='height: 200px;padding: 10px'>\n" +
+                document.getElementById("notes").innerHTML +="<td><div class='ibox' style='padding: 10px'>\n" +
                     "        <div class='ibox-title'>\n" +s+
                     "            <h3><a href='"+str+"'>"+result[i].NAME+"</a></h3>\n" +
                     "        </div>\n" +
