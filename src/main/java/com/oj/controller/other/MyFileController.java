@@ -49,7 +49,8 @@ public class MyFileController {
     public List<Map> getFileMapList(HttpServletRequest request, @RequestBody Map<String, String> param)
     {
         String id = request.getSession().getAttribute("user_id").toString();
-        return myfileService.getFileMapList(param, id);
+        param.put("id", id);
+        return myfileService.getFileMapList(param);
     }
 
     @RequestMapping("/uploadMyFile")
