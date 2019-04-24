@@ -12,9 +12,7 @@
             src="http://i.tianqi.com/index.php?c=code&amp;id=38&amp;icon=1&amp;num=2&amp;align=left">
     </iframe>
 </div>
-<div class="container">
-    <!--<div class="col-sm-6">-->
-        <div class="ibox float-e-margins">
+        <div class="ibox float-e-margins" style="margin-top: 30px;margin-left: 100px;margin-right: 100px">
             <div class="ibox-content">
                 <div class="echarts" id="echarts-line-chart" _echarts_instance_="1555300560876"
                      style="-webkit-tap-highlight-color: transparent; user-select: none; background-color: rgba(0, 0, 0, 0); cursor: default;">
@@ -34,12 +32,19 @@
                 </div>
             </div>
         </div>
-    <div class="wrapper wrapper-content animated fadeInRight">
-        <ul id="notes">
-        </ul>
-        <h3><a href="/testMn/">查看更多考试</a></h3>
-        <h3><a href="/experimentMn/">查看更多实验</a></h3>
+ <div class="wrapper wrapper-content animated fadeInRight" style="margin-top: 30px;margin-left: 80px;margin-right: 100px">
+        <div class="row">
+            <div class="col-sm-4" >
+                <table border="0px" style="width: 1500px">
+                    <tr id="notes">
+                    </tr>
+                </table>
+            </div>
+        </div>
+     <h3 align="right"><a href="/testMn/">查看更多考试</a></h3>
+     <h3 align="right"><a href="/experimentMn/">查看更多实验</a></h3>
     </div>
+<div class="category-list">
         <div class="col-lg-3"><h1>如何新增题目？</h1>
             <h3>题目包含如下几个要素：</h3>
             <ul>
@@ -81,11 +86,10 @@
             <p><a class="btn btn-primary" href="/testMn/">开始
                 »</a></p>
         </div>
-    <!-- /middle -->
 </div>
+    <!-- /middle -->
 <script type="text/javascript" th:src="@{/js/OJ/system/homepage.js}"></script>
 <script type="text/javascript" th:src="@{/js/plugins/echarts/echarts-all.js}"></script>
-
 </body>
 
 </html>
