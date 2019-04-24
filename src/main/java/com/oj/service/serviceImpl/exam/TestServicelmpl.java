@@ -1,7 +1,6 @@
 package com.oj.service.serviceImpl.exam;
 
 import com.oj.entity.exam.Test;
-import com.oj.mapper.exam.ExperimentMapper;
 import com.oj.mapper.exam.TestMapper;
 import com.oj.service.exam.TestService;
 import net.sf.json.JSONObject;
@@ -13,11 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * @author xielanning
- * @Time 2019年4月17日 10点18分
- * @Description 考试管理Service接口实现
+ * @author lixu
+ * @Time 2019年4月1日 10点18分
+ * @Description 考试管理Service接口实现类
  */
 @Service
 public class TestServicelmpl implements TestService {
@@ -27,6 +25,9 @@ public class TestServicelmpl implements TestService {
 
     /**
      * 获取当前教师负责班级下的考试列表接口功能实现
+     * @param testName
+     * @param user_id
+     * @return
      */
     @Override
     public List<Map> getTestInfo(String testName, String user_id) {
@@ -35,9 +36,6 @@ public class TestServicelmpl implements TestService {
         params.put("user_id", user_id);
         return mapper.getTestInfo(params);
     }
-
-
-
 
     /**
      * 获取题目列表接口功能实现
@@ -75,7 +73,10 @@ public class TestServicelmpl implements TestService {
     public Map getTestInfoById(String id) {
         return mapper.getTestInfoById(id);
     }
-
+    @Override
+    public List<Map> getIpInfoById(Map<String, String> param) {
+        return mapper.getIpInfoById(param);
+    }
     /**
      * 通过ID获取已选择试题列表接口功能实现
      * @param id
@@ -126,7 +127,7 @@ public class TestServicelmpl implements TestService {
         if ("add".equals(param.get("id"))){
             testInfo.setAdminId(user_id);
             testInfo.setReport("0");
-            testInfo.setKind("1");
+            testInfo.setKind("2");
             mapper.saveTest(testInfo);
             String testId = testInfo.getId();
             for (Map<String, String> selectedQue:selectedQueList) {
@@ -178,4 +179,32 @@ public class TestServicelmpl implements TestService {
         //删除考试信息
         mapper.deleteTest(id);
     }
+
+    //*********************************************************************************************************** xln
+    /*
+     * @author xielanning
+     * @Time 2019年4月24日 10点18分
+     */
+    //获取指定的考试成绩
+    public List<Map> getTestScoreResultList(Map<String, String> param, String user_id){
+        param.put("user_id", user_id);
+        return mapper.getTestScoreResult(param);
+    }
+    //获取指定考试的简要信息
+    public Map getTestBriefInf(String id){
+        return mapper.getTestBriefInf(id);
+    }
+    //获取本次考试下的所有班级
+    public List<Map> getTestClassList(String id){
+        return mapper.getTestClassList(id);
+    }
+    //获取考试题目集
+    public List<Map> getTestProblemList(String id){
+        return mapper.getTestProblemList(id);
+    }
+    //获取考试结果统计结果
+    public List<Map> getTheStatisticalResult(Map<String, String> param){
+        return  mapper.getTheStatisticalResult(param);
+    }
+    //获取本次考试下的所有专业
 }

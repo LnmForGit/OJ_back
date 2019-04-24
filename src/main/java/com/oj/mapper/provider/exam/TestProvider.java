@@ -7,14 +7,15 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 
 /**
- * @author xielanning
+ * @author lixu
  * @Time 2019年4月1日 10点18分
  * @Description 考试管理provider类
  */
 public class TestProvider {
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    public String getTestInfoSql(Map<String, Object> params){
-        Map<String, String> info = (Map<String, String>)params.get("condition");
+
+    public String getTestInfoSql(Map<String, Object> params) {
+        Map<String, String> info = (Map<String, String>) params.get("condition");
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT ");
         sql.append("a.id, ");
@@ -36,15 +37,72 @@ public class TestProvider {
         sql.append("WHERE course_id in ( ");
         sql.append("SELECT course_id ");
         sql.append("FROM teach_admin_course ");
-        sql.append("WHERE admin_id = '"+info.get("user_id")+"' ");
+        sql.append("WHERE admin_id = '" + info.get("user_id") + "' ");
         sql.append(") ) ");
         sql.append(") b ON a.id = b.test_id ");
-        sql.append("WHERE a.kind = '1' ");
-        if (!StringUtils.isEmpty(info.get("testName"))){
-            sql.append("AND a.name like '%"+info.get("testName")+"%' ");
+        sql.append("WHERE a.kind = '2' ");
+        if (!StringUtils.isEmpty(info.get("testName"))) {
+            sql.append("AND a.name like '%" + info.get("testName") + "%' ");
         }
         sql.append("ORDER BY ");
         sql.append("a.id DESC ");
+
+        log.info(sql.toString());
+        return sql.toString();
+    }
+
+    public String getIpInfoSql(Map<String, Object> params) {
+        Map<String, String> info = (Map<String, String>) params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        sql.append("select DISTINCT ");
+        sql.append("b.account,b.name,c.name as class,a.sip ,FROM_UNIXTIME(d.`submit_date`) as submit_date ");
+        sql.append("from (select tid,sid,sip from teach_test_submit where tid=" + info.get("tid") + ")");
+        sql.append(" as a,teach_students as b,teach_class as c,teach_submit_code as d ");
+        sql.append("where a.sid=d.id and d.user_id=b.id and b.class_id=c.id");
+        if (!StringUtils.isEmpty(info.get("account"))) {
+            sql.append(" AND b.account = '" + info.get("account") + "' ");
+        }
+        if (!StringUtils.isEmpty(info.get("name"))) {
+            sql.append(" AND b.name = '" + info.get("name") + "' ");
+        }
+        sql.append(" order by submit_date desc");
+        return sql.toString();
+    }
+//*************************************************************************************************** xln
+    /*
+     * @author xielanning
+     * @Time 2019年4月24日 10点18分
+     */
+    //获取指定的考试结果集
+    public String getTestScoreResultList(Map<String, Object> params) {
+        Map<String, String> info = (Map<String, String>) params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        //sql.append("SELECT t.account account, t.name name, t.class_name className, t.result testResult, t.all testScore FROM teach_test_result t ");
+        sql.append("SELECT t.account account, t.name name, t.class_name className, t.result testResult, t.all testScore FROM "); //最终要获取的属性
+        sql.append(" (SELECT * FROM teach_test_result WHERE tid = '"+info.get("testId")+"') t "); //获取指定考试下的所有结果集
+        sql.append(" WHERE t.class_id IN (SELECT b.class_id classId FROM "); //获取指定班级
+        sql.append(" (SELECT course_id FROM teach_admin_course WHERE admin_id='"+info.get("user_id")+"') a, "); //获取指定课程
+        sql.append(" teach_course_class b "); //
+        sql.append(" WHERE a.course_id = b.course_id "); //
+        if (!StringUtils.isEmpty(info.get("majorId")))
+            sql.append(" AND  b.class_id IN (SELECT id FROM teach_class WHERE major_id='"+info.get("majorId")+"')"); //获取指定专业下的课程
+        if(!StringUtils.isEmpty(info.get("classId")))
+            sql.append(" AND t.class_id ='"+info.get("classId")+"' ");
+        sql.append(") ");
+        sql.append("ORDER BY ");
+        sql.append("t.all DESC, t.account  "); //在成绩降序的基础上，学号增序
+        log.info(sql.toString());
+        return sql.toString();
+    }
+    //获取指定考试的成绩统计情况
+    public String getStatisticalResultSQL(Map<String, Object> params) {
+        Map<String, String> info = (Map<String, String>) params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT COUNT(t.all) 'value', t.all 'name' FROM teach_test_result t WHERE t.tid = "+info.get("testId")+" ");
+        if(!StringUtils.isEmpty(info.get("classId")))
+            sql.append(" AND t.class_id = "+info.get("classId"));
+        sql.append(" GROUP BY t.all ORDER BY t.all DESC");
+
         log.info(sql.toString());
         return sql.toString();
     }
