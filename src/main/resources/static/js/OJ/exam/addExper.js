@@ -436,6 +436,7 @@ function saveOrUpdateExper() {
     refreshScore();
     if($("#experName").val() == ""){
         toastr.error("","实验名称不能为空");
+        debugger;
         return;
     }
     if($("#experStartTime").val() == ""){

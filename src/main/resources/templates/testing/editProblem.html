@@ -6,6 +6,24 @@
 </head>
 <!--引入通用JS、css资源-->
 <div th:replace="common/staticImport :: common_resource"></div>
+<script type="text/javascript">
+    toastr.options = {
+        closeButton: false,
+        debug: false,
+        progressBar: true,
+        positionClass: "toast-top-center ",
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "2000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
+
+</script>
 <body class="gray-bg">
 <div class="row">
     <div class="col-sm-12">
