@@ -187,8 +187,10 @@ public class MyFileServicelmpl implements MyFileService {
     {
         String userId = request.getSession().getAttribute("user_id").toString();
         String id = request.getParameter("id");
-        String fileName = mapper.getFileNameById(id);
-        File filePath = new File(rootPath + userId + "/" + fileName);
+        System.out.println("session id "+userId);
+        System.out.println("id "+id);
+        String route = mapper.getPathById(id);
+        File filePath = new File(route);
         filePath.delete();
         mapper.fileDelete(id);
     }
