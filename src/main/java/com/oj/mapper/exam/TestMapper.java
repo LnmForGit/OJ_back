@@ -101,4 +101,32 @@ public interface TestMapper {
     public List<Map> getTheStatisticalResult(@Param("condition")Map<String, String> params);
     //获取本次考试下的所有专业
 
+
+    //获取指定考试下所有的考生列表
+    //获取指定考试下指定考生的题目完成情况
+
+    //*********************************************** 定时任务-（实验/考试）结果统计
+    //获取正在进行的（实验/考试）
+
+    //获取考试的提交的汇总情况
+    //@SelectProvider(type=TestProvider.class, method="getSubmitStateResultSQL")
+    @Select("SELECT a.id, a.account,a.name ,a.class,b.problem_id,b.accuracy, a.class_id " +
+            "FROM (SELECT a.id,a.account,a.name,a.class_id, b.name AS class FROM teach_students a,teach_class b WHERE a.`class_id`=b.`id` AND a.`class_id` IN (SELECT class_id FROM teach_test_class WHERE test_id= #{testId} ) ) a " +
+            "JOIN (SELECT user_id,problem_id,MAX(accuracy) AS accuracy FROM teach_submit_code WHERE test_id= #{testId} " +
+            "GROUP BY user_id, problem_id ORDER BY problem_id ) b " +
+            "ON a.id=b.user_id ")
+    public List<Map<String, Object>> getSubmitStateResult(String testId);
+    //获取题目与分数
+    @Select("SELECT pid, score FROM teach_test_problems WHERE tid=#{testId}")
+    public List<Map<String, Object>> getTestProblemInf(String testId);
+    //删除指定考试的结果
+    @Delete("DELETE FROM teach_test_result WHERE tid = #{testId} ")
+    public void deleteTargetTestResult(String testId);
+    //保存一条学生的考试结果
+    @InsertProvider(type=TestProvider.class, method="saveTheStudentTestResultSQL")
+    @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
+    public void saveTheStudentTestResult(@Param("condition")List<Map> params);
+   //获取当前正在进行的（实验/考试）
+    @Select("select id testId, from_unixtime(end) testEDate from teach_test where unix_timestamp(now()) between start and end ")
+    public List<Map> getCurrentTestList();
 }

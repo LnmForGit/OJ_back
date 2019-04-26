@@ -1,5 +1,6 @@
 package com.oj.service.serviceImpl.exam;
 
+
 import com.oj.entity.exam.Test;
 import com.oj.mapper.exam.TestMapper;
 import com.oj.service.exam.TestService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +129,7 @@ public class TestServicelmpl implements TestService {
         if ("add".equals(param.get("id"))){
             testInfo.setAdminId(user_id);
             testInfo.setReport("0");
-            testInfo.setKind("2");
+            testInfo.setKind("1");
             mapper.saveTest(testInfo);
             String testId = testInfo.getId();
             for (Map<String, String> selectedQue:selectedQueList) {
@@ -207,4 +209,97 @@ public class TestServicelmpl implements TestService {
         return  mapper.getTheStatisticalResult(param);
     }
     //获取本次考试下的所有专业
+
+
+
+    //*********************************************** 定时任务-（实验/考试）结果统计
+    //获取考试的提交的汇总情况
+    public List<Map<String, Object>> getSubmitStateResult(String params){
+        System.out.println(" ###########"+params);
+        if(mapper == null) System.out.println("mapper is null");
+        return mapper.getSubmitStateResult(params);
+    }
+    //获取题目与分数
+    public List<Map<String, Object>> getTestProblemInf(String testId){
+        return mapper.getTestProblemInf(testId);
+    }
+    //删除指定的考试结果集
+    public void deleteTargetTestResult(String testId){
+        mapper.deleteTargetTestResult(testId);
+    }
+    //保存给定的考试结果集
+    public void saveTestResultList(List<Map> data){
+            mapper.saveTheStudentTestResult(data);
+    }
+    //获取当前正在进行的（实验/考试）
+    public List<Map> getCurrentTestList(){
+        return mapper.getCurrentTestList();
+    }
+    //获取正在进行的（实验），并整理当前已有的提交状态，汇总后覆盖原数据
+    public void RunDoIt(){
+        List<Map> list = getCurrentTestList();
+        for(Map<String, Object> temp : list){
+            FunctionLY(temp.get("testId").toString());
+        }
+    }
+    //整理指定考试的结果集，并覆盖原先数据
+    //（应考虑是否保存最新结果集到本地磁盘，防止极端概率事件发生。如在删除原有数据库数据后，新数据还未完全存入数据库，此时突然断电！answer:给前端一个接口，支持手动判分）
+    public boolean FunctionLY (String testId){
+        class functionZT { //运算函数-取名ZT（取名郑通，望借大佬之势，镇压一切bug，护我OJ百世荣昌！）
+            public int get(List<Map<String, Object>> list, String tag){
+                for(Map<String, Object> temp : list){
+                    if(tag.equals(temp.get("pid").toString())){
+                        //System.out.println("##"+temp.get("score").toString());
+                        return Integer.parseInt(temp.get("score").toString());
+                    }
+                }
+                return 0;
+            }
+        }
+        functionZT zt = new functionZT();
+        Map map = new HashMap<String, String>();
+        map.put("testId", testId);
+        List<Map<String, Object>> subStateResultList = getSubmitStateResult(testId); //获取当前提交状态的汇总结果集
+        List<Map<String, Object>> testProInfList = getTestProblemInf(testId); //获取题目与对应分数的汇总集
+
+        Map<String, String> t = new HashMap<String, String>();
+        List<Map> result = new LinkedList<Map>();
+        String scoreResult = "";
+        int all=0;
+        for(Map<String, Object> temp : subStateResultList){
+            String str = t.get("account");
+            if(null==str || !temp.get("account").equals(str)){
+                if(null!=str){
+                    t.put("all", ""+all);
+                    t.put("result", scoreResult);
+                    t.put("first_ip", "000.000.000");
+                    t.put("testId", testId);
+                }
+                t = new HashMap<String, String>();
+                t.put("sid", temp.get("id").toString());
+                t.put("account", temp.get("account").toString());
+                t.put("name", temp.get("name").toString());
+                t.put("class", temp.get("class").toString());
+                t.put("class_id", temp.get("class_id").toString());
+               // System.out.println(temp.get("accuracy").toString()+" * "+ zt.get(testProInfList, temp.get("problem_id").toString()));
+                all=(int)(zt.get(testProInfList, temp.get("problem_id").toString()) * Double.parseDouble(temp.get("accuracy").toString()));
+                scoreResult=temp.get("problem_id")+":"+String.format("%.0f", (zt.get(testProInfList, temp.get("problem_id").toString()) * Double.parseDouble(temp.get("accuracy").toString())))+";";
+                result.add(t);
+                continue;
+            }
+            all+=(int)(zt.get(testProInfList, temp.get("problem_id").toString()) * Double.parseDouble(temp.get("accuracy").toString()));
+            scoreResult+=temp.get("problem_id")+":"+String.format("%.0f", (zt.get(testProInfList, temp.get("problem_id").toString()) * Double.parseDouble(temp.get("accuracy").toString())))+";";
+        }
+        t.put("all", ""+all);
+        t.put("result", scoreResult);
+        t.put("first_ip", "000.000.000");
+        t.put("testId", testId);
+        //System.out.println("---->"+result.size());
+        //int i ;
+        //for(i=0; true && i<result.size(); i++)
+            //System.out.println("#"+i+result.get(i));
+        deleteTargetTestResult(testId);
+        saveTestResultList(result);
+        return true;
+    }
 }

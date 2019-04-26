@@ -60,4 +60,15 @@ public interface TestService {
     public List<Map> getTheStatisticalResult(Map<String, String> param);
     //获取本次考试下的所有专业
 
+    //*********************************************** 定时任务-（实验/考试）结果统计
+    //获取考试的提交的汇总情况
+    public List<Map<String, Object>> getSubmitStateResult(String testId);
+    //获取题目与分数
+    public List<Map<String, Object>> getTestProblemInf(String testId);
+    //获取正在进行的（实验/考试）
+    public List<Map> getCurrentTestList();
+    //获取正在进行的（实验），并整理当前已有的提交状态，汇总后覆盖原数据
+    public void RunDoIt();
+    //整理考试提交状态，并存储数据
+    public boolean FunctionLY (String testId);
 }
