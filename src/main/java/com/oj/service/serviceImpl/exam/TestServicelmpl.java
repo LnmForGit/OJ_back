@@ -121,6 +121,8 @@ public class TestServicelmpl implements TestService {
         //获取考试信息
         JSONObject obj = JSONObject.fromObject(param.get("testInfo"));
         Test testInfo = (Test)JSONObject.toBean(obj, Test.class);
+        out.println("TESTINFO---->");
+        out.println(testInfo);
         //获取考试已选择试题信息
         List<Map<String, String>>  selectedQueList = (List<Map<String, String>>)param.get("selectedQueList");
         //获取考试已选择班级信息

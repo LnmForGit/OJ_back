@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -27,10 +28,7 @@ public class OJTimerLink {
         /*
             要进行的初始化操作（如获取正在进行的（实验/考试），并为其逐个添加一次性定时器
          */
-        List<Map> list = FinalService.getCurrentTestList();
-        for(Map<String, Object> temp : list){
-            addTimerCell(temp.get("testId").toString(), temp.get("testEDate").toString());
-        }
+        resestTimerLink();
     }
     public static boolean  addTimerCell(String timerId, String timeString, TimerTask progress){ //增加扩展性（调用的使用需要传入一个TimerTask类或其子类，该类内定义了使用者希望指定时间执行的操作）
         log.info("新增定时任务/"+timerId+"/"+timeString+"/"+progress.getClass());
@@ -56,8 +54,10 @@ public class OJTimerLink {
                     /*
                     这里添加一次性定时器要执行的任务
                      */
+                    System.out.println("#################OJTimerLink/addTimerCell/TimerProgress/run: 一次性定时器("+testId+")准备执行");
                     FinalService.FunctionLY(testId);  //更新指定考试的成绩
                     FinalService.FunctionPQH(testId); //生成指定考试的相似性结果
+                    System.out.println("#################OJTimerLink/addTimerCell/TimerProgress/run: 一次性定时器("+testId+")执行完成");
                 }catch(Exception e){
                     log.info("定时器执行过程异常或错误/"+e);
                 }finally{
@@ -65,6 +65,7 @@ public class OJTimerLink {
                 }
             }
         }
+        //System.out.println("一次性定时器的时间:“"+timeString);
         return addTimerCell(testId, timeString, new TimerProgress(testId));
     }
     public static boolean delTimerCell(String testId){//通过给定指定的考试编号，删除对应的定时器
@@ -86,6 +87,9 @@ public class OJTimerLink {
         }
         List<Map> listA = FinalService.getCurrentTestList();
         for(Map<String, Object> temp : listA){
+            //请特别注意时区问题，有很大影响
+            //System.out.println("从数据库获取到的时间与考试编号："+temp.get("testId").toString()+", "+temp.get("testId").getClass()+", "+temp.get("testEDate").toString()+", "+temp.get("testEDate").getClass());
+            //System.out.println("Java格式转换后结果："+new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(temp.get("testEDate")));
             addTimerCell(temp.get("testId").toString(), temp.get("testEDate").toString());
         }
     }

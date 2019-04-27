@@ -42,8 +42,11 @@ public class OJTimerCell {
         Timer timer=null;
         try {
             Date time;
+            //System.out.println("定时器内部：时间字符串转换前："+timeString);
+            //timeString="2019-05-04 17:30:29";
             time = sdf.parse(timeString);  //正确格式:"2019-04-25 17:19:20"
             timer = new Timer();
+            //out.println("定时器内部，时间字符串转换后的时间:"+timer);
             timer.schedule(progress, time);
         }catch(Exception e){
             throw e;
