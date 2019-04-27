@@ -56,7 +56,8 @@ public class OJTimerLink {
                     /*
                     这里添加一次性定时器要执行的任务
                      */
-                    FinalService.FunctionLY(testId);
+                    FinalService.FunctionLY(testId);  //更新指定考试的成绩
+                    FinalService.FunctionPQH(testId); //生成指定考试的相似性结果
                 }catch(Exception e){
                     log.info("定时器执行过程异常或错误/"+e);
                 }finally{
@@ -77,6 +78,16 @@ public class OJTimerLink {
         timerData.remove(testId);
         log.info("删除一次性定时器/"+testId+"成功");
         return true;
+    }
+    public static void resestTimerLink(){ //重置现有一次性定时器
+        List<String> list = new LinkedList<String>(timerData.keySet());
+        for(String key : list){
+            delTimerCell(key);
+        }
+        List<Map> listA = FinalService.getCurrentTestList();
+        for(Map<String, Object> temp : listA){
+            addTimerCell(temp.get("testId").toString(), temp.get("testEDate").toString());
+        }
     }
     public static void queryTimerCell(List<Map> tdata){ //在这进行进行中（实验/考试）数据的获取调用似乎不妥
         //for(Map<String, String> temp : tdata)

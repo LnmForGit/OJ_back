@@ -92,9 +92,9 @@ public class TestController {
     @PostMapping("/getTestInfo")
     @ResponseBody
     public List<Map> getTestInfo(HttpServletRequest request){
-        ///
-        testService.FunctionLY("318");
-        ///
+
+
+
         String testName = request.getParameter("testName");
         return testService.getTestInfo(testName, request.getSession().getAttribute("user_id").toString());
     }
@@ -216,14 +216,19 @@ public class TestController {
         //System.out.println(request.getSession().getAttribute("user_id").toString());
         return testService.getTestScoreResultList(param, request.getSession().getAttribute("user_id").toString());
     }
-    //获取本次考试下的所有专业
+    //对指定考试进行的当前所有提交进行汇总，并更新数据库对应表
+    @PostMapping("/UpdateTheTestResult")
+    @ResponseBody
+    public Map UpdateTheTestResult(@RequestBody Map<String, String> param, HttpServletRequest request){
+        Map map = new HashMap<String, String>();
+        if(testService.FunctionLY(param.get("testId")))
+            map.put("result", "succeed");
+        else map.put("result", "failed");
+        return map;
+    }
 
 
-    //定时任务-成绩处理
-    //（1）周期性处理（实验）提交状态表，并汇总到成绩表
-    //（2）定时于（实验/考试）结束后的5mins处理提交状态表，并汇总到成绩表
-    //定时任务-相似判断处理
-    //（1）定时于（实验/考试）结束后的10mins处理提交状态表，并汇总结果到相似性判断表
+
     //*********************************************************************************
     //周期性地在指定的时间开始，对所有进行中的（实验/考试）的提交状态表进行处理，并依次汇总给成绩表
     @Scheduled(cron = "0 01 3 ? * *")
@@ -231,6 +236,17 @@ public class TestController {
         log.info("夜伴三庚，又到更新数据的时候了。       ---- liyue");
         testService.RunDoIt();
     }
-
+    //获取指定（实验/考试）相似判断结果
+    @PostMapping("/getSimilarityResult")
+    @ResponseBody
+    public List<Map> getSimilarityResult(@RequestBody Map<String, String> param, HttpServletRequest request){
+        return testService.getSimilarityResult(param.get("testId"));
+    }
+    //获取指定（实验/考试）的指定提交编号的代码
+    @PostMapping("/getTargetSubmitCode")
+    @ResponseBody
+    public Map getTargetSubmitCode(@RequestBody Map<String, String> param, HttpServletRequest request){
+        return testService.getTargetSubmitCode(param);
+    }
 }
 

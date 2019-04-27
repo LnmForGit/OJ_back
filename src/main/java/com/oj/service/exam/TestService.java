@@ -71,4 +71,15 @@ public interface TestService {
     public void RunDoIt();
     //整理考试提交状态，并存储数据
     public boolean FunctionLY (String testId);
+
+
+
+    //*********************************************** 定时任务-（实验/考试）相似度结果统计
+    //处理考试提交代码，判断相似度，并保存到数据库
+    public boolean FunctionPQH(String testId);
+    //获取指定（实验/考试）相似判断结果
+    public List<Map> getSimilarityResult(String testId);
+    //获取指定的两个提交编号的代码
+    public Map getTargetSubmitCode(Map t);
+
 }

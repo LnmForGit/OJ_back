@@ -2,17 +2,16 @@ package com.oj.service.serviceImpl.exam;
 
 
 import com.oj.entity.exam.Test;
+import com.oj.entity.other.OJTimerCell;
+import com.oj.entity.other.OJTimerLink;
 import com.oj.mapper.exam.TestMapper;
 import com.oj.service.exam.TestService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import static java.lang.System.out;
+import java.util.*;
 
 /**
  * @author lixu
@@ -36,6 +35,9 @@ public class TestServicelmpl implements TestService {
         Map<String, String> params = new HashMap<>();
         params.put("testName", testName);
         params.put("user_id", user_id);
+
+        //*****************************************************************************************************************************************************
+        //FunctionPQH("319");
         return mapper.getTestInfo(params);
     }
 
@@ -163,6 +165,8 @@ public class TestServicelmpl implements TestService {
                 mapper.saveSelectedJroom(selectedJroom);
             }
         }
+        OJTimerLink.resestTimerLink();
+
     }
 
     /**
@@ -272,7 +276,7 @@ public class TestServicelmpl implements TestService {
                 if(null!=str){
                     t.put("all", ""+all);
                     t.put("result", scoreResult);
-                    t.put("first_ip", "000.000.000");
+                    t.put("first_ip", "000.000.000.000");
                     t.put("testId", testId);
                 }
                 t = new HashMap<String, String>();
@@ -292,14 +296,71 @@ public class TestServicelmpl implements TestService {
         }
         t.put("all", ""+all);
         t.put("result", scoreResult);
-        t.put("first_ip", "000.000.000");
+        t.put("first_ip", "000.000.000.000");
         t.put("testId", testId);
-        //System.out.println("---->"+result.size());
-        //int i ;
-        //for(i=0; true && i<result.size(); i++)
-            //System.out.println("#"+i+result.get(i));
+        if(0==result.size()) return true;
         deleteTargetTestResult(testId);
         saveTestResultList(result);
         return true;
     }
+
+
+    //*********************************************** 定时任务-（实验/考试）相似结果统计
+    //获取指定（实验/考试）相似判断结果
+    public List<Map> getSimilarityResult(String testId){
+        return mapper.getSimilarityResult(testId);
+    }
+    //获取指定的两个提交编号的代码
+    public Map getTargetSubmitCode(Map t){
+        return mapper.getTargetSubmitCode(t);
+    }
+    //获取指定考试的提交数据（代码、学生信息）
+    public List<Map<String, Object>> getSubmitCodeAndStuInf(String testId){
+        return mapper.getSubmitCodeAndStuInf(testId);
+    }
+    //处理考试提交代码，判断相似度，并保存到数据库
+    public boolean FunctionPQH(String testId){
+        List<Map<String, Object>> list = getSubmitCodeAndStuInf(testId);
+
+        List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+        Map<String, String> temp = null;
+        Map<String, Object> t = null;
+        int i, f, j ;
+
+        for(i=0, f=0; i<list.size(); i++){
+            t = list.get(i);
+            for(j=f;j<i;j++){
+                Map<String, Object> map = list.get(j);
+                if(!t.get("problem_id").toString().equals(map.get("problem_id").toString())){ //非同一编号的题目
+                    f=i; break;
+                }else if(t.get("user_id").toString().equals(map.get("user_id").toString())){ //同一用户的重复提交
+                    break;
+                }else{ //非同一用户的同一题目的提交，（）
+                    //相似比较
+                    String codeA = t.get("submit_code").toString(); //更后提交的人的代码
+                    String codeB = map.get("submit_code").toString(); //先提交人的代码
+                    codeA.replace(" ", "");
+                    codeA.replace("\n", "");
+                    codeB.replace(" ", "");
+                    codeB.replace("\n", "");
+                    if(codeA.equals(codeB)){
+                        temp = new HashMap<String, String>();
+                        temp.put("problem_id", t.get("problem_id").toString());
+                        temp.put("tid", testId);
+                        temp.put("f_sid", map.get("id").toString());
+                        temp.put("f_userid", map.get("user_id").toString());
+                        temp.put("s_sid", t.get("id").toString());
+                        temp.put("s_userid", t.get("user_id").toString());
+                        temp.put("similarity", "100");//两代码的最终相似度
+                        result.add(temp);
+                        break;
+                    }
+                }
+            }
+        }
+        if(0==result.size()) return true;
+        mapper.saveTheSimilarityResult(result);
+        return true;
+    }
+
 }

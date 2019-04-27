@@ -106,7 +106,7 @@ public interface TestMapper {
     //获取指定考试下指定考生的题目完成情况
 
     //*********************************************** 定时任务-（实验/考试）结果统计
-    //获取正在进行的（实验/考试）
+    //获取
 
     //获取考试的提交的汇总情况
     //@SelectProvider(type=TestProvider.class, method="getSubmitStateResultSQL")
@@ -122,11 +122,26 @@ public interface TestMapper {
     //删除指定考试的结果
     @Delete("DELETE FROM teach_test_result WHERE tid = #{testId} ")
     public void deleteTargetTestResult(String testId);
-    //保存一条学生的考试结果
+    //保存学生的考试结果
     @InsertProvider(type=TestProvider.class, method="saveTheStudentTestResultSQL")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
     public void saveTheStudentTestResult(@Param("condition")List<Map> params);
    //获取当前正在进行的（实验/考试）
     @Select("select id testId, from_unixtime(end) testEDate from teach_test where unix_timestamp(now()) between start and end ")
     public List<Map> getCurrentTestList();
+
+    //************************************************* 相似度
+    //获取指定考试的提交数据（代码、学生信息）
+    @Select("select  id,problem_id,user_id,submit_code from teach_submit_code where test_id= #{testId} and accuracy=1 order by problem_id, id")
+    public List<Map<String, Object>> getSubmitCodeAndStuInf(String testId);
+    //保存相似判断结果到数据库
+    @InsertProvider(type=TestProvider.class, method="saveTheSimilarityResultSQL")
+    @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
+    public void saveTheSimilarityResult(@Param("condition")List<Map<String, String>> params);
+    //获取指定（实验/考试）相似判断结果
+    @Select("select t.f_sid,t.problem_id, a.account fAccount, a.name fName, b.name fClassName, t.s_sid, c.account sAccount,c.name sName,b.name sClassName, t.similarity from teach_similarity_base t,teach_students a,teach_students c,teach_class b,teach_class d where t.`f_userid`=a.id and t.`s_userid`=c.`id` and a.`class_id`=b.id and c.`class_id`=d.`id` and tid= #{testId} ")
+    public List<Map> getSimilarityResult(String testId);
+    //获取指定的两个提交编号的代码
+    @Select("select a.submit_code codeA, b.submit_code codeB from teach_submit_code a, teach_submit_code b where a.id = #{f_sid} and b.id = #{s_sid}")
+    public Map getTargetSubmitCode(Map t);
 }

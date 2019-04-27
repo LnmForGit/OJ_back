@@ -21,7 +21,6 @@
                     <table id = "resultTable" class="table table-striped table-bordered table-hover dataTables-example">
                         <thead>
                         <tr>
-                            <th width="10%">ID</th>
                             <th width="10%">题号</th>
                             <th width="10%">学号</th>
                             <th width="15%">姓名</th>
@@ -29,6 +28,7 @@
                             <th width="10%">学号</th>
                             <th width="15%">姓名</th>
                             <th width="10%">班级</th>
+                            <th width="10%">相似度</th>
                             <th width="10%">操作</th>
                         </tr>
                         </thead>
@@ -54,9 +54,9 @@
                 <div class="col-sm-6" width="50%">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5 >抄袭者 </h5>
+                            <h5 >抄袭者: </h5>
                             <h5>
-                                <span id="CopyName" style="font-size:15px; color:#cda15a; ">没得名字</span>
+                                <span id="sName" style="font-size:15px; color:#cda15a; ">没得名字</span>
                             </h5>
                         </div>
                         <div class="ibox-content">
@@ -65,20 +65,18 @@
                                     <form role="form">
                                         <div class="form-group">
                                             <label>班级:</label>
-                                            <span id="CopyclassName" style="font-size:15px; color:#cda15a; ">没得名字</span>
+                                            <span id="sClassName" style="font-size:15px; color:#cda15a; "></span>
                                             <label>             学号:</label>
-                                            <span id="CopyAccount" style="font-size:15px; color:#cda15a; ">没得名字</span>
+                                            <span id="sAccount" style="font-size:15px; color:#cda15a; "></span>
                                         </div>
                                         <div class="form-group">
-                                            <label>题目:</label>
-                                            <span id="proID" style="font-size:15px; color:#cda15a; ">没得名字</span>
-                                            <label>            状态:</label>
-                                            <span id="state" style="font-size:15px; color:#cda15a; ">Accept</span>
+                                            <label>题目编号:</label>
+                                            <span id="sProId" style="font-size:15px; color:#cda15a; "></span>
                                         </div>
                                         <div class="form-group">
 
                                             <div class="col-sm-12">
-                                                    <textarea  cols="50" rows="30">
+                                                    <textarea  id="sCode" cols="50" rows="30">
                                                     </textarea>
                                             </div>
                                         </div>
@@ -91,44 +89,36 @@
                 <div class="col-sm-6" width="50%">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>被抄袭者</h5>
+                            <h5 >被抄袭者: </h5>
+                            <h5>
+                                <span id="fName" style="font-size:15px; color:#cda15a; "></span>
+                            </h5>
                         </div>
-                            <div class="ibox-content">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <form role="form">
-                                            <div class="form-group">
-                                                <label>班级：</label>
-                                                <span id="CopyedclassName" style="font-size:15px; color:#cda15a; ">没得名字</span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>姓名：</label>
-                                                <span id="CopyedName" style="font-size:15px; color:#cda15a; ">没得名字</span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>学号：</label>
-                                                <span id="CopyedAccount" style="font-size:15px; color:#cda15a; ">没得名字</span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>题目：</label>
-                                                <span id="proID1" style="font-size:15px; color:#cda15a; ">没得名字</span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>状态：</label>
-                                                <span id="state1" style="font-size:15px; color:#cda15a; ">Accept</span>
-                                            </div>
-                                            <div class="form-group">
-
-                                                <div class="col-sm-12">
-                                                    <textarea  cols="50" rows="30">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label>班级:</label>
+                                            <span id="fClassName" style="font-size:15px; color:#cda15a; "> </span>
+                                            <label>             学号:</label>
+                                            <span id="fAccount" style="font-size:15px; color:#cda15a; "> </span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>题目:</label>
+                                            <span id="fProId" style="font-size:15px; color:#cda15a; "> </span>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+                                                    <textarea  id="fCode" cols="50" rows="30">
                                                     </textarea>
-                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -137,6 +127,10 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    var testInfo = [[${info}]];
+    //console.log(testInfo);
+</script>
 <script type="text/javascript" th:src="@{/js/OJ/exam/similarityUser.js}"></script>
 </body>
 

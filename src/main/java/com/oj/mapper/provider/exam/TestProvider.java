@@ -119,7 +119,7 @@ public class TestProvider {
         log.info(sql.toString());
         return sql.toString();
     }
-    //保存一条学生考试结果
+    //保存学生考试结果
     public String saveTheStudentTestResultSQL(Map<String, Object> params){
 
         List<Map<String, String>> temp = (List<Map<String, String>>) params.get("condition");
@@ -137,6 +137,25 @@ public class TestProvider {
             sql.append("\"" + info.get("class") + "\", ");
             sql.append("\"" + info.get("result") + "\", ");
             sql.append(info.get("all") + ") ");
+        }
+        log.info(sql.toString());
+        return sql.toString();
+    }
+    //保存学生考试相似判断结果
+    public String saveTheSimilarityResultSQL(Map<String, Object> params){
+        List<Map<String, String>> temp = (List<Map<String, String>>) params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        sql.append("INSERT INTO teach_similarity_base VALUES ");
+        for(int i=0; i<temp.size(); i++){
+            Map<String, String> info = temp.get(i);
+            sql.append((0==i?"":",")+"(NULL, ");
+            sql.append(info.get("tid")+", ");
+            sql.append(info.get("f_sid")+", ");
+            sql.append(info.get("f_userid")+", ");
+            sql.append(info.get("s_sid")+", ");
+            sql.append(info.get("s_userid")+", ");
+            sql.append(info.get("similarity")+", ");
+            sql.append(info.get("problem_id")+") ");
         }
         log.info(sql.toString());
         return sql.toString();
