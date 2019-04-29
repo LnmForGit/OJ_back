@@ -204,7 +204,14 @@ function saveOrUpdateProblem() {
     var id = getUrlParam("id");
     var timestamp = Date.parse( new Date() ).toString();
     timestamp = timestamp.substr(0,10);
+
+    // if($("#dialogProblemName").val() == ""){
+    //     toastr.error("","实验名称不能为空");
+    //     debugger;
+    //     return;
+    // }
     if($("#dialogProblemName").val() == ""){
+
         toastr.error("","题目名称不能为空");
         return;
     }else if($("#dialogProblemName").val().length >= 40){
