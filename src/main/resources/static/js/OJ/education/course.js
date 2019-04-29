@@ -175,14 +175,14 @@ function courseClassShow(id) {
             var innerHtml = ''
             var isSelectAll = true
             for (i = 0; i < result.length; i++){
-                innerHtml += "<tr><td>"
+                innerHtml += "<tr><td width='2%'>"
                 if(result[i].course_id == null){
                     innerHtml += "<input name='CLDselect' onclick='checkSelectAll()' type='checkbox' value='"+result[i].id+"'>"
                     isSelectAll = false
                 }else{
                     innerHtml += "<input name='CLDselect' onclick='checkSelectAll()' type='checkbox' checked value='"+result[i].id+"'>"
                 }
-                innerHtml += "</td><td>"+result[i].name+"</td></tr>"
+                innerHtml += "</td><td width='98%'>"+result[i].name+"</td></tr>"
             }
             if(isSelectAll){
                 document.getElementsByName("btSelectAll")[0].checked = true

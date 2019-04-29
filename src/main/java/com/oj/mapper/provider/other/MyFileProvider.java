@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public class MyFileProvider {
@@ -24,8 +25,12 @@ public class MyFileProvider {
         if (!StringUtils.isEmpty(info.get("uploader_id"))){
             sql.append(" AND myfile.uploader_id = "+info.get("uploader_id")+" ");
         }
+        String id = info.get("id");
+        //System.out.println("id : "+id);
+        if(!id.equals("2"))sql.append(" AND uploader_id = "+id+" ");
         sql.append(" AND myfile.uploader_id = admin.id order by myfile.upload_time desc");
         System.out.println(sql);
+        System.out.println("params : " + params.toString());
         log.info(sql.toString());
         return sql.toString();
     }

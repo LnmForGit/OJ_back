@@ -46,8 +46,10 @@ public class MyFileController {
 
     @PostMapping("/getFileMapList")
     @ResponseBody
-    public List<Map> getFileMapList(@RequestBody Map<String, String> param, HttpServletRequest request)
+    public List<Map> getFileMapList(HttpServletRequest request, @RequestBody Map<String, String> param)
     {
+        String id = request.getSession().getAttribute("user_id").toString();
+        param.put("id", id);
         return myfileService.getFileMapList(param);
     }
 
@@ -76,12 +78,14 @@ public class MyFileController {
     {
         Map<String, String> map = new HashMap<>();
         try {
-            myfileService.checkFileName(request.getParameter("name"));
+            String user_id = request.getSession().getAttribute("user_id").toString();
+            myfileService.checkFileName(request.getParameter("name"), user_id);
             map.put("flag", "1");
             return map;
         } catch (Exception e){
             map.put("flag", "0");
             map.put("message", e.getMessage());
+            System.out.println("error my : "+ e.getMessage());
             log.error(e.getMessage());
             return map;
         }
