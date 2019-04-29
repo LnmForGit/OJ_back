@@ -43,8 +43,8 @@ function getExperInfo() {
                         var a = "";
                         a += "<button type='button' class='btn btn-primary' onclick='showIp(\""+row.id+"\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='openAddExper(\""+row.id+"\")' title='编辑' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil'></i>&nbsp;编辑</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='判分' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-refresh'></i>&nbsp;判分</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='deleteUser(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
+                        a += "<button type='button' class='btn btn-primary' onclick='UpdateTheTestResult(\""+row.id+"\")' title='判分' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-refresh'></i>&nbsp;判分</button>"
+                        a += "<button type='button' class='btn btn-primary' onclick='experScore(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='similarityUser(\""+row.id+"\")' title='相似' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eye'></i>&nbsp;相似</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='deleteExper(\""+row.id+"\")' title='删除' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-trash'></i>&nbsp;删除</button>"
                         a += "<button type='button' class='btn btn-primary' onclick='copyExper(\""+row.id+"\")' title='复制' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-copy'></i>&nbsp;复制</button>"
@@ -63,7 +63,28 @@ function formatTime(time) {
     time = time.replace("T", " ")
     return time;
 }
+function UpdateTheTestResult(t){
+    $.ajax({
+        type: "POST",
+        url: "/testMn/UpdateTheTestResult",
+        dataType: "json",
+        contentType: "application/json;charset=UTF-8",
+        data:JSON.stringify({
+            "testId" : t
+        }),
+        success:function (result) {
+            if(result.result == "succeed"){
+                swal("判分成功！", "考试成绩已更新", "success");
+            }else{
+                swal("判分失败！", "考试成绩未更新", "error");
+            }
+        }
+    });
+}
 
+function experScore(t){
+    window.location.href="/experimentMn/showTestScore/"+t;
+}
 function openAddExper(id) {
     window.location.href = "/experimentMn/addExper/"+id;
 }
