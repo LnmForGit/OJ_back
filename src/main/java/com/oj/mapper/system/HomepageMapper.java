@@ -18,7 +18,7 @@ public interface HomepageMapper {
 //            "FROM teach_test a INNER JOIN (SELECT DISTINCT test_id FROM teach_test_class WHERE class_id IN (\n" +
 //            "SELECT class_id FROM teach_course_class WHERE course_id IN ( SELECT course_id FROM teach_admin_course WHERE admin_id = #{id} ) ) ) b \n" +
 //            "ON a.id = b.test_id ORDER BY a.id DESC")
-    @Select("SELECT a.id,a.NAME, a.`start`  AS start_time, a.`end`  AS end_time \n" +
+    @Select("SELECT a.kind,a.id,a.NAME, a.`start`  AS start_time, a.`end`  AS end_time \n" +
             "FROM teach_test a INNER JOIN (SELECT DISTINCT test_id FROM teach_test_class WHERE class_id IN (\n" +
             "SELECT class_id FROM teach_course_class WHERE course_id IN ( SELECT course_id FROM teach_admin_course WHERE admin_id = #{id} ) ) ) b \n" +
             "ON a.id = b.test_id ORDER BY a.id DESC")

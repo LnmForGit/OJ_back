@@ -170,26 +170,12 @@ function showpending() {
                 if(result[i].state=="已结束")
                 {
                     var s = "<span class=\"label label-danger\">已结束</span>";
-                    if(result[i].NAME[0]=="实")
-                    {
-                        var ss = "<a href='/experimentMn/experimentScore/"+result[i].id+"'>查看成绩</a>";
-                    }
-                    else
-                    {
-                        var ss = "<a href='/testMn/testScore/"+result[i].id+"'>查看成绩</a>";
-                    }
+                    var ss = "<a href='/experimentMn/showTestScore/"+result[i].id+"'>查看成绩</a>";
                 }
                 else if(result[i].state=="正在进行")
                 {
                     var s = "<span class=\"label label-info\">进行中</span>";
-                    if(result[i].NAME[0]=="实")
-                    {
-                        var ss = "<a href='/experimentMn/experimentScore/"+result[i].id+"'>查看成绩</a>";
-                    }
-                    else
-                    {
-                        var ss = "<a href='/testMn/testScore/"+result[i].id+"'>查看成绩</a>";
-                    }
+                    var ss = "<a href='/experimentMn/showTestScore/"+result[i].id+"'>查看成绩</a>";
                 }
                 else if(result[i].state=="未开始")
                 {
@@ -197,7 +183,7 @@ function showpending() {
                     var ss = "";
                 }
                 var str = "";
-                if(result[i].NAME[0]=="实")
+                if(result[i].kind==2)
                 {
                     str = "/experimentMn/"
                 }
