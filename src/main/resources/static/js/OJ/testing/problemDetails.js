@@ -22,7 +22,7 @@ function  problemDetails() {
                 $("#dialogProblemOutSample").html(delHtml(result[0].outsample))
                 $("#dialogProblemMaxMemory").text(result[0].maxmemory)
                 $("#dialogProblemMaxTime").text(result[0].maxtime)
-                $("#dialogProblemRank").text(result[0].rank);
+                $("#dialogProblemRank").text(5 - parseInt(result[0].rank / 20));
                 $("#ac").html(result[0].AC_number);
                 $("#sum").html(result[0].submit_number);
                 var rate = ((result[0].AC_number / result[0].submit_number) * 100).toFixed(2).toString() + "%";
