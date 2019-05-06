@@ -26,7 +26,24 @@ import java.util.Date;
 public class MyFileServicelmpl implements MyFileService {
     @Autowired(required = false)
     private MyFileMapper mapper;
-    public String rootPath = "E:/学习笔记/OJ平台重构/testUpload/";
+    public String rootPath;
+    public void getRootPath()
+    {
+        System.out.println("===========操作系统是:"+System.getProperties().getProperty("os.name"));
+        if(Pattern.matches(".*(Win).*", System.getProperties().getProperty("os.name")))
+        {
+            rootPath = "C:/uploadFile/";
+        }
+        else
+        {
+            rootPath = "/uploadFile/";
+        }
+        File createPath = new File(rootPath);
+        if(!createPath .exists())
+        {
+            createPath.mkdirs();
+        }
+    }
 
     public List<Map> getAdminSelectInfo()
     {
@@ -62,6 +79,7 @@ public class MyFileServicelmpl implements MyFileService {
     //上传文件
     public void uploadMyFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception
     {
+        getRootPath();
             InputStream in = null;
             OutputStream out = null;
             try
@@ -138,6 +156,7 @@ public class MyFileServicelmpl implements MyFileService {
 
     public void downloadFile(String id, HttpServletResponse response)
     {
+        getRootPath();
         String path = mapper.getPathById(id);
         //System.out.println(path);
         String fileName = java.net.URLEncoder.encode(mapper.getFileNameById(id));
