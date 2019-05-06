@@ -40,8 +40,8 @@ function editProblem(){
                 $("#dialogProblemMaxTime").val(result[0].maxtime)
                 rank = (result[0].rank);
                 $("#dialogProblemRank").ionRangeSlider({
-                    min: 1,
-                    max: 5,
+                    min: 0,
+                    max: 100,
                     from: result[0].rank,
                     type: 'single',
                     step: 1,
@@ -63,8 +63,8 @@ function editProblem(){
     }else{
         $("#dialogTitle").html("新建题目");
         $("#dialogProblemRank").ionRangeSlider({
-            min: 1,
-            max: 5,
+            min: 0,
+            max: 100,
             from: 0,
             type: 'single',
             step: 1,
