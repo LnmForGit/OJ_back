@@ -11,8 +11,18 @@ public interface BbsMangerMapper {
     //新增一条话题
     @Select("insert into teach_bbs_topic(id,name,content,admin_id) values(NULL,#{name},#{content},#{admin_id})")
     public void addTopic(Map<String, Object> param);
-
+    //修改一条话题
+    @Select("update teach_bbs_topic set name=#{name},content=#{content} where id=#{id}")
+    public void saveTopic(Map<String,Object> param);
     //删除话题
+    @Select("select id from teach_bbs_post where sub_id=#{id}")
+    public List<Map> selectpostId(String id);
+    @Select("delete from teach_bbs_post where id=#{id}")
+    public void deletePost(String id);
+    @Select("delete from teach_bbs_reply where post_id=#{id}")
+    public void delreply(String id);
+    @Select("delete from teach_bbs_post_zan where post_id=#{id}")
+    public void delpostzan(String id);
     @Select("delete from teach_bbs_topic where id=#{id}")
     public void delTopic(String id);
     //文章列表

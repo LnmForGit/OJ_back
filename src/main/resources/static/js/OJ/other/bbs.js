@@ -102,11 +102,9 @@ function getPostFlag() {
     })
 }
 function resetDialog() {
-    $("#myModal5 input").html("");
-    $("#myModal5 select").html("");
-    $("#myModal5 input").removeClass("error");
-    $("#myModal5 select").removeClass("error");
-    $("#myModal5 label.error").remove();
+    $('#content').code("");
+    $('#dialogNoticeForm input').select('');
+    $('#dialogNoticeForm input').val('');
 }
 function AddTopic(){
     if($("#postTitle").val()==""){

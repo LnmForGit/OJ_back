@@ -7,6 +7,9 @@ public interface BbsMangerService {
     ////新增一条话题
     public void addTopic(Map<String, Object> param);
 
+    //修改话题
+    public void saveTopic(Map<String, Object> param);
+
     //删除话题
     public void delTopic(Map<String,  String> param);
 

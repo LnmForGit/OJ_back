@@ -30,9 +30,23 @@ public class BbsMangerlmpl implements BbsMangerService {
         mapper.addTopic(param);
     }
 
+    //修改话题
+    public void saveTopic(Map<String, Object> param){
+        mapper.saveTopic(param);
+    }
+
     //删除话题
     public void delTopic(Map<String, String> param){
-        mapper.delTopic(param.get("id"));
+        List<Map> list= new ArrayList<>();
+         String id=param.get("id");
+        list=mapper.selectpostId(id);
+        int i=0;
+        for(i=0;i<list.size();i++){
+            mapper.deletePost(list.get(i).get("id").toString());
+            mapper.delreply(list.get(i).get("id").toString());
+            mapper.delpostzan(list.get(i).get("id").toString());
+        }
+        mapper.delTopic(id);
     }
 
     //获取文章列表

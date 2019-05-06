@@ -1,6 +1,6 @@
 
 $(document).ready(function () {
-
+    loadSummernote()
     showtopicListinfo();
 });
 
@@ -38,12 +38,21 @@ function showtopicListinfo() {
         },{
             "data":"flag"
         }],
-        "columnDefs": [{
+        "columnDefs": [
+            {
+                "render": function (data, type, row) {
+                    debugger
+                    var content = row.content;
+
+                    return content.replace(/<[^>]+>/g,"").substring(0,50);
+                },
+                "targets": 2
+            },{
             "render": function (data, type, row) {
                 debugger
                 var a = "";
                 //a += "<button type='button' class='btn btn-primary' onclick='showIp(\"" + row.id + "\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>";
-                a += "<button type='button' onclick='showarticel(\"" + row.id +"\")' class='btn btn-primary'  title='查看'   style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;详情</button>"
+                a += "<button type='button' onclick='showarticel(\"" + row.title +"\",\"" + escape(row.content) +"\")' class='btn btn-primary'  title='查看'   style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;详情</button>"
                 if(row.flag=="否") {
                     a += "<button type='button' class='btn btn-primary' onclick='Flag(\"" + row.id +"\", \""+row.flag+ "\")' title='置顶' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil'></i>&nbsp;置顶</button>"
                 }else{
@@ -86,24 +95,33 @@ function Flag(id,flag) {
         }
     })
 }
-function showarticel(id) {
-    $.ajax({
-        type: "POST",
-        url: "/blocksMn/showarticel",
-        dataType: "json",
-        contentType: "application/json;charset=UTF-8",
-        data:JSON.stringify({
-            id:id
-        }),success(result){
-            console.log(result)
-            $('#title').html(result.title);
-            $('#content').html(result.content);
-            $('#myModal5').modal();
-        }
-    })
+function showarticel(name,content) {
+   $('#postTitle').val(name);
+  // $('#topic').val(topic);
+    $('#content').code(unescape(content));
+    $('#myModal5').modal();
 }
 function formatTime(time) {
     time = time.split(".")[0];
     time = time.replace("T", " ")
     return time;
+}
+function loadSummernote() {
+    $('#content').summernote('disable');
+    $("#content").summernote({
+        height: 500,
+        minHeight: 200,
+        maxHeight: 600,
+        lang: 'zh-CN',
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['view', ['fullscreen', 'codeview']]
+        ]
+
+    })
 }

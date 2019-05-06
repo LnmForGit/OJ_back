@@ -41,12 +41,21 @@ public class BbsMangerController {
 
         return list;
     }
+    //增加一个话题
     @PostMapping("/addTopic")
     @ResponseBody
     public boolean addTopic(@RequestBody Map<String, Object> param,HttpServletRequest request) {
         param.put("admin_id",request.getSession().getAttribute("user_id").toString());
         System.out.println(param);
        BbsMangerService.addTopic(param);
+
+        return true;
+    }
+    //修改一个话题
+    @PostMapping("/saveTopic")
+    @ResponseBody
+    public boolean saveTopic(@RequestBody Map<String, Object> param) {
+        BbsMangerService.saveTopic(param);
 
         return true;
     }

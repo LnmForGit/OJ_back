@@ -11,6 +11,9 @@ $(document).ready(function () {
 });
 
 function showpostList(){
+    if(PostList.length>0){
+        $('#shafa').hide();
+    }
     newTest=""
   for(var i in PostList){
       newTest+= '                <div class="ibox-content">\n' +
@@ -24,8 +27,8 @@ function showpostList(){
           '</strong> <span ><i class="fa fa-clock-o"></i> ' +formatTime(PostList[i].time)+
           '</span>\n' +
           '                    </div>\n' +
-          '                    <p>\n' +PostList[i].content+
-         '                    </p>\n' +
+          '                    <p >\n' +PostList[i].content.replace(/<[^>]+>/g,"").substring(0,50)+
+         '       ...             </p>\n' +
           '                    <div class="row">\n' +
           '                        <div class="col-md-6">\n' +
           '\n' +
