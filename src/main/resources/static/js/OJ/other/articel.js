@@ -6,13 +6,6 @@ $(document).ready(function () {
     queryreplyInfo();
     loadSummernote();
     reply_btn();
-    // $(function(){
-    //     //页面加载完毕后开始执行的事件
-    //     $(".reply_btn").click(function(){
-    //         $(".reply_textarea").remove();
-    //         $(this).parent().append("<div class='reply_textarea'><textarea placeholder='在这里发表你的观点...' name='' cols='100' rows='5' ></textarea><br/><input type='submit' value='发表' onclick='addreplyson()'/></div>");
-    //     });
-    // });
 });
 function reply_btn(id,level) {
 
@@ -31,9 +24,13 @@ function showarticel() {
     $("#view").html(Postinfo.post.view_num);
     $("#zan").html(Postinfo.post.zan_num);
     $("#iszan").html(Postinfo.zan);
+    $('#Replynum').html(" &nbsp&nbsp&nbsp&nbsp"+Postinfo.post.reply_num+"条回复");
 }
 
 function queryreplyInfo(){
+    if(replyList.length>0){
+        $('#shafa').hide();
+    }
      var Test="";
      for(var i in replyList){
          var s="";
@@ -44,7 +41,7 @@ function queryreplyInfo(){
              '                            <div class="media-body">\n' +
              '                                <h4 class="media-heading">'+replyList[i].name+'</h4>\n' +
              '<p>'+replyList[i].content+'</p>\n'+
-             '<span class="text-muted"><i class="fa fa-clock-o"></i>发表于 :'+formatTime(replyList[i].time)+'</span>\n'+
+             '<span ><i class="fa fa-clock-o"></i>发表于 :'+formatTime(replyList[i].time)+'</span>\n'+
              '<div class="small text-right">\n' +
              '                                    <div><i class="fa fa-comments-o"> </i>' +
              '<a class="reply_btn" onclick="reply_btn('+replyList[i].id+','+replyList[i].level+')">回复('+ replyList[i].sum+')</a>|\n' +
@@ -132,6 +129,9 @@ function replyPost(){
                 swal("发布失败！");
             }
             $('#reply').summernote('code','');
+            setTimeout( function(){
+                history.go(0);
+            }, 1* 1000 );
         }
     })
 }

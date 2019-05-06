@@ -40,7 +40,7 @@
                             <h2>欢迎来到讨论区</h2>
                             <span>你可以自由选择你感兴趣的话题。</span>
                             <div class="ibox-tools">
-                                <a title="发布" data-toggle='modal' data-target='#myModal5' class="btn btn-primary btn-xs" >我要发布</a>
+                                <a title="发布" onclick="resetDialog()" data-toggle='modal' data-target='#myModal5' class="btn btn-primary btn-xs" >我要发布</a>
                             </div>
                         </div>
                     </div>
@@ -81,55 +81,60 @@
 <!--弹窗布局开始-->
 <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg">
-<div class="modal-content">
-    <div class="mail-box-header">
-        <h2>
-            我要发布
-        </h2>
-    </div>
-    <div class="mail-box">
-
-
-
-        <div class="mail-body">
-
-            <form class="form-horizontal" method="get">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">文章标题：</label>
-
-                    <div class="col-sm-10">
-                        <input type="text" id="postTitle" class="form-control" placeholder="一句话说明你遇到的问题或想分享的经验">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">所属话题：</label>
-                    <div class="col-sm-10">
-                        <select id="TopicSubject"  width="100%">
-                            <option value="-1">请选择话题</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-
-        </div>
-        <h2>文章内容</h2>
-        <div class="mail-text h-200">
-
-            <div class="summernote" id="content">
-
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="dialogTitle">我要发布</h4>
             </div>
-            <div class="clearfix"></div>
-        </div>
-        <div class="mail-body text-right tooltip-demo">
-            <button type="button" class="btn btn-primary" onclick="AddTopic()"><i class="fa fa-reply"></i> 发布</button>
-            <button type="button" class="btn btn-white" id="closeFileInfoDialog" data-dismiss="modal"><i class="fa fa-times"></i>关闭</button>
-        </div>
-    </div>
+            <div class="modal-body">
+                <form method="get" id="dialogNoticeForm" class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-9 droppable sortable ui-droppable ui-sortable" style="width: 100%">
+                            <div class="form-group draggable ui-draggable dropped">
+                                <label id="lable1" class="col-sm-2 control-label">标题：</label>
+                                <div class="col-sm-5">
+                                    <input id="postTitle" name="dialogNoticeTitle" type="text"  aria-required="true" aria-invalid="false" class="form-control" placeholder="请输入标题">
+                                    <input id="dialogNoticeId" type="text" hidden>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9 droppable sortable ui-droppable ui-sortable" style="width: 100%">
+                            <div class="form-group draggable ui-draggable dropped">
+                                <label id="lable2" class="col-sm-2 control-label">话题：</label>
 
+                                <div class="col-sm-5">
+                                    <select id="TopicSubject"  class="form-control" >
+                                        <option value="-1">请选择话题</option>
+                                    </select>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-9 droppable sortable ui-droppable ui-sortable"  style="width: 100%">
+                            <div class="form-group draggable ui-draggable dropped">
+                                <label class="col-sm-2 control-label">发帖内容：</label>
+                                <div class="col-sm-5">
+                                    <div class="ibox-content no-padding" style="width:600px;">
+                                        <div class="summernote" id="content">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" id="closeUserInfoDialog" data-dismiss="modal">关闭</button>
+                <button id="button1" type="button" class="btn btn-primary" onclick="AddTopic()">保存</button>
+            </div>
+        </div>
     </div>
 </div>
 
-</div>
 <!-- 全局js -->
 <!--<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>-->
 <!--<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>-->
