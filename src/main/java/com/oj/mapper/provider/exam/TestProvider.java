@@ -23,7 +23,8 @@ public class TestProvider {
         sql.append("a.name, ");
         sql.append("'考试' as kind, ");
         sql.append("FROM_UNIXTIME(a.`start`) as start_time, ");
-        sql.append("FROM_UNIXTIME(a.`end`) as end_time ");
+        sql.append("FROM_UNIXTIME(a.`end`) as end_time, ");
+        sql.append("admin_id ");
         sql.append("FROM ");
         sql.append("teach_test a ");
         sql.append("INNER JOIN ( ");

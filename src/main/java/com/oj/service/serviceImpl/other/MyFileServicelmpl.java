@@ -140,7 +140,7 @@ public class MyFileServicelmpl implements MyFileService {
     {
         String path = mapper.getPathById(id);
         //System.out.println(path);
-        String fileName = mapper.getFileNameById(id);
+        String fileName = java.net.URLEncoder.encode(mapper.getFileNameById(id));
         File file = new File(path);
         if (file.exists()) {
             //System.out.println("File path is : " + path);
