@@ -21,7 +21,9 @@ spring:
   resources:
     static-locations: classpath:/static,classpath:/templates
 
+  fileUploadPath:
+    WinPath: C:/uploadFile/
+    LinuxPath: /uploadFile/
 
-
-logging:
+  logging:
   path: D:/Develop/DevelopWorkingSpace/IdeaProjects/log
