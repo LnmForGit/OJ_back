@@ -1,4 +1,34 @@
 spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles: test
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/teaching?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password:
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
+  resources:
+    static-locations: classpath:/static,classpath:/templates
+
+logging:
+    path: /root/OJ/oj_back_log
+
+---
+spring:
+  profiles: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/teaching?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
@@ -14,14 +44,32 @@ spring:
     multipart:
       max-file-size: 10240MB
       max-request-size: 10240MB
-
-
-  mvc:
-  #    static-path-pattern: /static/**
   resources:
     static-locations: classpath:/static,classpath:/templates
 
+logging:
+    path: D:/Develop/DevelopWorkingSpace/IdeaProjects/log
 
+---
+spring:
+  profiles: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/teaching?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password:
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  servlet:
+    multipart:
+      max-file-size: 10240MB
+      max-request-size: 10240MB
+  resources:
+    static-locations: classpath:/static,classpath:/templates
 
 logging:
-  path: D:/Develop/DevelopWorkingSpace/IdeaProjects/log
+    path: /root/OJ/oj_back_log
