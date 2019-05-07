@@ -11,7 +11,7 @@ function reply_btn(id,level) {
 
     $(".reply_btn").click(function(){
         $(".reply_textarea").remove();
-        $(this).parent().append("<div class='reply_textarea'><textarea class='content' placeholder='在这里发表你的观点...' name='' cols='100' rows='5' ></textarea><br/><input type='submit' value='发表' onclick='addreplyson("+id+","+level+")'/></div>");
+        $(this).parent().append("<div class='reply_textarea'><textarea class='content' placeholder='在这里发表你的观点...' name='' cols='100' rows='5' ></textarea><br/><input type='submit' value='发表' onclick='addreplyson("+id+","+level+")'/> <a class='emotion'>表情</a></div>");
     });
 }
 function showarticel() {
@@ -31,27 +31,71 @@ function queryreplyInfo(){
     if(replyList.length>0){
         $('#shafa').hide();
     }
-     var Test="";
-     for(var i in replyList){
-         var s="";
-         Test+=' <li class="media">\n' +
-             '                            <a class="pull-left" href="#">\n' +
-             '                                <i class="fa fa-comments-o"></i>\n' +
-             '                            </a>\n' +
-             '                            <div class="media-body">\n' +
-             '                                <h4 class="media-heading">'+replyList[i].name+'</h4>\n' +
-             '<p>'+replyList[i].content+'</p>\n'+
-             '<span ><i class="fa fa-clock-o"></i>发表于 :'+formatTime(replyList[i].time)+'</span>\n'+
-             '<div class="small text-right">\n' +
-             '                                    <div><i class="fa fa-comments-o"> </i>' +
-             '<a class="reply_btn" onclick="reply_btn('+replyList[i].id+','+replyList[i].level+')">回复('+ replyList[i].sum+')</a>|\n' +
-             '                                        <i class="fa fa-thumbs-up"></i><a onclick="replyzan('+replyList[i].id+')">赞('+replyList[i].zannum+')</a></div>\n' +
-             '                                </div>\n';
-              Test+=replysoninfo(replyList[i].id);
-             Test+='                            </div>\n' +
-             '                        </li>\n';
+    if(replyList.length>0){
+        $('#shafa').hide();
     }
-     $('.media-list').append(Test);
+    if(replyList.length<=5){
+        replyListPage(0);
+    }else{
+        replyListPage(0);
+        var page=replyList.length/5;
+        console.log(page);
+        test="";
+        var j=0;
+        test+='<button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i>\n' +
+            '                </button>';
+        for(var i=0;i<page;i++){
+            j=i+1;
+            test+='<button class="btn btn-white" onclick="replyListPage('+i+')">'+j+'</button>\n'
+        }test+=' <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i>\n' +
+            '                </button>';
+        $('#page').append(test);
+    }
+
+}
+function replyListPage(page){
+    $('.media-list').html("");
+    Test="";
+    var first=0;
+    var end=replyList.length;
+    if(page==0){
+        first=0;
+        if(replyList.length<=5) {
+            end = replyList.length;
+        }else{
+            end=5;
+        }
+    }else{
+        first=(page)*5;
+        if(first>replyList.length){
+            return;
+        }
+        if(replyList.length> page*2*5){
+            end=page*5*2;
+        }else{
+            end=replyList.length;
+        }
+    }
+    for(var i=first;i<end;i++){
+        var s="";
+        Test+=' <li class="media">\n' +
+            '                            <a class="pull-left" href="#">\n' +
+            '                                <i class="fa fa-comments-o"></i>\n' +
+            '                            </a>\n' +
+            '                            <div class="media-body">\n' +
+            '                                <h4 class="media-heading">'+replyList[i].name+'</h4>\n' +
+            '<p>'+replyList[i].content+'</p>\n'+
+            '<span ><i class="fa fa-clock-o"></i>发表于 :'+formatTime(replyList[i].time)+'</span>\n'+
+            '<div class="small text-right">\n' +
+            '                                    <div><i class="fa fa-comments-o"> </i>' +
+            '<a class="reply_btn" onclick="reply_btn('+replyList[i].id+','+replyList[i].level+')">回复('+ replyList[i].sum+')</a>|\n' +
+            '                                        <i class="fa fa-thumbs-up"></i><a onclick="replyzan('+replyList[i].id+')">赞('+replyList[i].zannum+')</a></div>\n' +
+            '                                </div>\n';
+        Test+=replysoninfo(replyList[i].id);
+        Test+='                            </div>\n' +
+            '                        </li>\n';
+    }
+    $('.media-list').append(Test);
 }
 function replysoninfo(level) {
     var newtest="";
