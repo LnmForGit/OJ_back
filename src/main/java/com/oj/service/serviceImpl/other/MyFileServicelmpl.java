@@ -1,6 +1,7 @@
 package com.oj.service.serviceImpl.other;
 
 import com.oj.entity.other.MyFile;
+import com.oj.entity.other.FilePath;
 import com.oj.mapper.other.MyFileMapper;
 import com.oj.service.other.MyFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +28,24 @@ public class MyFileServicelmpl implements MyFileService {
     @Autowired(required = false)
     private MyFileMapper mapper;
     public String rootPath;
+
     public void getRootPath()
     {
+        FilePath Path = new FilePath();
+        System.out.println(Path);
         System.out.println("===========操作系统是:"+System.getProperties().getProperty("os.name"));
         if(Pattern.matches(".*(Win).*", System.getProperties().getProperty("os.name")))
         {
-            rootPath = "C:/uploadFile/";
+            //System.out.println("check my winPath ---- "+Path.getWinPath());
+            rootPath = Path.getWinPath();
         }
         else
         {
-            rootPath = "/uploadFile/";
+            //System.out.println("check my winPath ---- "+Path.getLinuxPath());
+            rootPath = Path.getLinuxPath();
         }
         File createPath = new File(rootPath);
+        //System.out.println("check my path ---- "+rootPath);
         if(!createPath .exists())
         {
             createPath.mkdirs();
