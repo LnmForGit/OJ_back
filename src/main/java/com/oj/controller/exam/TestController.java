@@ -91,12 +91,14 @@ public class TestController {
     //获取考试信息
     @PostMapping("/getTestInfo")
     @ResponseBody
-    public List<Map> getTestInfo(HttpServletRequest request){
+    public Map getTestInfo(HttpServletRequest request){
 
 
 
         String testName = request.getParameter("testName");
-        return testService.getTestInfo(testName, request.getSession().getAttribute("user_id").toString());
+        Map<String, List> map = new HashMap<>();
+        map.put("data", testService.getTestInfo(testName, request.getSession().getAttribute("user_id").toString()));
+        return map;
     }
 
     //获取试题列表

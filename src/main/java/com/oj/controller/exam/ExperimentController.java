@@ -33,6 +33,8 @@ public class ExperimentController {
     private TestService testService;
     @RequestMapping("/")
     public String index(){
+        System.out.println("获取时间" + new Date());
+
         return "exam/experiment";
     }
     //展示实验编辑页面
@@ -91,9 +93,11 @@ public class ExperimentController {
     //获取实验信息
     @PostMapping("/getExperInfo")
     @ResponseBody
-    public List<Map> getExperInfo(HttpServletRequest request){
+    public Map getExperInfo(HttpServletRequest request){
         String experName = request.getParameter("experName");
-        return experimentService.getExperInfo(experName, request.getSession().getAttribute("user_id").toString());
+        Map<String, List> map = new HashMap<>();
+        map.put("data", experimentService.getExperInfo(experName, request.getSession().getAttribute("user_id").toString()));
+        return map;
     }
 
     //获取试题列表
