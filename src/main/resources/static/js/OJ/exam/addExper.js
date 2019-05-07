@@ -59,6 +59,7 @@ function loadLayerDate() {
     }else{
         startTime = laydate.now();
         endTime = laydate.now();
+        console.log(startTime);
         $('#experStartTime').val(laydate.now(0, 'YYYY-MM-DD hh:mm:ss'));
         $('#experEndTime').val(laydate.now(7, 'YYYY-MM-DD hh:mm:ss'));
     };
@@ -160,6 +161,14 @@ function loadPreSelectQuestion() {
                         return a;
                     },
                     "targets" :3
+                },{
+                    "render":function (data,type,row) {
+                        var a="";
+
+                        a+="<a  onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25' href='/problemsMn/problemDetails' style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+                        return a
+                    },
+                    "targets":1,
                 }]
             });
         }
@@ -450,11 +459,18 @@ function saveOrUpdateExper() {
         toastr.error("","请选择题目");
         return;
     }else{
+        var sum=0;
         for(var i=0; i<selectedQueList.length; i++){
             if(selectedQueList[i].score==0){
                 toastr.error("","已选择的第"+(i+1)+"条试题分数必须大于0");
                 return;
             }
+            sum+=parseFloat(selectedQueList[i].score);
+        }
+        console.log(sum);
+        if(sum<99 || sum>100){
+            toastr.error("","所有分数相加必须等于99或100");
+            return;
         }
     }
     if(selectedClassList.length == 0){
