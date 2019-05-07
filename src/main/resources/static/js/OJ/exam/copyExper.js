@@ -445,11 +445,18 @@ function saveOrUpdateExper() {
         toastr.error("","请选择题目");
         return;
     }else{
+        var sum=0;
         for(var i=0; i<selectedQueList.length; i++){
             if(selectedQueList[i].score==0){
                 toastr.error("","已选择的第"+(i+1)+"条试题分数必须大于0");
                 return;
             }
+            sum+=parseFloat(selectedQueList[i].score);
+        }
+        console.log(sum);
+        if(sum<99 || sum>100){
+            toastr.error("","所有分数相加必须等于99或100");
+            return;
         }
     }
     if(selectedClassList.length == 0){
