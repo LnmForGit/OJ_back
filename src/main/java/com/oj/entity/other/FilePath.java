@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FilePath {
+
     @Value("${spring.fileUploadPath.WinPath}")
     private static String WinPath;
     @Value("${spring.fileUploadPath.LinuxPath}")

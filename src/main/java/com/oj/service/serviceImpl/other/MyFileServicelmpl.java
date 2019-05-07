@@ -28,6 +28,7 @@ public class MyFileServicelmpl implements MyFileService {
     @Autowired(required = false)
     private MyFileMapper mapper;
     public String rootPath;
+
     public void getRootPath()
     {
         FilePath Path = new FilePath();

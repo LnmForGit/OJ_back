@@ -18,6 +18,10 @@ spring:
 
   mvc:
   #    static-path-pattern: /static/**
+
+  fileUploadPath:
+    WinPath: C:/uploadFile/
+    LinuxPath: /uploadFile/
   resources:
     static-locations: classpath:/static,classpath:/templates
 
