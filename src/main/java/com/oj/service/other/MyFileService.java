@@ -26,6 +26,8 @@ public interface MyFileService {
     public List<Map> fileFlag(String id);
     //保存状态
     public void saveFileFlag(String id, String flag);
+    //根据ID检查这个文件存不存在
+    public boolean checkFileExistence(String id);
     /*
     //获取年级下拉信息
     public List<Map> getGradeSelectInfo();

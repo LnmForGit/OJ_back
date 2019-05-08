@@ -41,6 +41,9 @@ public interface MyFileMapper {
     //更新状态
     @Update("update teach_myfile set flag=#{flag} where id = #{id}")
     public void saveFileFlag(String id, String flag);
+    //根据文件ID查询文件大小
+    @Select("select size from teach_myfile where id = #{id}")
+    public int getFileSizeById(String id);
 
     /*
     //通过ClassProvider类中的getQuerySql()方法动态构建查询语句

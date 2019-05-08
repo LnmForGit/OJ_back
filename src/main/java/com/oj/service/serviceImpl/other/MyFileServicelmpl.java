@@ -172,6 +172,7 @@ public class MyFileServicelmpl implements MyFileService {
             //System.out.println("File path is : " + path);
             response.setHeader("content-type", "application/octet-stream");
             response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+            response.setHeader("Content-Length", "" + mapper.getFileSizeById(id));
             //response.setHeader("Pragma", "No-cache");
             //response.setHeader("Cache-Control", "No-cache");
             //response.setDateHeader("Expires", 0);
@@ -219,6 +220,20 @@ public class MyFileServicelmpl implements MyFileService {
         File filePath = new File(route);
         filePath.delete();
         mapper.fileDelete(id);
+    }
+
+    public boolean checkFileExistence(String id)
+    {
+        String path = mapper.getPathById(id);
+        File file = new File(path);
+        if(file.exists())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }
