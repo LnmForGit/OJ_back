@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,9 +37,24 @@ public class ExperimentServiceImpl implements ExperimentService {
         Map<String, String> params = new HashMap<>();
         params.put("experName", experName);
         params.put("user_id", user_id);
-        return mapper.getExperInfo(params);
+        List<Map> list = mapper.getExperInfo(params);
+        for (Map map:list) {
+            map.put("start_time", timeStamp2String((Timestamp)map.get("start_time")));
+            map.put("end_time", timeStamp2String((Timestamp)map.get("end_time")));
+        }
+        return list;
     }
 
+    public String timeStamp2String(Timestamp timestamp){
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try{
+            String str2 = sdf.format(timestamp);
+            return str2;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
     /**
      * 获取题目列表接口功能实现
      * @return

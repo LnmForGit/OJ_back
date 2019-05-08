@@ -9,57 +9,50 @@ function resetForm() {
     getExperInfo();
 }
 function getExperInfo() {
-    $.ajax({
-        type: "POST",
-        url: "/experimentMn/getExperInfo",
-        dataType: "json",
-        data:{
-            "experName" : $('#experName').val()
+    var dataTable = $('#experInfoTable');
+    if ($.fn.dataTable.isDataTable(dataTable)) {
+        dataTable.DataTable().destroy();
+    }
+    dataTable.DataTable({
+        "serverSide": false,
+        "autoWidth" : false,
+        "bSort": false,
+        "ajax": {
+            type: "POST",
+            url: "/experimentMn/getExperInfo",
+            dataType: "json",
+            data:{
+                "experName" : $('#experName').val()
+            },
         },
-        success:function (result) {
-            $.each(result,function(index,value){
-                value.start_time = formatTime(value.start_time)
-                value.end_time = formatTime(value.end_time)
-            })
-            var dataTable = $('#experInfoTable');
-            if ($.fn.dataTable.isDataTable(dataTable)) {
-                dataTable.DataTable().destroy();
-            }
-            dataTable.DataTable({
-                "serverSide": false,
-                "autoWidth" : false,
-                "bSort": false,
-                "data" : result,
-                "columns" : [{
-                    "data" : "name"
-                },{
-                    "data" : "kind"
-                },{
-                    "data" :"start_time"
-                },{
-                    "data" : "end_time"
-                },],
-                "columnDefs": [{
-                    "render" : function(data, type, row) {
-                        var a = "";
-                        a += "<button type='button' class='btn btn-primary' onclick='showIp(\""+row.id+"\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>"
+        "columns" : [{
+            "data" : "name"
+        },{
+            "data" : "kind"
+        },{
+            "data" :"start_time"
+        },{
+            "data" : "end_time"
+        },],
+        "columnDefs": [{
+            "render" : function(data, type, row) {
+                debugger
+                var a = "";
+                a += "<button type='button' class='btn btn-primary' onclick='showIp(\""+row.id+"\")' title='IP' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eject'></i>&nbsp;IP</button>"
 
-                        if(row.admin_id==user_id) {
-                            a += "<button type='button' class='btn btn-primary' onclick='openAddExper(\"" + row.id + "\")' title='编辑' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil'></i>&nbsp;编辑</button>"
-                        }
-                        a += "<button type='button' class='btn btn-primary' onclick='UpdateTheTestResult(\"" + row.id + "\")' title='判分' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-refresh'></i>&nbsp;判分</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='experScore(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='similarityUser(\""+row.id+"\")' title='相似' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eye'></i>&nbsp;相似</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='deleteExper(\""+row.id+"\")' title='删除' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-trash'></i>&nbsp;删除</button>"
-                        a += "<button type='button' class='btn btn-primary' onclick='copyExper(\""+row.id+"\")' title='复制' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-copy'></i>&nbsp;复制</button>"
-                        return a;
-                    },
-                    "targets" :4
-                }]
-            });
-        }
-    })
-
+                if(row.admin_id==user_id) {
+                    a += "<button type='button' class='btn btn-primary' onclick='openAddExper(\"" + row.id + "\")' title='编辑' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-pencil'></i>&nbsp;编辑</button>"
+                }
+                a += "<button type='button' class='btn btn-primary' onclick='UpdateTheTestResult(\"" + row.id + "\")' title='判分' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-refresh'></i>&nbsp;判分</button>"
+                a += "<button type='button' class='btn btn-primary' onclick='experScore(\""+row.id+"\")' title='成绩' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-search'></i>&nbsp;成绩</button>"
+                a += "<button type='button' class='btn btn-primary' onclick='similarityUser(\""+row.id+"\")' title='相似' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-eye'></i>&nbsp;相似</button>"
+                a += "<button type='button' class='btn btn-primary' onclick='deleteExper(\""+row.id+"\")' title='删除' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-trash'></i>&nbsp;删除</button>"
+                a += "<button type='button' class='btn btn-primary' onclick='copyExper(\""+row.id+"\")' title='复制' data-toggle='dropdown' style='margin-right:15px; margin-bottom: -1px;'><i class='fa fa-copy'></i>&nbsp;复制</button>"
+                return a;
+            },
+            "targets" :4
+        }]
+    });
 }
 
 function formatTime(time) {
