@@ -50,6 +50,7 @@ public interface TestService {
      */
     //获取指定的考试成绩
     public List<Map> getTestScoreResultList(Map<String, String> param, String user_id);
+    public List<Map> getcompScoreResultList(Map<String, String> param, String user_id);
     //获取指定考试的简要信息
     public Map getTestBriefInf(String id);
     //获取本次考试下的所有班级

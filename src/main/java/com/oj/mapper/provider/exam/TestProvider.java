@@ -96,6 +96,18 @@ public class TestProvider {
         log.info(sql.toString());
         return sql.toString();
     }
+    public String getcompScoreResultList(Map<String, Object> params) {
+        Map<String, String> info = (Map<String, String>) params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        //sql.append("SELECT t.account account, t.name name, t.class_name className, t.result testResult, t.all testScore FROM teach_test_result t ");
+        sql.append("SELECT t.account account, t.name name, t.class_name className, t.result testResult, t.all testScore FROM\n" +
+                "teach_test_result t  where ");
+        sql.append("tid='"+info.get("testId")+"'");
+        sql.append("ORDER BY ");
+        sql.append("t.all DESC, t.account  "); //在成绩降序的基础上，学号增序
+        log.info(sql.toString());
+        return sql.toString();
+    }
     //获取指定考试的成绩统计情况
     public String getStatisticalResultSQL(Map<String, Object> params) {
         Map<String, String> info = (Map<String, String>) params.get("condition");

@@ -163,7 +163,7 @@ function uploadFile(id) {
     var formData = new FormData();
     formData.append('file', $('#uploadFile')[0].files[0]);
     var length = getSize($('#uploadFile')[0].files[0].size);
-    if($('#uploadFile')[0].files[0].size >= 1073741824)
+    if($('#uploadFile')[0].files[0].size >= 1073741824*5)//后面的5表示1G*5=5G 上限为5G 可修改
     {
         swal("上传失败！", "上传文件过大！最大不能超过1GB", "error");
         return ;
@@ -297,7 +297,24 @@ function deleteFile(id) {
 }
 
 function downloadFile(id) {
-    window.location.href="/myFile/downloadFile?id="+id;
+    $.ajax({
+        type: "POST",
+        url: "/myFile/checkFileExistence",
+        dataType: "json",
+        data: {
+            id: id,
+        },
+        success:function (result){
+            if(result.flag == 1)
+            {
+                window.location.href="/myFile/downloadFile?id="+id;
+            }
+            else
+            {
+                swal("下载失败！", "文件不存在，请联系教师或管理员", "error");
+            }
+        }
+    })
 }
 
 

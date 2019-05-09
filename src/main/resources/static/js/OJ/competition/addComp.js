@@ -1,14 +1,13 @@
 
 var selectedQueList = [];
-var selectedClassList = [];
 var selectedJroomList = [];
-
+console.log(experInfo);
+if (experInfo.id != 'add' ){
     selectedQueList = experInfo.selectedQueList;
-    selectedClassList = experInfo.selectedClassList;
-    //selectedJroomList = experInfo.selectedJroomList;
-    //experInfo.experInfo.start = formatTime(experInfo.experInfo.start);
-    //experInfo.experInfo.end = formatTime(experInfo.experInfo.end);
-    console.log(selectedClassList);
+    selectedJroomList = experInfo.selectedJroomList;
+    experInfo.compInfo.start = formatTime(experInfo.compInfo.start);
+    experInfo.compInfo.end = formatTime(experInfo.compInfo.end);
+}
 toastr.options = {
     "closeButton": true,
     "debug": false,
@@ -25,6 +24,7 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 $(document).ready(function () {
+    console.log(experInfo.compInfo);
     // 加载时间选择器
     loadLayerDate();
     //加载富文本编辑器
@@ -37,10 +37,6 @@ $(document).ready(function () {
     loadPreSelectQuestion();
     // 加载已选择题目列表
     loadSelectedQuestion();
-    // 加载待选择班级列表
-    loadPreSelectClass();
-    // 加载已选择班级列表
-    loadSelectedClass();
     // 加载待选择机房列表
     loadPreSelectJroom();
     // 加载已选择机房列表
@@ -51,11 +47,19 @@ $(document).ready(function () {
 function loadLayerDate() {
     var startTime;
     var endTime;
-
-    startTime = laydate.now();
-    endTime = laydate.now();
-    $('#experStartTime').val(laydate.now(0, 'YYYY-MM-DD hh:mm:ss'));
-    $('#experEndTime').val(laydate.now(7, 'YYYY-MM-DD hh:mm:ss'));
+    if (experInfo.id != 'add'){
+        startTime = experInfo.compInfo.start;
+        endTime = experInfo.compInfo.end;
+        console.log(startTime );
+        $('#experStartTime').val(startTime);
+        $('#experEndTime').val(endTime);
+    }else{
+        startTime = laydate.now();
+        endTime = laydate.now();
+        console.log(startTime);
+        $('#experStartTime').val(laydate.now(0, 'YYYY-MM-DD hh:mm:ss'));
+        $('#experEndTime').val(laydate.now(7, 'YYYY-MM-DD hh:mm:ss'));
+    };
 
     //日期范围限制
     var start = {
@@ -111,13 +115,13 @@ function loadSummernote() {
 }
 
 function loadExpreInfo() {
-    $("#experName").val(experInfo.experInfo.name);
+    $("#experName").val(experInfo.compInfo.name);
     $("#experName").attr("disabled","disabled");
-    $('#experDesc').code(experInfo.experInfo.description);
-    if ("" == experInfo.experInfo.is_ip){
+    $('#experDesc').code(experInfo.compInfo.description);
+    if ("" == experInfo.compInfo.is_ip){
         $("[name='is_ip']").removeAttr("checked");
     }
-    if ("" == experInfo.experInfo.only_ip){
+    if ("" == experInfo.compInfo.only_ip){
         $("[name='only_ip']").removeAttr("checked");
     }
 }
@@ -154,6 +158,14 @@ function loadPreSelectQuestion() {
                         return a;
                     },
                     "targets" :3
+                },{
+                    "render":function (data,type,row) {
+                        var a="";
+
+                        a+="<a  onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25' href='/problemsMn/problemDetails' style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+                        return a
+                    },
+                    "targets":1,
                 }]
             });
         }
@@ -234,97 +246,96 @@ function deleteSelectedQue(id) {
     loadSelectedQuestion();
 }
 
-function loadPreSelectClass() {
-    $.ajax({
-        type: "POST",
-        url: "/experimentMn/loadPreSelectClass",
-        dataType: "json",
-        success:function (result) {
-            var dataTable = $('#preSelectClassTable');
-            if ($.fn.dataTable.isDataTable(dataTable)) {
-                dataTable.DataTable().destroy();
-            }
+// function loadPreSelectClass() {
+//     $.ajax({
+//         type: "POST",
+//         url: "/experimentMn/loadPreSelectClass",
+//         dataType: "json",
+//         success:function (result) {
+//             var dataTable = $('#preSelectClassTable');
+//             if ($.fn.dataTable.isDataTable(dataTable)) {
+//                 dataTable.DataTable().destroy();
+//             }
+//             dataTable.DataTable({
+//                 "paging": false,
+//                 "serverSide": false,
+//                 "autoWidth" : false,
+//                 "bSort": false,
+//                 "scrollY": "300px",
+//                 "scrollCollapse": "true",
+//                 "data" : result,
+//                 "columns" : [{
+//                     "data" :"name"
+//                 }],
+//                 "columnDefs": [{
+//                     "render" : function(data, type, row) {
+//                         var a = "";
+//                         a+="<i style=\"cursor:pointer\" onclick='preSelectClass(this, \""+row.id+"\", \""+row.name+"\")' class='fa fa-check'></i>"
+//                         return a;
+//                     },
+//                     "targets" :1
+//                 }]
+//             });
+//         }
+//     })
+// }
+//
+// function loadSelectedClass() {
+//     var dataTable = $('#selectedClassTable');
+//     if ($.fn.dataTable.isDataTable(dataTable)) {
+//         dataTable.DataTable().destroy();
+//     }
+//     dataTable.DataTable({
+//         "paging": false,
+//         "serverSide": false,
+//         "autoWidth" : false,
+//         "bSort": false,
+//         "scrollY": "300px",
+//         "scrollCollapse": "true",
+//         "data" : selectedClassList,
+//         "columns" : [{
+//             "data" :"name"
+//         }],
+//         "columnDefs": [{
+//             "render" : function(data, type, row) {
+//                 var a = "";
+//                 a+="<i style='cursor:pointer' onclick='deleteSelectedClass(\""+row.id+"\")' class='fa fa-close'></i>"
+//                 return a;
+//             },
+//             "targets" :1
+//         }]
+//     });
+// }
 
-            dataTable.DataTable({
-                "paging": false,
-                "serverSide": false,
-                "autoWidth" : false,
-                "bSort": false,
-                "scrollY": "300px",
-                "scrollCollapse": "true",
-                "data" : result,
-                "columns" : [{
-                    "data" :"name"
-                }],
-                "columnDefs": [{
-                    "render" : function(data, type, row) {
-                        var a = "";
-                        a+="<i style=\"cursor:pointer\" onclick='preSelectClass(this, \""+row.id+"\", \""+row.name+"\")' class='fa fa-check'></i>"
-                        return a;
-                    },
-                    "targets" :1
-                }]
-            });
-        }
-    })
-}
 
-function loadSelectedClass() {
-    var dataTable = $('#selectedClassTable');
-    if ($.fn.dataTable.isDataTable(dataTable)) {
-        dataTable.DataTable().destroy();
-    }
-    dataTable.DataTable({
-        "paging": false,
-        "serverSide": false,
-        "autoWidth" : false,
-        "bSort": false,
-        "scrollY": "300px",
-        "scrollCollapse": "true",
-        "data" : selectedClassList,
-        "columns" : [{
-            "data" :"name"
-        }],
-        "columnDefs": [{
-            "render" : function(data, type, row) {
-                var a = "";
-                a+="<i style='cursor:pointer' onclick='deleteSelectedClass(\""+row.id+"\")' class='fa fa-close'></i>"
-                return a;
-            },
-            "targets" :1
-        }]
-    });
-}
+// function preSelectClass(radio, id, name) {
+//     var isSelected = false
+//     for (var i=0; i<selectedClassList.length; i++){
+//         if(id == selectedClassList[i].id){
+//             isSelected = true
+//             toastr.warning("","该班级已经被选择")
+//             break
+//         }
+//     }
+//     if (!isSelected) {
+//         var addClass = {};
+//         addClass.id = id;
+//         addClass.name = name;
+//
+//         selectedClassList.push(addClass);
+//         loadSelectedClass();
+//     }
+//
+// }
 
-
-function preSelectClass(radio, id, name) {
-    var isSelected = false
-    for (var i=0; i<selectedClassList.length; i++){
-        if(id == selectedClassList[i].id){
-            isSelected = true
-            toastr.warning("","该班级已经被选择")
-            break
-        }
-    }
-    if (!isSelected) {
-        var addClass = {};
-        addClass.id = id;
-        addClass.name = name;
-
-        selectedClassList.push(addClass);
-        loadSelectedClass();
-    }
-
-}
-
-function deleteSelectedClass(id) {
-    for (var i=0; i<selectedClassList.length; i++){
-        if(id == selectedClassList[i].id){
-            selectedClassList.splice(i, 1);
-        }
-    }
-    loadSelectedClass();
-}
+// function deleteSelectedClass(id) {
+//     for (var i=0; i<selectedClassList.length; i++){
+//         if(id == selectedClassList[i].id){
+//             selectedClassList.splice(i, 1);
+//         }
+//     }
+//     loadSelectedClass();
+// }
 
 
 function loadPreSelectJroom() {
@@ -459,13 +470,9 @@ function saveOrUpdateExper() {
             return;
         }
     }
-    if(selectedClassList.length == 0){
-        toastr.error("","请选择班级");
-        return;
-    }
     $.ajax({
         type: "POST",
-        url: "/experimentMn/saveOrUpdateExper",
+        url: "/competition/saveOrUpdateComp",
         contentType: "application/json;charset=UTF-8",
         dataType: "json",
         data: JSON.stringify({
@@ -480,7 +487,6 @@ function saveOrUpdateExper() {
 
             },
             "selectedQueList":selectedQueList,
-            "selectedClassList":selectedClassList,
             "selectedJroomList":selectedJroomList
         }),
         success: function (result) {
