@@ -33,7 +33,7 @@ public class MyFileServicelmpl implements MyFileService {
     {
         FilePath Path = new FilePath();
         System.out.println(Path);
-        System.out.println("===========操作系统是:"+System.getProperties().getProperty("os.name"));
+        /*System.out.println("===========操作系统是:"+System.getProperties().getProperty("os.name"));
         if(Pattern.matches(".*(Win).*", System.getProperties().getProperty("os.name")))
         {
             //System.out.println("check my winPath ---- "+Path.getWinPath());
@@ -43,7 +43,8 @@ public class MyFileServicelmpl implements MyFileService {
         {
             //System.out.println("check my winPath ---- "+Path.getLinuxPath());
             rootPath = Path.getLinuxPath();
-        }
+        }*/
+        rootPath = Path.getUploadPath()+"upload/resource/";
         File createPath = new File(rootPath);
         //System.out.println("check my path ---- "+rootPath);
         if(!createPath .exists())
