@@ -49,8 +49,7 @@ public class FilePath {
 
     public String toString()
     {
-        //return "yml win path is " + WinPath + "  yml linux path is " + LinuxPath;
-        return "upload Path is " + uploadPath;
+        return "yml win path is " + WinPath + "  yml linux path is " + LinuxPath;
     }
 
 }

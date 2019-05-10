@@ -44,6 +44,7 @@ public class MyFileServicelmpl implements MyFileService {
             //System.out.println("check my winPath ---- "+Path.getLinuxPath());
             rootPath = Path.getLinuxPath();
         }*/
+
         rootPath = Path.getUploadPath()+"upload/resource/";
         File createPath = new File(rootPath);
         //System.out.println("check my path ---- "+rootPath);
