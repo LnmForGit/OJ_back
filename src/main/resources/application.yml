@@ -1,14 +1,12 @@
 spring:
   profiles:
     active: dev
-  fileUploadPath:
-        WinPath: C:/uploadFile/
-        LinuxPath: /root/OJ/oj_file
-
 
 ---
 spring:
   profiles: test
+  fileUploadPath:
+    path: /root/OJ/oj_file/
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/teaching?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
@@ -25,7 +23,7 @@ spring:
       max-file-size: 10240MB
       max-request-size: 10240MB
   resources:
-    static-locations: classpath:/static,classpath:/templates
+    static-locations: classpath:/static,classpath:/templates,file:${spring.fileUploadPath.path}
 
 logging:
     path: /root/OJ/oj_back_log
@@ -33,6 +31,8 @@ logging:
 ---
 spring:
   profiles: dev
+  fileUploadPath:
+    path: C:/OJ/oj_file/
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/teaching?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
@@ -48,16 +48,8 @@ spring:
     multipart:
       max-file-size: 10240MB
       max-request-size: 10240MB
-
-
-  mvc:
-  #    static-path-pattern: /static/**
-
-  fileUploadPath:
-    WinPath: C:/uploadFile/
-    LinuxPath: /uploadFile/
   resources:
-    static-locations: classpath:/static,classpath:/templates
+    static-locations: classpath:/static,classpath:/templates,file:${spring.fileUploadPath.path}
 
 logging:
     path: D:/Develop/DevelopWorkingSpace/IdeaProjects/log
@@ -65,6 +57,8 @@ logging:
 ---
 spring:
   profiles: prod
+  fileUploadPath:
+    path: /root/OJ/oj_file/
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/teaching?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
@@ -81,7 +75,6 @@ spring:
       max-file-size: 10240MB
       max-request-size: 10240MB
   resources:
-    static-locations: classpath:/static,classpath:/templates
-
+    static-locations: classpath:/static,classpath:/templates,file:${spring.fileUploadPath.path}
 logging:
     path: /root/OJ/oj_back_log
