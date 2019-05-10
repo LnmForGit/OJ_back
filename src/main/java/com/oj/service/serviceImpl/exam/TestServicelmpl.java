@@ -216,6 +216,10 @@ public class TestServicelmpl implements TestService {
         param.put("user_id", user_id);
         return mapper.getTestScoreResult(param);
     }
+    public List<Map> getcompScoreResultList(Map<String, String> param, String user_id){
+        //param.put("user_id", user_id);
+        return mapper.getcompScoreResult(param);
+    }
     //获取指定考试的简要信息
     public Map getTestBriefInf(String id){
         return mapper.getTestBriefInf(id);

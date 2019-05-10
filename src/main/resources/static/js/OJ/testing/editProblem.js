@@ -1,3 +1,18 @@
+toastr.options = {
+    closeButton: false,
+    debug: false,
+    progressBar: true,
+    positionClass: "toast-top-center ",
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "2000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut"
+};
 $(document).ready(function () {
     loadSummernote();
     indexSubjectSelect();
@@ -74,7 +89,7 @@ function editProblem(){
                 rank = obj.fromNumber;
             }
         });
-        $("#dialogProblemTestId").attr("value", 1);
+        $("#dialogProblemTestId").attr("value", 0);
     }
 
 }
@@ -198,18 +213,16 @@ function getUrlParam(name) {
     if (r != null) return unescape(r[2]); return null; //返回参数值
 }
 
-
 //编辑题目后进行存储
 function saveOrUpdateProblem() {
     var id = getUrlParam("id");
     var timestamp = Date.parse( new Date() ).toString();
     timestamp = timestamp.substr(0,10);
-
-    // if($("#dialogProblemName").val() == ""){
-    //     toastr.error("","实验名称不能为空");
-    //     debugger;
-    //     return;
-    // }
+    if($("#dialogProblemName").val() == ""){
+        toastr.error("","实验名称不能为空");
+        debugger;
+        return;
+    }
     if($("#dialogProblemName").val() == ""){
 
         toastr.error("","题目名称不能为空");
@@ -225,6 +238,9 @@ function saveOrUpdateProblem() {
         return;
     }else if($("#dialogProblemMaxMemory").val() == ""){
         toastr.error("","最大内存不能为空");
+        return;
+    }else if(!($("#dialogProblemPublicOn").is(':checked') ^ $("dialogProblemPublic").is('checked'))){
+        toastr.error("","请选择是否公开该题目");
         return;
     }
 

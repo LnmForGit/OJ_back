@@ -7,23 +7,6 @@
 <!--引入通用JS、css资源-->
 <div th:replace="common/staticImport :: common_resource"></div>
 <script type="text/javascript">
-
-    toastr.options = {
-        closeButton: false,
-        debug: false,
-        progressBar: true,
-        positionClass: "toast-top-center ",
-        onclick: null,
-        showDuration: "300",
-        hideDuration: "1000",
-        timeOut: "2000",
-        extendedTimeOut: "1000",
-        showEasing: "swing",
-        hideEasing: "linear",
-        showMethod: "fadeIn",
-        hideMethod: "fadeOut"
-    };
-
 </script>
 <body class="gray-bg">
 <div class="row">
@@ -57,7 +40,11 @@
                                 <div class="form-group">
                                     <label class="col-sm-6 control-label">是否公开：</label>
                                     <div class="col-sm-6">
-                                         <input type="checkbox" id="dialogProblemPublic" name="dialogProblemPublic" class="form-control"  aria-required="true" aria-invalid="false" value="on" checked="">
+                                        <label class="radio-inline">
+                                            <input type="radio" id="dialogProblemPublicOn" name="optionsRadios" value="on" >是</label>
+                                        <label class="radio-inline">
+                                            <input type="radio" id="dialogProblemPublic" name="optionsRadios" value="" >否
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -76,6 +63,7 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">难度等级：</label>

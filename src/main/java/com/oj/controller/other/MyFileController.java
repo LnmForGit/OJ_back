@@ -120,6 +120,23 @@ public class MyFileController {
         myfileService.downloadFile(id, response);
     }
 
+    @PostMapping("/checkFileExistence")
+    @ResponseBody
+    public Map<String, String>checkFileExistence(HttpServletRequest request)
+    {
+        Map<String, String>map = new HashMap<>();
+        if(myfileService.checkFileExistence(request.getParameter("id")))
+        {
+            map.put("flag", "1");
+            return map;
+        }
+        else
+        {
+            map.put("flag", "0");
+            return map;
+        }
+    }
+
     @PostMapping("/fileFlag")
     @ResponseBody
     public List<Map> fileFlag(HttpServletRequest request)

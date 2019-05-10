@@ -1,4 +1,4 @@
-
+var FlagList=[];
 $(document).ready(function () {
     loadSummernote();
     showtopic();
@@ -59,47 +59,95 @@ function getPostFlag() {
         contentType: "application/json;charset=UTF-8",
         success:function(result) {
             console.log(result);
-            var newTest=""
-            for(var i in result){
-                newTest+='  <div class="row">\n' +
-                    '                                <div class="col-sm-9">\n' +
-                    '                                    <div class="forum-icon">\n' +
-                    '                                        <i class="fa fa-clock-o"></i>\n' +
-                    '                                    </div>\n' +
-                    '                                    <a href="/block/showarticle/'+result[i].id+'/'+result[i].name+'/'+result[i].sub_id+'" class="forum-item-title">'+result[i].title+
-                    '                                         <b class="btn btn-primary btn-xs">置顶</b>'+
-                    '                                        </a>\n' +
-                     '                                    <div class="forum-sub-title">'+result[i].content+'</div>\n' +
-                    '<span color="#676a6c">'+result[i].name+'&nbsp&nbsp<i class="fa fa-clock-o"></i>发表于 :'+formatTime(result[i].time)+'</span>\n'+
-                    '<span>&nbsp&nbsp&nbsp&nbsp发表在[<b color="#676a6c">'+result[i].topic_name+'</b>]中</span>'+
-                    '                                </div>\n' +
-                    '                                <div class="col-sm-1 forum-info">\n' +
-                    '                                        <span class="views-number">\n' + result[i].view_num+
-                    '                                        </span>\n' +
-                    '                                    <div>\n' +
-                    '                                        <small>浏览</small>\n' +
-                    '                                    </div>\n' +
-                    '                                </div>\n' +
-                    '                                <div class="col-sm-1 forum-info">\n' +
-                    '                                        <span class="views-number">\n' + result[i].zan_num+
-                    '                                        </span>\n' +
-                    '                                    <div>\n' +
-                    '                                        <small>点赞</small>\n' +
-                    '                                    </div>\n' +
-                    '                                </div>\n' +
-                    '                                <div class="col-sm-1 forum-info">\n' +
-                    '                                        <span class="views-number">\n' + result[i].reply_num+
-                    '                                        </span>\n' +
-                    '                                    <div>\n' +
-                    '                                        <small>回复</small>\n' +
-                    '                                    </div>\n' +
-                    '                                </div>\n' +
-                    '                            </div>\n'+
-                    '<hr>';
-            }
-            $("#Parentform").append(newTest);
+           FlagList=result;
+           Page();
         }
     })
+}
+function Page() {
+    if(FlagList.length>0){
+        $('#shafa').hide();
+    }
+    if(FlagList.length<=10){
+        FlagListPage(0);
+    }else{
+        FlagListPage(0);
+        var page=FlagList.length/10;
+        console.log(page);
+        test="";
+        test+='<button class="btn btn-white" type="button"><i class="fa fa-chevron-left"></i>\n' +
+            '                </button>';
+        for(var i=0;i<page;i++){
+            j=i+1;
+            test+='<button class="btn btn-white" onclick="FlagListPage('+i+')">'+j+'</button>\n'
+        }
+        test+=' <button class="btn btn-white" type="button"><i class="fa fa-chevron-right"></i>\n' +
+            '                </button>';
+        $('#page').append(test);
+    }
+}
+function FlagListPage(page){
+    $('#Parentform').html("");
+    newTest="";
+    var first=0;
+    var end=FlagList.length;
+    if(page==0){
+        first=0;
+        if(FlagList.length<10) {
+            end = FlagList.length;
+        }else{
+            end=10;
+        }
+    }else{
+        first=(page)*10;
+        if(first>FlagList.length){
+            return;
+        }
+        if(FlagList.length> page*2*10){
+            end=page*10*2;
+        }else{
+            end=FlagList.length;
+        }
+    }
+    var result=FlagList
+    for(var i=first;i<end;i++){
+        newTest+='  <div class="row">\n' +
+            '                                <div class="col-sm-9">\n' +
+            '                                    <div class="forum-icon">\n' +
+            '                                        <i class="fa fa-clock-o"></i>\n' +
+            '                                    </div>\n' +
+            '                                    <a href="/block/showarticle/'+result[i].id+'/'+result[i].name+'/'+result[i].sub_id+'" class="forum-item-title">'+result[i].title+
+            '                                         <b class="btn btn-primary btn-xs">置顶</b>'+
+            '                                        </a>\n' +
+            '                                    <div class="forum-sub-title">'+result[i].content.replace(/<[^>]+>/g,"").substring(0,50)+'</div>\n' +
+            '<span color="#676a6c">'+result[i].name+'&nbsp&nbsp<i class="fa fa-clock-o"></i>发表于 :'+formatTime(result[i].time)+'</span>\n'+
+            '<span>&nbsp&nbsp&nbsp&nbsp发表在[<b color="#676a6c">'+result[i].topic_name+'</b>]中</span>'+
+            '                                </div>\n' +
+            '                                <div class="col-sm-1 forum-info">\n' +
+            '                                        <span class="views-number">\n' + result[i].view_num+
+            '                                        </span>\n' +
+            '                                    <div>\n' +
+            '                                        <small>浏览</small>\n' +
+            '                                    </div>\n' +
+            '                                </div>\n' +
+            '                                <div class="col-sm-1 forum-info">\n' +
+            '                                        <span class="views-number">\n' + result[i].zan_num+
+            '                                        </span>\n' +
+            '                                    <div>\n' +
+            '                                        <small>点赞</small>\n' +
+            '                                    </div>\n' +
+            '                                </div>\n' +
+            '                                <div class="col-sm-1 forum-info">\n' +
+            '                                        <span class="views-number">\n' + result[i].reply_num+
+            '                                        </span>\n' +
+            '                                    <div>\n' +
+            '                                        <small>回复</small>\n' +
+            '                                    </div>\n' +
+            '                                </div>\n' +
+            '                            </div>\n'+
+            '<hr>';
+    }
+    $("#Parentform").append(newTest);
 }
 function resetDialog() {
     $('#content').code("");

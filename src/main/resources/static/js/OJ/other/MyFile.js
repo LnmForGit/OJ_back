@@ -297,7 +297,24 @@ function deleteFile(id) {
 }
 
 function downloadFile(id) {
-    window.location.href="/myFile/downloadFile?id="+id;
+    $.ajax({
+        type: "POST",
+        url: "/myFile/checkFileExistence",
+        dataType: "json",
+        data: {
+            id: id,
+        },
+        success:function (result){
+            if(result.flag == 1)
+            {
+                window.location.href="/myFile/downloadFile?id="+id;
+            }
+            else
+            {
+                swal("下载失败！", "文件不存在，请联系教师或管理员", "error");
+            }
+        }
+    })
 }
 
 
