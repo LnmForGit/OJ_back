@@ -131,7 +131,7 @@ function replysoninfo(level) {
         }
     });
 
-    return newtest;
+    //return newtest;
 }
 function loadSummernote() {
     $("#reply").summernote({
@@ -189,14 +189,20 @@ function postzan() {
             post_id:Postinfo.post.id,
         }),success(result){
             if(result ==0){
-           swal("点赞成功！");
-
+                swal("点赞成功！");
+                zan=$('#zan').html();
+                $('#zan').html("");
+                $('#zan').html( parseInt(zan)+1);
+                $("#iszan").html("已赞");
             }else{
                 swal("取消点赞！");
+                zan=$('#zan').html();
+                $('#zan').html("");
+                $('#zan').html( parseInt(zan)-1);
+
+                $("#iszan").html("点赞");
             }
-            setTimeout( function(){
-                history.go(0);
-            }, 1* 1000 );
+
 
         }
     })
@@ -216,9 +222,6 @@ function replyzan(id){
             }else{
                 swal("取消点赞！");
             }
-            setTimeout( function(){
-                history.go(0);
-            }, 500 );
 
         }
     })
