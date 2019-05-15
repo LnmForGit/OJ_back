@@ -23,7 +23,7 @@ public interface MyFileMapper {
     @Select("select * from teach_myfile where name = #{name} and uploader_id = #{id}")
     public List<Map> getFileRouteByName(@Param("name")String name, @Param("id")String id);
     //存储文件信息
-    @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size, flag) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size}, #{flag})")
+    @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size, flag, savename) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size}, #{flag}, #{savename})")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
     public int save(MyFile M);
     //删除文件信息

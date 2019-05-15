@@ -115,8 +115,9 @@ public class MyFileServicelmpl implements MyFileService {
                     File createPath = new File(newRootPath);
                     createPath.mkdirs();
                 }
-
-                String route = rootPath+id+"/"+file.getOriginalFilename();
+                Date date = new Date();
+                String saveName = date.getTime()+file.getOriginalFilename();
+                String route = rootPath+id+"/"+saveName;
                 System.out.println(route);
                 File targetfile = new File(route);
                 out = new FileOutputStream(targetfile);
@@ -128,6 +129,7 @@ public class MyFileServicelmpl implements MyFileService {
                 M.setRoute(route);
                 M.setSize(file.getSize());
                 M.setFlag(flag);
+                M.setSavename(saveName);
                 System.out.println(M);
                 mapper.save(M);
             }
