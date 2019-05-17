@@ -1,6 +1,8 @@
 package com.oj.schedule;
 
 import com.oj.mapper.system.HomepageMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.util.*;
  */
 @Component
 public class demo {
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     public static String stampToDate(String s){
         String res;
@@ -55,8 +59,10 @@ public class demo {
                 starttime = stampToDate(starttime);
                 homepagemapper.savemonth(starttime,resac,res);
             }
+            log.info("提交统计定时成功");
         } catch (ParseException e) {
             e.printStackTrace();
+            log.error("提交统计定时失败"+e.getMessage());
         }
     }
 }

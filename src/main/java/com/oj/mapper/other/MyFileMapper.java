@@ -21,9 +21,9 @@ public interface MyFileMapper {
     public List<Map> getFileMapList(@Param("condition") Map<String, String> param);
     //通过name获取对应的文件信息
     @Select("select * from teach_myfile where name = #{name} and uploader_id = #{id}")
-    public List<Map> getFileRouteByName(String name, String id);
+    public List<Map> getFileRouteByName(@Param("name")String name, @Param("id")String id);
     //存储文件信息
-    @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size, flag) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size}, #{flag})")
+    @Insert("insert into teach_myfile (name, upload_time, uploader_id, route, size, flag, savename) values(#{name}, #{upload_time}, #{uploader_id}, #{route}, #{size}, #{flag}, #{savename})")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
     public int save(MyFile M);
     //删除文件信息
@@ -40,7 +40,7 @@ public interface MyFileMapper {
     public List<Map> getFileNameAndNameById(String id);
     //更新状态
     @Update("update teach_myfile set flag=#{flag} where id = #{id}")
-    public void saveFileFlag(String id, String flag);
+    public void saveFileFlag(@Param("id")String id, @Param("flag")String flag);
     //根据文件ID查询文件大小
     @Select("select size from teach_myfile where id = #{id}")
     public int getFileSizeById(String id);
