@@ -1,9 +1,6 @@
 package com.oj.mapper.system;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -26,11 +23,11 @@ public interface HomepageMapper {
 
     //获取总提交提交
     @Select("SELECT COUNT(submit_date) FROM teach_submit_code WHERE submit_date between #{starttime} and #{endtime}")
-    public String getsubmit(String starttime,String endtime);
+    public String getsubmit(@Param("starttime") String starttime, @Param("endtimetime")String endtime);
 
     //获取AC总数
     @Select("SELECT COUNT(submit_date) FROM teach_submit_code WHERE (submit_date between #{starttime} and #{endtime}) AND (submit_state=1 OR submit_state=2)")
-    public String getac(String starttime,String endtime);
+    public String getac(@Param("starttime")String starttime,@Param("endtimetime")String endtime);
 
     //清空本月提交统计数据表
     @Delete("truncate table teach_month_submit")
@@ -38,7 +35,7 @@ public interface HomepageMapper {
 
     //存入统计数据
     @Insert("insert into teach_month_submit(date,AC,number) values(#{date}, #{ac}, #{number})")
-    public int savemonth(String date,String ac, String number);
+    public int savemonth(@Param("date")String date,@Param("ac")String ac, @Param("number")String number);
 
     //从teach_month_submit查询提交数据
     @Select("select * from teach_month_submit order by id desc")
