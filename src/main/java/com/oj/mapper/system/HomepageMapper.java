@@ -23,11 +23,11 @@ public interface HomepageMapper {
 
     //获取总提交提交
     @Select("SELECT COUNT(submit_date) FROM teach_submit_code WHERE submit_date between #{starttime} and #{endtime}")
-    public String getsubmit(@Param("starttime") String starttime, @Param("endtimetime")String endtime);
+    public String getsubmit(@Param("starttime") String starttime, @Param("endtime")String endtime);
 
     //获取AC总数
     @Select("SELECT COUNT(submit_date) FROM teach_submit_code WHERE (submit_date between #{starttime} and #{endtime}) AND (submit_state=1 OR submit_state=2)")
-    public String getac(@Param("starttime")String starttime,@Param("endtimetime")String endtime);
+    public String getac(@Param("starttime")String starttime,@Param("endtime")String endtime);
 
     //清空本月提交统计数据表
     @Delete("truncate table teach_month_submit")
