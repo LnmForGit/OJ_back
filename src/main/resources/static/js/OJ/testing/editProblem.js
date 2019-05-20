@@ -91,7 +91,7 @@ function editProblem(){
                 rank = obj.fromNumber;
             }
         });
-        $("#dialogProblemTestId").attr("value", 0);
+        $("#dialogProblemTestId").attr("value", 1);
     }
 
 }
@@ -337,8 +337,8 @@ function indexSubjectSelect() {
 function delHtml(msg) {
 
         var msg = msg.replace(/<\/?[^>]*>/g, ''); //去除HTML Tag
-        msg = msg.replace(/[|]*\n/, '') //去除行尾空格
-        msg = msg.replace(/&npsp;/ig, ''); //去掉npsp
+        // msg = msg.replace(/[|]*\n/, '') //去除行尾空格
+        msg = msg.replace(/&npsp;/ig, ' '); //去掉npsp
         return msg;
 
 }
