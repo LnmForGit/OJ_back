@@ -193,7 +193,7 @@ function uploadFile(id) {
                 xhr.addEventListener("abort", uploadCanceled, false);
                 xhr.send(formData);
                 queryMyFileInfo();
-                swal("上传成功！", "", "success");
+                //swal("上传成功！", "", "success");
             //}else{
                 //swal("上传失败！", result.message, "error");
             //}
