@@ -19,6 +19,8 @@ public class MyFile {
     private long size;
     //标记（是公开还是私有）
     private int flag;
+    //实际存储文件名字
+    private String savename;
 
     public String getId()
     {
@@ -50,7 +52,10 @@ public class MyFile {
     }
 
     public int getFlag(){return flag;}
+    public String getSavename(){return savename;}
 
+
+    public void setSavename(String savename){this.savename = savename;}
     public void setId(String Course_id)
     {
         this.id = Course_id;

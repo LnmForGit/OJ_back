@@ -10,16 +10,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class FilePath {
 
-    @Value("${spring.fileUploadPath.WinPath}")
+    //    @Value("${spring.fileUploadPath.WinPath}")
     private static String WinPath;
-    @Value("${spring.fileUploadPath.LinuxPath}")
+    //    @Value("${spring.fileUploadPath.LinuxPath}")
     private static String LinuxPath;
+
+    @Value("${spring.fileUploadPath.path}")
+    private static String uploadPath;
+
+    public static String getUploadPath()
+    {
+        return uploadPath;
+    }
+
+    @Value("${spring.fileUploadPath.path}")
+    public void setUploadPath(String uploadPath)
+    {
+        this.uploadPath = uploadPath;
+    }
 
     public static String getWinPath() {
         return WinPath;
     }
 
-    @Value("${spring.fileUploadPath.WinPath}")
+    //    @Value("${spring.fileUploadPath.WinPath}")
     public void setWinPath(String WinPath) {
         this.WinPath = WinPath;
     }
@@ -28,7 +42,7 @@ public class FilePath {
         return LinuxPath;
     }
 
-    @Value("${spring.fileUploadPath.LinuxPath}")
+    //    @Value("${spring.fileUploadPath.LinuxPath}")
     public void setLinuxPath(String LinuxPath) {
         this.LinuxPath = LinuxPath;
     }
