@@ -14,6 +14,7 @@ function reply_btn(id,level) {
         $(this).parent().append("<div class='reply_textarea'><textarea wrap='hard' class='content' placeholder='在这里发表你的观点...' name='' cols='100' rows='5' ></textarea><br/><input type='submit' value='发表' onclick='addreplyson("+id+","+level+")'/></div>");
     });
 }
+
 function showarticel() {
     console.log(Postinfo)
     $("#title").html(Postinfo.post.title);
