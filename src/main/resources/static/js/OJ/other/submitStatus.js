@@ -85,6 +85,24 @@ function getStatusInfo() {
                 return a;
             },
             "targets" :3
+        },{
+            "render" : function(data, type, row) {
+                var a = "<span>"+row.submit_time+" ms</span>";
+                return a;
+            },
+            "targets" :4
+        },{
+            "render" : function(data, type, row) {
+                var a = "<span>"+row.submit_memory+" KB</span>";
+                return a;
+            },
+            "targets" :5
+        },{
+            "render" : function(data, type, row) {
+                var a = "<span>"+row.submit_code_length+" b</span>";
+                return a;
+            },
+            "targets" :6
         }]
     });
 
