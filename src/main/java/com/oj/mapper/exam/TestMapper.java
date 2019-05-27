@@ -87,6 +87,8 @@ public interface TestMapper {
     //获取指定考试的成绩结果
     @SelectProvider(type=TestProvider.class, method = "getTestScoreResultList")
     public List<Map> getTestScoreResult(@Param("condition")Map<String, String> params);
+    @SelectProvider(type=TestProvider.class, method = "getcompScoreResultList")
+    public List<Map> getcompScoreResult(@Param("condition")Map<String, String> params);
     //获取指定考试的简要信息
     @Select("SELECT t.name 'testName', FROM_UNIXTIME(t.start) testSDate, FROM_UNIXTIME(t.end) testEDate FROM teach_test t WHERE t.id = #{id}")
     public Map getTestBriefInf(String id);

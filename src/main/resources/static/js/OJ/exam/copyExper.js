@@ -154,6 +154,14 @@ function loadPreSelectQuestion() {
                         return a;
                     },
                     "targets" :3
+                },{
+                    "render":function (data,type,row) {
+                        var a="";
+
+                        a+="<a onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25'  style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+                        return a;
+                    },
+                    "targets":1,
                 }]
             });
         }
@@ -178,7 +186,7 @@ function loadSelectedQuestion() {
         },{
             "data" :"name"
         }],
-        "columnDefs": [{
+        "columnDefs":  [{
             "render" : function(data, type, row) {
                 var a = "";
                 a+="<input type='text' value='"+row.score+"' class='form-control'>"
@@ -196,6 +204,11 @@ function loadSelectedQuestion() {
     });
 }
 
+
+function setId(id){
+    $('#id').val(id);
+    problemDetails();
+}
 
 function preSelect(radio, id, name) {
     var isSelected = false
@@ -445,11 +458,18 @@ function saveOrUpdateExper() {
         toastr.error("","请选择题目");
         return;
     }else{
+        var sum=0;
         for(var i=0; i<selectedQueList.length; i++){
             if(selectedQueList[i].score==0){
                 toastr.error("","已选择的第"+(i+1)+"条试题分数必须大于0");
                 return;
             }
+            sum+=parseFloat(selectedQueList[i].score);
+        }
+        console.log(sum);
+        if(sum<99 || sum>100){
+            toastr.error("","所有分数相加必须等于99或100");
+            return;
         }
     }
     if(selectedClassList.length == 0){

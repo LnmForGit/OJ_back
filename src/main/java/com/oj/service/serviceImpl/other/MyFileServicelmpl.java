@@ -1,6 +1,7 @@
 package com.oj.service.serviceImpl.other;
 
 import com.oj.entity.other.MyFile;
+import com.oj.entity.other.FilePath;
 import com.oj.mapper.other.MyFileMapper;
 import com.oj.service.other.MyFileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,32 @@ import java.util.Date;
 public class MyFileServicelmpl implements MyFileService {
     @Autowired(required = false)
     private MyFileMapper mapper;
-    public String rootPath = "E:/学习笔记/OJ平台重构/testUpload/";
+    public String rootPath;
+
+    public void getRootPath()
+    {
+        FilePath Path = new FilePath();
+        System.out.println(Path);
+        /*System.out.println("===========操作系统是:"+System.getProperties().getProperty("os.name"));
+        if(Pattern.matches(".*(Win).*", System.getProperties().getProperty("os.name")))
+        {
+            //System.out.println("check my winPath ---- "+Path.getWinPath());
+            rootPath = Path.getWinPath();
+        }
+        else
+        {
+            //System.out.println("check my winPath ---- "+Path.getLinuxPath());
+            rootPath = Path.getLinuxPath();
+        }*/
+
+        rootPath = Path.getUploadPath()+"upload/resource/";
+        File createPath = new File(rootPath);
+        //System.out.println("check my path ---- "+rootPath);
+        if(!createPath .exists())
+        {
+            createPath.mkdirs();
+        }
+    }
 
     public List<Map> getAdminSelectInfo()
     {
@@ -62,6 +88,7 @@ public class MyFileServicelmpl implements MyFileService {
     //上传文件
     public void uploadMyFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception
     {
+        getRootPath();
             InputStream in = null;
             OutputStream out = null;
             try
@@ -88,8 +115,9 @@ public class MyFileServicelmpl implements MyFileService {
                     File createPath = new File(newRootPath);
                     createPath.mkdirs();
                 }
-
-                String route = rootPath+id+"/"+file.getOriginalFilename();
+                Date date = new Date();
+                String saveName = date.getTime()+file.getOriginalFilename();
+                String route = rootPath+id+"/"+saveName;
                 System.out.println(route);
                 File targetfile = new File(route);
                 out = new FileOutputStream(targetfile);
@@ -101,6 +129,7 @@ public class MyFileServicelmpl implements MyFileService {
                 M.setRoute(route);
                 M.setSize(file.getSize());
                 M.setFlag(flag);
+                M.setSavename(saveName);
                 System.out.println(M);
                 mapper.save(M);
             }
@@ -138,14 +167,16 @@ public class MyFileServicelmpl implements MyFileService {
 
     public void downloadFile(String id, HttpServletResponse response)
     {
+        getRootPath();
         String path = mapper.getPathById(id);
         //System.out.println(path);
-        String fileName = mapper.getFileNameById(id);
+        String fileName = java.net.URLEncoder.encode(mapper.getFileNameById(id));
         File file = new File(path);
         if (file.exists()) {
             //System.out.println("File path is : " + path);
             response.setHeader("content-type", "application/octet-stream");
             response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+            response.setHeader("Content-Length", "" + mapper.getFileSizeById(id));
             //response.setHeader("Pragma", "No-cache");
             //response.setHeader("Cache-Control", "No-cache");
             //response.setDateHeader("Expires", 0);
@@ -193,6 +224,20 @@ public class MyFileServicelmpl implements MyFileService {
         File filePath = new File(route);
         filePath.delete();
         mapper.fileDelete(id);
+    }
+
+    public boolean checkFileExistence(String id)
+    {
+        String path = mapper.getPathById(id);
+        File file = new File(path);
+        if(file.exists())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

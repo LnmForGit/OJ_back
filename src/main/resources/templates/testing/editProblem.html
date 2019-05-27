@@ -6,6 +6,8 @@
 </head>
 <!--引入通用JS、css资源-->
 <div th:replace="common/staticImport :: common_resource"></div>
+<script type="text/javascript">
+</script>
 <body class="gray-bg">
 <div class="row">
     <div class="col-sm-12">
@@ -38,14 +40,11 @@
                                 <div class="form-group">
                                     <label class="col-sm-6 control-label">是否公开：</label>
                                     <div class="col-sm-6">
-                                         <input type="checkbox" id="dialogProblemPublic" name="dialogProblemPublic" class="form-control"  aria-required="true" aria-invalid="false" value="on" checked="">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-6 control-label">难度等级：</label>
-                                    <div class="col-sm-6" >
-                                        <div id="dialogProblemRank" name="dialogProblemRank"></div>
-                                        <!--<input type="text" id="dialogProblemRank" name="dialogProblemRank" class="form-control"  >-->
+                                        <label class="radio-inline">
+                                            <input type="radio" id="dialogProblemPublicOn" name="optionsRadios" value="on" >是</label>
+                                        <label class="radio-inline">
+                                            <input type="radio" id="dialogProblemPublic" name="optionsRadios" value="no" >否
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -61,6 +60,16 @@
                                     <div class="col-sm-6">
                                         <input id="dialogProblemMaxMemory" name="dialogProblemMaxMemory" type="text"  aria-required="true" aria-invalid="false" class="form-control" value="50240">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">难度等级：</label>
+                                <div class="col-sm-3" >
+                                    <div id="dialogProblemRank" name="dialogProblemRank"></div>
+                                    <!--<input type="text" id="dialogProblemRank" name="dialogProblemRank" class="form-control"  >-->
                                 </div>
                             </div>
                         </div>

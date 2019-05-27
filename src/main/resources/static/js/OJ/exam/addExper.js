@@ -25,6 +25,7 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 $(document).ready(function () {
+    console.log(experInfo.experInfo);
     // 加载时间选择器
     loadLayerDate();
     //加载富文本编辑器
@@ -54,11 +55,13 @@ function loadLayerDate() {
     if (experInfo.id != 'add'){
         startTime = experInfo.experInfo.start;
         endTime = experInfo.experInfo.end;
+        console.log(startTime );
         $('#experStartTime').val(startTime);
         $('#experEndTime').val(endTime);
     }else{
         startTime = laydate.now();
         endTime = laydate.now();
+        console.log(startTime);
         $('#experStartTime').val(laydate.now(0, 'YYYY-MM-DD hh:mm:ss'));
         $('#experEndTime').val(laydate.now(7, 'YYYY-MM-DD hh:mm:ss'));
     };
@@ -160,10 +163,24 @@ function loadPreSelectQuestion() {
                         return a;
                     },
                     "targets" :3
+                },{
+                    "render":function (data,type,row) {
+                        var a="";
+
+                        a+="<a  onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25'  style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+
+                        return a
+                    },
+                    "targets":1,
                 }]
             });
         }
     })
+}
+
+function setId(id){
+    $('#id').val(id);
+    problemDetails();
 }
 
 function loadSelectedQuestion() {
@@ -204,12 +221,12 @@ function loadSelectedQuestion() {
 
 
 function preSelect(radio, id, name) {
-    var isSelected = false
+    var isSelected = false;
     for (var i=0; i<selectedQueList.length; i++){
         if(id == selectedQueList[i].id){
-            isSelected = true
+            isSelected = true;
             toastr.warning("","该题目已经被选择")
-            break
+            break;
         }
     }
     if (!isSelected) {
@@ -450,11 +467,18 @@ function saveOrUpdateExper() {
         toastr.error("","请选择题目");
         return;
     }else{
+        var sum=0;
         for(var i=0; i<selectedQueList.length; i++){
             if(selectedQueList[i].score==0){
                 toastr.error("","已选择的第"+(i+1)+"条试题分数必须大于0");
                 return;
             }
+            sum+=parseFloat(selectedQueList[i].score);
+        }
+        console.log(sum);
+        if(sum<99 || sum>100){
+            toastr.error("","所有分数相加必须等于99或100");
+            return;
         }
     }
     if(selectedClassList.length == 0){

@@ -1,6 +1,7 @@
 package com.oj.controller.exam;
 
 import com.oj.service.exam.ExperimentService;
+import com.oj.service.exam.TestService;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.*;
 
 /**
  * @author lixu
@@ -27,9 +29,12 @@ public class ExperimentController {
 
     @Autowired
     private ExperimentService experimentService;
-
+    @Autowired
+    private TestService testService;
     @RequestMapping("/")
     public String index(){
+        System.out.println("获取时间" + new Date());
+
         return "exam/experiment";
     }
     //展示实验编辑页面
@@ -88,9 +93,11 @@ public class ExperimentController {
     //获取实验信息
     @PostMapping("/getExperInfo")
     @ResponseBody
-    public List<Map> getExperInfo(HttpServletRequest request){
+    public Map getExperInfo(HttpServletRequest request){
         String experName = request.getParameter("experName");
-        return experimentService.getExperInfo(experName, request.getSession().getAttribute("user_id").toString());
+        Map<String, List> map = new HashMap<>();
+        map.put("data", experimentService.getExperInfo(experName, request.getSession().getAttribute("user_id").toString()));
+        return map;
     }
 
     //获取试题列表
@@ -146,5 +153,64 @@ public class ExperimentController {
             return map;
         }
     }
+    @RequestMapping("/showTestScore/{tid}")
+    public String showTestScore(@PathVariable String tid, Model model){
+        Map<String,Object> info = new HashMap<>();
+        info.put("tid", tid);
+        model.addAttribute("info", info);
+        return "exam/testScore";
+    }
+    //获取考试相似度判断结果页面
+    @RequestMapping("/similarityUser/{tid}")
+    public String showTestSimilarityUser(@PathVariable String tid, Model model){
+        Map<String,Object> info = new HashMap<>();
+        info.put("tid", tid);
+        model.addAttribute("info", info);
+        return "exam/similarityUser";
+    }
+    //获取考试简要信息
+    @RequestMapping("/getTestBriefInf")
+    @ResponseBody
+    public Map getTestBriefInf(@RequestBody Map<String, String> param, HttpServletRequest request){
+        Map map = testService.getTestBriefInf(param.get("testId"));
+        System.out.println(map);
+        return map;
+    }
+    //获取考试题目集
+    @RequestMapping("/getTestProblemList")
+    @ResponseBody
+    public List<Map> getTestProblemList(@RequestBody Map<String, String> param, HttpServletRequest request){
+        return testService.getTestProblemList(param.get("testId"));
+    }
+    //获取考试结果统计结果
+    @RequestMapping("/getTheStatisticalResult")
+    @ResponseBody
+    public Map getTheStatisticalResult(@RequestBody Map<String, String> param, HttpServletRequest request){
+        Map result = new HashMap<String, Object>();
+        List<Map> list = testService.getTheStatisticalResult(param);
+        List keyList = new LinkedList<String>();
+        for(Map k : list){
+            k.put("name", k.get("name")+"分");
+            keyList.add(k.get("name"));
+        }
+        result.put("key", keyList);
+        result.put("data", list);
+        return result;
+    }
+    //获取本次考试下的所有班级
+    @RequestMapping("/getTestClassList")
+    @ResponseBody
+    public List<Map> getTestClassList(@RequestBody Map<String, String> param, HttpServletRequest request){
+        return testService.getTestClassList(param.get("testId"));
+    }
+    //获取考试成绩集
+    @PostMapping("/getTestScoreResultList")
+    @ResponseBody
+    public List<Map> getTestScoreResult(@RequestBody Map<String, String> param, HttpServletRequest request){
+        //System.out.println(param);
+        //System.out.println(request.getSession().getAttribute("user_id").toString());
+        return testService.getTestScoreResultList(param, request.getSession().getAttribute("user_id").toString());
+    }
+    //获取本次考试下的所有专业
 
 }

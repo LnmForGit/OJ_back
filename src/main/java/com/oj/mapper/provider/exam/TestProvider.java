@@ -23,7 +23,8 @@ public class TestProvider {
         sql.append("a.name, ");
         sql.append("'考试' as kind, ");
         sql.append("FROM_UNIXTIME(a.`start`) as start_time, ");
-        sql.append("FROM_UNIXTIME(a.`end`) as end_time ");
+        sql.append("FROM_UNIXTIME(a.`end`) as end_time, ");
+        sql.append("admin_id ");
         sql.append("FROM ");
         sql.append("teach_test a ");
         sql.append("INNER JOIN ( ");
@@ -90,6 +91,18 @@ public class TestProvider {
         if(!StringUtils.isEmpty(info.get("classId")))
             sql.append(" AND t.class_id ='"+info.get("classId")+"' ");
         sql.append(") ");
+        sql.append("ORDER BY ");
+        sql.append("t.all DESC, t.account  "); //在成绩降序的基础上，学号增序
+        log.info(sql.toString());
+        return sql.toString();
+    }
+    public String getcompScoreResultList(Map<String, Object> params) {
+        Map<String, String> info = (Map<String, String>) params.get("condition");
+        StringBuffer sql = new StringBuffer();
+        //sql.append("SELECT t.account account, t.name name, t.class_name className, t.result testResult, t.all testScore FROM teach_test_result t ");
+        sql.append("SELECT t.account account, t.name name, t.class_name className, t.result testResult, t.all testScore FROM\n" +
+                "teach_test_result t  where ");
+        sql.append("tid='"+info.get("testId")+"'");
         sql.append("ORDER BY ");
         sql.append("t.all DESC, t.account  "); //在成绩降序的基础上，学号增序
         log.info(sql.toString());

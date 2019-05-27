@@ -1,3 +1,18 @@
+toastr.options = {
+    closeButton: false,
+    debug: false,
+    progressBar: true,
+    positionClass: "toast-top-center ",
+    onclick: null,
+    showDuration: "300",
+    hideDuration: "1000",
+    timeOut: "2000",
+    extendedTimeOut: "1000",
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut"
+};
 $(document).ready(function () {
     loadSummernote();
     indexSubjectSelect();
@@ -27,10 +42,12 @@ function editProblem(){
                     $('#problemSubject').html('<option value="' + 40 + '">' + "其他" + '</option>').trigger("change");
                 else
                     $('#problemSubject').html('<option value="' + result[0].subjectid + '">' + result[0].subject + '</option>').trigger("change");
-                if(result[0].public == "")
-                    $("#dialogProblemPublic").attr("checked", false);
-                else
+                if(result[0].public == "on"){
+                    $("#dialogProblemPublicOn").attr("checked", true);
+                }
+                else {
                     $("#dialogProblemPublic").attr("checked", true);
+                }
                 $("#experDesc").code(result[0].description)
                 $("#dialogProblemInType").val(delHtml(result[0].intype))
                 $("#dialogProblemOutType").val(delHtml(result[0].outtype))
@@ -38,11 +55,11 @@ function editProblem(){
                 $("#dialogProblemOutSample").val(delHtml(result[0].outsample))
                 $("#dialogProblemMaxMemory").val(result[0].maxmemory)
                 $("#dialogProblemMaxTime").val(result[0].maxtime)
-                rank = (result[0].rank);
+                rank = dbRankToShowRank(result[0].rank);
                 $("#dialogProblemRank").ionRangeSlider({
                     min: 1,
                     max: 5,
-                    from: result[0].rank,
+                    from: rank,
                     type: 'single',
                     step: 1,
                     prettify: false,
@@ -65,7 +82,7 @@ function editProblem(){
         $("#dialogProblemRank").ionRangeSlider({
             min: 1,
             max: 5,
-            from: 0,
+            from: 1,
             type: 'single',
             step: 1,
             prettify: false,
@@ -198,13 +215,18 @@ function getUrlParam(name) {
     if (r != null) return unescape(r[2]); return null; //返回参数值
 }
 
-
 //编辑题目后进行存储
 function saveOrUpdateProblem() {
     var id = getUrlParam("id");
     var timestamp = Date.parse( new Date() ).toString();
     timestamp = timestamp.substr(0,10);
     if($("#dialogProblemName").val() == ""){
+        toastr.error("","实验名称不能为空");
+        debugger;
+        return;
+    }
+    if($("#dialogProblemName").val() == ""){
+
         toastr.error("","题目名称不能为空");
         return;
     }else if($("#dialogProblemName").val().length >= 40){
@@ -219,6 +241,9 @@ function saveOrUpdateProblem() {
     }else if($("#dialogProblemMaxMemory").val() == ""){
         toastr.error("","最大内存不能为空");
         return;
+    }else if(!$("input[name='optionsRadios']:checked").val()){
+        toastr.error("","请选择是否公开该题目");
+        return;
     }
 
         $.ajax({
@@ -231,7 +256,7 @@ function saveOrUpdateProblem() {
                 "id" : id,
                 "name" : $("#dialogProblemName").val(),
                 "subjectid" : $("#problemSubject").val(),
-                "isPublic" : $("#dialogProblemPublic").is(':checked') ? "on" : "",
+                "isPublic" : $("input[name='optionsRadios']:checked").val() == "on" ? "on" : "",
                 "description" : $("#experDesc").code(),
                 "intype" :$("#dialogProblemInType").val(),
                 "outtype": $("#dialogProblemOutType").val(),
@@ -239,7 +264,7 @@ function saveOrUpdateProblem() {
                 "outsample": $("#dialogProblemOutSample").val(),
                 "maxmemory":  $("#dialogProblemMaxMemory").val(),
                 "maxtime" : $("#dialogProblemMaxTime").val(),
-                "rank" : rank,
+                "rank" : showRankToDbRank(rank),
                 "time" : timestamp,
                 "author" : $("#user").val(),
                 "kind" : 1,
@@ -312,9 +337,45 @@ function indexSubjectSelect() {
 function delHtml(msg) {
 
         var msg = msg.replace(/<\/?[^>]*>/g, ''); //去除HTML Tag
-        msg = msg.replace(/[|]*\n/, '') //去除行尾空格
-        msg = msg.replace(/&npsp;/ig, ''); //去掉npsp
+        // msg = msg.replace(/[|]*\n/, '') //去除行尾空格
+        msg = msg.replace(/&npsp;/ig, ' '); //去掉npsp
         return msg;
 
+}
+
+//为方便用户操作，对rank的值进行换算后存入数据库
+//数据库：81 -- 100  显示：1
+//数据库：61 -- 80  显示：2
+//数据库：41 -- 60  显示：3
+//数据库：11 -- 40  显示：4
+//数据库：0 -- 10  显示：5
+function showRankToDbRank(rank){
+    if(rank == 5){
+        rank = 5;
+    } else if(rank == 4){
+        rank = 25;
+    } else if(rank == 3){
+        rank = 45;
+    } else if(rank == 2){
+        rank = 65;
+    } else if(rank == 1){
+        rank = 85;
+    }
+    return rank;
+}
+
+function dbRankToShowRank(rank){
+    if(rank >= 0 && rank <= 10){
+        rank = 5;
+    } else if(rank >= 11 && rank <= 40){
+        rank = 4;
+    } else if(rank >= 41 && rank <= 60){
+        rank = 3;
+    } else if(rank >= 61 && rank <= 80){
+        rank = 2;
+    } else if(rank >= 81 && rank <= 100){
+        rank = 1;
+    }
+    return rank;
 }
 
