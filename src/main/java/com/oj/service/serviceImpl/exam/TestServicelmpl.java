@@ -328,6 +328,14 @@ public class TestServicelmpl implements TestService {
         return true;
     }
 
+    //删除指定考试里指定学生的ip绑定数据
+    public boolean deleteTargetIpData(Map<String, String> param){
+        String Id = param.get("Id");
+        if(null==Id) return false;
+        mapper.deleteTargetIpData(Id);
+        return true;
+    }
+
 
     //*********************************************** 定时任务-（实验/考试）相似结果统计
     //获取指定（实验/考试）相似判断结果

@@ -79,7 +79,7 @@ public class TestController {
         //ID
         info.put("tid",tid);
         model.addAttribute("info", info);
-        return "exam/showIp";
+        return "exam/showTestIp";
     }
     @PostMapping("/getIpInfoList")
     @ResponseBody
@@ -227,7 +227,15 @@ public class TestController {
         else map.put("result", "failed");
         return map;
     }
-
+    @PostMapping("/deleteTargetIpData")
+    @ResponseBody
+    public Map deleteTargetIpData(@RequestBody Map<String, String> param, HttpServletRequest request){
+        Map result = new HashMap();
+        result.put("result", "failed");
+        if(testService.deleteTargetIpData(param))
+            result.put("result", "succeed");
+        return result;
+    }
 
 
     //*********************************************************************************
