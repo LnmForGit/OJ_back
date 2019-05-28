@@ -1,7 +1,6 @@
 package com.oj.controller.other;
 
 import com.oj.service.other.PicService;
-import com.sun.xml.internal.ws.encoding.MimeMultipartParser;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
