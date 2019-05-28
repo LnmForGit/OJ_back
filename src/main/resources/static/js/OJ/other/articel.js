@@ -15,6 +15,7 @@ function reply_btn(id,level) {
     });
 }
 
+
 function showarticel() {
     console.log(Postinfo)
     $("#title").html(Postinfo.post.title);

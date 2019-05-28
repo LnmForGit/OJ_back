@@ -2,7 +2,6 @@ package com.oj.controller.exam;
 
 
 import com.oj.service.exam.TestService;
-import com.oj.service.serviceImpl.exam.TestServicelmpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +79,7 @@ public class TestController {
         //ID
         info.put("tid",tid);
         model.addAttribute("info", info);
-        return "exam/showIp";
+        return "exam/showTestIp";
     }
     @PostMapping("/getIpInfoList")
     @ResponseBody
@@ -228,7 +227,15 @@ public class TestController {
         else map.put("result", "failed");
         return map;
     }
-
+    @PostMapping("/deleteTargetIpData")
+    @ResponseBody
+    public Map deleteTargetIpData(@RequestBody Map<String, String> param, HttpServletRequest request){
+        Map result = new HashMap();
+        result.put("result", "failed");
+        if(testService.deleteTargetIpData(param))
+            result.put("result", "succeed");
+        return result;
+    }
 
 
     //*********************************************************************************

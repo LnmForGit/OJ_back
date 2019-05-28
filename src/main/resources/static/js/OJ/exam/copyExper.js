@@ -154,6 +154,14 @@ function loadPreSelectQuestion() {
                         return a;
                     },
                     "targets" :3
+                },{
+                    "render":function (data,type,row) {
+                        var a="";
+
+                        a+="<a onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25'  style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+                        return a;
+                    },
+                    "targets":1,
                 }]
             });
         }
@@ -178,7 +186,7 @@ function loadSelectedQuestion() {
         },{
             "data" :"name"
         }],
-        "columnDefs": [{
+        "columnDefs":  [{
             "render" : function(data, type, row) {
                 var a = "";
                 a+="<input type='text' value='"+row.score+"' class='form-control'>"
@@ -196,6 +204,11 @@ function loadSelectedQuestion() {
     });
 }
 
+
+function setId(id){
+    $('#id').val(id);
+    problemDetails();
+}
 
 function preSelect(radio, id, name) {
     var isSelected = false

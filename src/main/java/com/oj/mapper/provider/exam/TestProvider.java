@@ -57,8 +57,8 @@ public class TestProvider {
         Map<String, String> info = (Map<String, String>) params.get("condition");
         StringBuffer sql = new StringBuffer();
         sql.append("select DISTINCT ");
-        sql.append("b.account,b.name,c.name as class,a.sip ,FROM_UNIXTIME(d.`submit_date`) as submit_date ");
-        sql.append("from (select tid,sid,sip from teach_test_submit where tid=" + info.get("tid") + ")");
+        sql.append("a.id, b.account,b.name,c.name as class,a.sip ,FROM_UNIXTIME(d.`submit_date`) as submit_date ");
+        sql.append("from (select id, tid,sid,sip from teach_test_submit where tid=" + info.get("tid") + ")");
         sql.append(" as a,teach_students as b,teach_class as c,teach_submit_code as d ");
         sql.append("where a.sid=d.id and d.user_id=b.id and b.class_id=c.id");
         if (!StringUtils.isEmpty(info.get("account"))) {

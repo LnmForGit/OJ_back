@@ -59,7 +59,8 @@ public interface TestService {
     public List<Map> getTestProblemList(String id);
     //获取考试结果统计结果
     public List<Map> getTheStatisticalResult(Map<String, String> param);
-    //获取本次考试下的所有专业
+    //删除指定考试里指定学生的ip绑定数据
+    public boolean deleteTargetIpData(Map<String, String> param);
 
     //*********************************************** 定时任务-（实验/考试）结果统计
     //获取考试的提交的汇总情况
