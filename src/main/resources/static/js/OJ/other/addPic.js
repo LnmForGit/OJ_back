@@ -25,11 +25,14 @@ $(document).ready(function () {
 });
 
 function loadSummernote() {
-    $("#picDesc").summernote({
+    var summernote = $("#picDesc").summernote({
         height: 200,
         minHeight: 200,
         maxHeight: 200,
         lang: 'zh-CN',
+        onImageUpload: function(files, editor, $editable) {
+            uploadSummerPic(files[0], editor, $editable);
+        },
         toolbar: [
             ['style', ['style']],
             ['font', ['bold', 'underline', 'clear']],
@@ -39,9 +42,27 @@ function loadSummernote() {
             ['table', ['table']],
             ['view', ['fullscreen', 'codeview']]
         ]
-
-    })
+    });
 }
+
+
+//上传图片
+function uploadSummerPic(file, editor, $editable) {
+    var fd = new FormData();
+    fd.append("file", file);
+    $.ajax({
+        type:"POST",
+        url:"/pic/uploadSummerPic",
+        data: fd,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            editor.insertImage($editable, data.url);
+        }
+    });
+}
+
 
 function loadPic()
 {

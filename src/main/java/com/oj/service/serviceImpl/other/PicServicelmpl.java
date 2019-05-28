@@ -298,4 +298,61 @@ public class PicServicelmpl implements PicService {
             mapper.saveAdminPic(String.valueOf(selectedPicList.get(i).get("id")), String.valueOf(selectedPicList.get(i).get("order_show")));
         }
     }
+
+    //summernote上传图片
+    public String uploadSummerPic(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception
+    {
+        String re = "";
+        getRootPath();
+        InputStream in = null;
+        OutputStream out = null;
+        try
+        {
+            in = file.getInputStream();
+            Date date = new Date();
+            String saveName = date.getTime()+file.getOriginalFilename();
+            File createTmp = new File(rootPath+"summernote");
+            if(!createTmp.exists())
+            {
+                createTmp.mkdirs();
+            }
+            String route = rootPath+"summernote/"+saveName;
+            re = "http://127.0.0.1:8080/upload/img/summernote/"+saveName;
+            System.out.println(route);
+            File targetfile = new File(route);
+            out = new FileOutputStream(targetfile);
+            FileCopyUtils.copy(in, out);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            throw new Exception("文件上传失败!");
+        }
+        finally
+        {
+            if(in != null)
+            {
+                try
+                {
+                    in.close();
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            if(out != null)
+            {
+                try
+                {
+                    out.close();
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            return re;
+        }
+    }
 }

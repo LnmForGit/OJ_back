@@ -36,4 +36,6 @@ public interface PicService {
     public void saveAdminPic(@RequestBody Map<String, Object> param, HttpServletRequest request);
     //新增的话 保存基本的信息且把upload/img/tmp/sessionId/fileName中的图片拷贝到/upload/img/fileName中
     public void savePicMsg(@RequestBody Map<String, String> param, HttpServletRequest request);
+    //summernote中加图片
+    public String uploadSummerPic(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception;
 }
