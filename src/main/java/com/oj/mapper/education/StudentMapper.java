@@ -41,7 +41,7 @@ public interface StudentMapper {
     public List<Map> getClassList();
 
     //增加学生
-    @Insert("INSERT INTO teach_students(account, password, name, class_id) values(#{account}, '123456', #{name}, #{class_id})")
+    @Insert("INSERT INTO teach_students(account, password, name, class_id) values(#{account}, #{password}, #{name}, #{class_id})")
     @Options(useGeneratedKeys=true, keyProperty="id",keyColumn="id")
     //public int addNewStudent(@Param("account")String account, @Param("name")String name, @Param("classId")String classId);
    // @Insert("INSERT INTO teach_students values(#{account}, #{password}, #{name}, #{classId})")

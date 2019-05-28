@@ -139,15 +139,15 @@ function showAddMoreStudent(){
 }
 //新增或更新用户信息
 function saveOrUpdateStudentInfo() {
-    if($("#dialogStudentInfo").validate({
+    /*if($("#dialogStudentInfo").validate({
         rules: {
             dialogStuAccount: {
                 required: true,
-                maxlength: 32
+                length: 10
             },
             dialogStudentName: {
                 required: true,
-                maxlength: 32
+                maxlength: 5
             },
             dialogClassName: {
                 required: true
@@ -155,29 +155,31 @@ function saveOrUpdateStudentInfo() {
         },
         messages: {
             dialogUserAccount: {
-                required: icon + "登录名不能为空",
-                minlength: icon + "登录名最长为32"
+                required: icon + "学号不能为空",
+                length: icon + "学号应为10位的整数"
             },
             dialogUserName: {
                 required: icon + "姓名不能为空",
                 equalTo: icon + "姓名最长为32"
             },
-            dialogUserRole: {
-                required: icon + "角色不能为空"
+            dialogClassName: {
+                required: icon + "班级不能为空"
             }
         }
-    }).form()){
+    }).form()){*/
+    var newStudentInf = {
+        "id" : $("#dialogStudentId").val(),
+        "account" : $("#dialogStuAccount").val(),
+        "name" : $("#dialogStudentName").val(),
+        "class_id" : $("#dialogClassName").val()
+    }
+    if(false==checkStudentInf(newStudentInf, 'checkClassId')) return;
         $.ajax({
             type: "POST",
             url: ($("#dialogStudentId").val()==''?"/studentMn/addNewStudent":"/studentMn/changeTheStudent"),
             dataType: "json",
             contentType: "application/json;charset=UTF-8",
-            data:JSON.stringify({
-                "id" : $("#dialogStudentId").val(),
-                "account" : $("#dialogStuAccount").val(),
-                "name" : $("#dialogStudentName").val(),
-                "class_id" : $("#dialogClassName").val()
-            }),
+            data:JSON.stringify(newStudentInf),
             success:function (result){
                 if(result.result == "succeed"){
                     queryStudentInfo();
@@ -189,7 +191,7 @@ function saveOrUpdateStudentInfo() {
                 }
             }
         });
-    }
+    /*}*/
 }
 //获取所有班级信息
 function indexClassNameSelect() {
@@ -221,40 +223,31 @@ function reSetPassord(id) {
     $("#resetPasswordUserId").val(id)
 }
 
-//保存重置的密码
+//发送重置密码的请求
 function saveNewPassword() {
-    if($("#resetPasswordForm").validate({
-        rules: {
-            newPassword: {
-                required: true,
-                minlength: 6
-            },
-            verifyPassword: {
-                required: true,
-                equalTo: "#newPassword"
-            }
-        },
-        messages: {
-
-            newPassword: {
-                required: icon + "请填写新密码",
-                minlength: icon + "密码最少为6位"
-            },
-            verifyPassword: {
-                required: icon + "请再次输入新密码",
-                equalTo: icon + "两次密码输入不一致"
-            }
-        }
-    }).form()) {
+    if($('#newPassword').val()==''){
+        swal('请输入新密码', '', 'error');
+        return;
+    }else if($('#verifyPassword').val()==''){
+        swal('请再次输入密码', '', 'error');
+        return;
+    }else if($('#newPassword').val() != $('#verifyPassword').val()){
+        swal('两次输入密码不相同', '请确保两次输入的密码一样', 'error');
+        return;
+    }
+    var newStudentInf = {
+        "id" : $("#resetPasswordUserId").val(),
+        "password" : $("#newPassword").val()
+    }
+    if(false==checkStudentInf(newStudentInf, 'checkPassword')){
+        return;
+    }
         $.ajax({
             type: "POST",
             url: "/studentMn/changeTheStudentPW",
             contentType: "application/json;charset=UTF-8",
             dataType: "json",
-            data:JSON.stringify({
-                "id" : $("#resetPasswordUserId").val(),
-                "password" : $("#newPassword").val()
-            }),
+            data:JSON.stringify(newStudentInf),
             success:function (result){
                 if(result.result=='succeed'){
                     //关闭模态窗口
@@ -266,8 +259,11 @@ function saveNewPassword() {
 
             }
         })
-    }
 }
+/*
+    方案一：前端进行多次创建请求，并显示每次请求的结果   -------------------------------------- 缺乏规范性检测
+    （未使用方案）
+ */
 //批量添加学生时，展示预览信息(方案一)
 function showStudentInfList() {
     $('#CLDtbody').html("");
@@ -355,51 +351,25 @@ function saveStudentList(){
         });
     }
 }
+/*
+    方案二：前端一次性将要新增的学生账号发送给后台并保持连接，后台执行多次创建请求，最后将结果返回给当前连接
+    （当前使用方案）
+ */
 //批量添加学生时，展示预览信息(方案二)
 function showStudentInfListB(JsonData) {
-
+    var classId = $('#dialogClassNameB').val();
+    if(classId == ''){
+        swal('未选择班级','请先选择班级');
+        $('.confirm').one("click", function(){ //一次性监听器
+            $("#testId").trigger("click"); //模拟点击关闭按钮
+        });
+        return ;
+    }
     var className = $('#dialogClassNameB').find('option:selected').text();
     $('#CLDuserId').val( className );
-
-
     var JData = JsonData.data;
-    /*
-    for(var i =0 ; i<JData.length;i++){
-        JData[i].className = className;
-    }
-    */
     var dataTable = $('#CLDtbody');
     dataTable.html("");
-    /*
-    if ($.fn.dataTable.isDataTable(dataTable)) {
-        dataTable.DataTable().destroy();
-    }
-    */
-    //var str='';
-    //str="<thead>" + "<tr>" + "<th width='33%'>学号</th>\n" + "<th width='34%'>姓名</th>\n" + "<th width='33%'>班级</th>\n" + "</tr>\n" + "</thead>";
-    //$('#CLDtbody').append(str);
-    /*
-    dataTable.DataTable({
-        "paging": false,
-        "serverSide": false,
-        "autoWidth" : false,
-        "bSort": false,
-        "scrollY": "300px",
-        "scrollCollapse": "true",
-        "data" : JData,
-        "columns" : [{
-            "data" : "account", "title" : "学号"
-        },{
-            "data" :"name", "title" : "姓名"
-        },{
-            "data" : 'className', "title" : "班级"
-        },]
-    });
-    */
-    //var str='';
-    //str="<thead>" + "<tr>" + "<th width=\"33%\">学号</th>\n" + "<th width=\"34%\">姓名</th>\n" + "<th width=\"33%\">班级</th>\n" + "</tr>\n" + "</thead>";
-    //$('#CLDtbody').append(str);
-
     for(var i=0; i<JData.length; i++){
         var Taccount = (JData[i]['account']==undefined?'':JData[i]['account']);
         var Tname = (JData[i]['name']==undefined?'':JData[i]['name']);
@@ -414,15 +384,9 @@ function showStudentInfListB(JsonData) {
 }
 //批量添加学生账号(方案二)
 function saveStudentListB(){
-    var classId = $('#dialogClassNameB').val();
-    if(classId == ''){
-        swal('未选择班级','请先选择班级');
+    if(!checkStudentList(NewStudentList)) //检查学生账号集的数据（学号、姓名）是否符合规范
         return ;
-    }
-    if(!checkStudentList(NewStudentList))
-        return ;
-    NewStudentList.classId=$('#dialogClassNameB').find('option:selected').val();
-    //console.log(NewStudentList);
+    NewStudentList.classId=$('#dialogClassNameB').find('option:selected').val(); //临时将学生账号集的班级所属添加上
         $.ajax({
             type: "POST",
             url: "/studentMn/bulkAddNewStudent",
@@ -443,32 +407,71 @@ function saveStudentListB(){
                 }
             }
         });
-
 }
+//检查批量新增的学生集合的数据格式是否规范：批量添加时的规范性检测
 function checkStudentList(t){
     var XTypeRule = /^[0-9]*$/;
     var i=0; t=t.data;
-    //console.log(t);
     for(;i<t.length;i++){
         //console.log(t[i].account.length+'>'+t[i].account);
         //console.log(t[i].name.length+'>'+t[i].name);
-        if(!XTypeRule.test(t[i].account)  || t[i].account.length!=10) {
+        /*if(!XTypeRule.test(t[i].account)  || t[i].account.length!=10) {
             swal('学号' + t[i].account + '格式不正确', '请确保为10位全数字格式', 'error');
             return false;
         }else if(t[i].name.length>50 || t[i].name.length<1){
             swal('姓名' + t[i].name + '格式不正确', '请确保不大于50个字符长度', 'error');
             return false;
+        }*/
+        if(false==checkStudentInf(t[i], '')) return false;
+    }
+    return true;
+}
+function checkStudentInf(t, acType){
+    /*
+    idsmallint(6) unsigned NOT NULL
+    accountvarchar(64) NOT NULL
+    passwordchar(32) NOT NULL
+    namevarchar(50) NULL
+    class_idsmallint(4) NOT NULL
+     */
+    if('checkPassword'==acType){
+        if(t.password.length>32 || t.password.length<6){
+            swal('新密码('+t.password+')格式不正确', '请确保其为长度不大于32且不小于6的非空字符串', 'error');
+            return false;
+        }
+        return true;
+    }
+    var XTypeRule = /^[0-9]*$/;
+    if(!XTypeRule.test(t.account)  || t.account.length!=10) {
+        swal('学号(' + t.account + ')格式不正确', '请确保为非空的10位数字字符串', 'error');
+        return false;
+    }else if(t.name.length>50 || t.name.length<1){
+        swal('姓名(' + t.name + ')格式不正确', '请确保为长度不大于50的非空字符串', 'error');
+        return false;
+    }else if('checkClassId'==acType){
+        if(t.class_id==''){
+            swal('未指定班级', '请指定所属班级', 'error');
+            return false;
         }
     }
     return true;
 }
-function ConvertExcelToJsonArray(){ //将input file组件所选择的excel文件的内容读取出来，并以Json对象的形式将数据返回
 
+
+
+/*
+    excel文件读取及数据提取调用：
+        excel文件依赖于: xlsx.full.min.js
+ */
+//将input file组件所选择的excel文件的内容读取出来，并以Json对象的形式将数据返回
+function ConvertExcelToJsonArray(){
     $('#CLDtbody').html("");
-    //$('#WTF_001').height(50);
-    var file = document.getElementById('upFileX')//$('#upFileX');
+    var file = document.getElementById('upFileX')
     if($('#upFileX').val()==''){
         swal('未选择文件','请选择要读取的excel文件');
+        $('.confirm').one("click", function(){ //一次性监听器
+            $("#testId").trigger("click"); //模拟点击关闭按钮
+        });
         return ;
     }
     if(!file.files) {
@@ -500,54 +503,53 @@ function ConvertExcelToJsonArray(){ //将input file组件所选择的excel文件
         NewStudentList=ans[0];
         showStudentInfListB(NewStudentList);
     }
-
     return ans;
 }
-
-function ConverArrayToJson(data){  //将数组转换未指定json对象
-    //console.log(data[0]);
+//将数组内容转换为json对象
+/*
+    参数解读：data数组的格式为[[['account', 'name'], ['学号', '姓名']....],[...]... ]  ，其为一个三维数组，代表一个excel文件里的所有内容（每一张表（每一张表里的内容（每一张表里的每一行内容）））
+    返回类型：[{classId:'班级编号', data:[{account:'学号', name:'姓名'},...], Num:'data集合的总数'}, ...]
+*/
+function ConverArrayToJson(data){
     var result ;
     var i=0, j=0;
     var temp;
     var str;
-
     result='[';
     while(data[i]!=undefined){
-        //console.log('flagA');
         str='{"classId":"?", "data":[';
         j=1;
-        while(data[i][j][0]!=undefined && data[i][j][1]!=undefined){
+        while(data[i][j]!=undefined && data[i][j][0]!=undefined && data[i][j][1]!=undefined){
+            //console.log("array data "+j+"->");
+            //console.log(data[i][j]);
             temp='{"account":"'+data[i][j][0]+'", "name":"'+data[i][j][1]+'"}';
             j++;
-            temp+=(data[i][j][0]!=undefined && data[i][j][1]!=undefined)?', ':'';
+            temp+=(data[i][j]!=undefined && data[i][j][0]!=undefined && data[i][j][1]!=undefined)?', ':'';
             str+=temp;
         }
-        if(data[i][j][0]!=undefined || data[i][j][1]!=undefined){
+        if(data[i][j]!=undefined && (data[i][j][0]!=undefined || data[i][j][1]!=undefined)){//表(i+1)的第(j+1)行存在，但数据不完整
             swal("表格数据异常提醒", "表"+(i+1)+"第"+(j+1)+"行存在缺少项，若无错，请忽略！")
         }
         i++;
-        str+='], "Num":"'+(j-1)+'" }'+(data[i]!=undefined?', ':'');
+        str+='], "Num":"'+(j-1)+'" }';
         result+=str;
-        //break; //只读第一张表
+        if(false && data[i]!=undefined){ //false字段的添加，以此来控制只获取第一张表的数据（原因：一个execle文件里，可以存在多张表！）
+            str+=(data[i]!=undefined?', ':'');
+        }else break;  //只读第一张表
     }
     result+=']';
-    //console.log('jsong string:\n'+result);
-    result=JSON.parse(result);
-    //console.log(result[1]);
+    result=JSON.parse(result);//将json格式的字符串转换为json对象
     return result;
 }
 
 
 
 
+
 /*
-文件依赖于: xlsx.full.min.js
-
-xielanning 2019/4/9
-
-*/
-
-//excel文件上传的调用(暂废)
+    excel文件上传的调用(暂废)：
+        原方案拟定将excel文件的读取操作放在后台进行，后因故放弃
+ */
 function upFile() {
     var formData = new FormData();
     formData.append('file', $('#upFileX')[0].files[0]);
