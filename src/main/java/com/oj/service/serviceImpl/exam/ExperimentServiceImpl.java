@@ -1,6 +1,7 @@
 package com.oj.service.serviceImpl.exam;
 
 import com.oj.entity.exam.Experiment;
+import com.oj.entity.other.OJTimerLink;
 import com.oj.mapper.exam.ExperimentMapper;
 import com.oj.service.exam.ExperimentService;
 import net.sf.json.JSONObject;
@@ -179,6 +180,7 @@ public class ExperimentServiceImpl implements ExperimentService {
                 mapper.saveSelectedJroom(selectedJroom);
             }
         }
+        OJTimerLink.resestTimerLink();
     }
 
     /**

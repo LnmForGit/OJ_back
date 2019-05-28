@@ -154,6 +154,14 @@ function loadPreSelectQuestion() {
                         return a;
                     },
                     "targets" :3
+                },{
+                    "render":function (data,type,row) {
+                        var a="";
+
+                        a+="<a onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25'  style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+                        return a;
+                    },
+                    "targets":1,
                 }]
             });
         }
@@ -486,4 +494,10 @@ function saveOrUpdateTest() {
             }
         }
     });
+}
+
+
+function setId(id){
+    $('#id').val(id);
+    problemDetails();
 }
