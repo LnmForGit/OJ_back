@@ -23,7 +23,7 @@ $(document).ready(function () {
         loadPic();
     }
 });
-
+// ok
 function loadSummernote() {
     var summernote = $("#picDesc").summernote({
         height: 200,

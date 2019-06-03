@@ -216,7 +216,7 @@ public class PicController {
         return String.valueOf(request.getSession().getAttribute("user_id"));
     }
 
-    //上传summer组件中的图片
+    //上传summer组件中的图片 ok
     @PostMapping("/uploadSummerPic")
     @ResponseBody
     public Map<String, String> uploadSummerPic(HttpServletRequest request, @RequestParam("file") MultipartFile file)

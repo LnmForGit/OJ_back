@@ -299,7 +299,7 @@ public class PicServicelmpl implements PicService {
         }
     }
 
-    //summernote上传图片
+    //summernote上传图片 ok
     public String uploadSummerPic(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception
     {
         String re = "";
