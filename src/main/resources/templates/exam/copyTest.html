@@ -261,11 +261,102 @@
         </button>
     </div>
 </div>
+<div class="modal inmodal fade" id="myModa25" tabindex="-1" role="dialog"  aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <input type="hidden" id="id" value="">
+        <div class="modal-content">
+            <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="row">
+                    <div class="text-center article-title">
+                        <h2 id="dialogProblemName">
+                        </h2>
+                    </div>
+                </div>
+                <div class="row animated fadeInRight">
+                    <div class="col-sm-3 ">
+                        <div class="ibox">
+                            <div class="ibox-content">
+                                <div class="form-group">
+                                    <h3>难度等级：<label id="dialogProblemRank"></label> </h3>
+                                </div>
+                                <div class="form-group">
+                                    <h3>时间限制：<label id="dialogProblemMaxTime"></label> </h3>
+                                </div>
+                                <div class="form-group">
+                                    <h3>内存限制：<label id="dialogProblemMaxMemory"></label> </h3>
+                                </div>
+                                <div>
+                                    <div>
+                                        <span>AC率:<span id="ac_rate"></span> </span>
+                                        <small class="pull-right"><span id="ac"></span>/<span id="sum"></span></small>
+                                    </div>
+                                    <div class="progress progress-small">
+                                        <div style="width: 0%;" class="progress-bar" id="rate"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 ">
+                        <div class="well">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    题目描述
+                                </div>
+                                <div class="panel-body">
+                                    <p id="description"></p>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    输入描述
+                                </div>
+                                <div class="panel-body">
+                                    <p id="dialogProblemInType"></p>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    输出描述
+                                </div>
+                                <div class="panel-body">
+                                    <p id="dialogProblemOutType"></p>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    输入样例
+                                </div>
+                                <div class="panel-body">
+                                    <p id="dialogProblemInSample"></p>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    输出样例
+                                </div>
+                                <div class="panel-body">
+                                    <p id="dialogProblemOutSample"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="'btn btn-primary" id="closeUserInfoDialog" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script th:inline="javascript">
     var testInfo = [[${info}]];
     console.log(testInfo);
 </script>
 <script type="text/javascript" th:src="@{/js/OJ/exam/copyTest.js}"></script>
+<script type="text/javascript" th:src="@{/js/OJ/testing/problemDetails.js}"></script>
+<script type="text/javascript" th:src="@{/js/OJ/testing/drawnSubjectTree.js}"></script>
 </body>
 
 </html>

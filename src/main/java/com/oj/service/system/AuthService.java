@@ -10,6 +10,7 @@ import java.util.Map;
  * @Description 权限功能相关功能Service接口
  */
 public interface AuthService {
+
     //通过roleID获取当前用户的权限
     public String getAuthListByRole(String roleId);
 

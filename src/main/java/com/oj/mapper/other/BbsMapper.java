@@ -44,8 +44,9 @@ public interface BbsMapper  {
     @Select("select id,user_id,content,sum,zannum,FROM_UNIXTIME(reply_time) as time,admin,name,level from teach_bbs_reply where post_id=#{post_id} and p_id=0")
     public List<Map> getreplyMaplist( String post_id );
 
+
     //返回文章下某一级别下的回复信息
-    @Select("select a.id,a.user_id,a.content,a.sum,a.zannum,FROM_UNIXTIME(a.reply_time) as time,a.admin,a.name,a.level,b.name as replyedname \n" +
+    @Select("select a.id,a.user_id,a.content,a.sum,a.zannum,CAST(FROM_UNIXTIME(a.reply_time) as char) as time,a.admin,a.name,a.level,b.name as replyedname \n" +
             "from teach_bbs_reply a,teach_bbs_reply b\n" +
             "where a.level=#{level}\n" +
             "and a.p_id=b.id order by a.reply_time ")

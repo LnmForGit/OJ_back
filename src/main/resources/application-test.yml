@@ -22,3 +22,4 @@ spring:
 
 logging:
     path: /root/OJ/oj_back_log
+debug: false

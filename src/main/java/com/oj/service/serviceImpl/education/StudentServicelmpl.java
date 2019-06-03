@@ -23,6 +23,7 @@ public class StudentServicelmpl implements StudentService {
     @Autowired(required = false)
     private StudentMapper mapper;
 
+
     @Override
     public List<Map> getTargetStudentList(Map<String, String> param){
         List<Map> result = null;
@@ -38,20 +39,27 @@ public class StudentServicelmpl implements StudentService {
         return mapper.getClassList();
     }
 
+    /*
+    添加一个学生账号：
+    账号密码不能指定，默认为MD5加密的当前学号
+     */
     @Override
     public int addNewStudent(Student student) throws Exception {
-
+        student.setPassword(OJPWD.OJPWDTOMD5(student.getAccount())); //MD5加密
         Map<String, String> map = mapper.getTheStudentByAccount(student.getAccount());
         if(null!=map && map.size()>0)
             throw new Exception("学号"+student.getAccount()+"已存在");
         return mapper.addNewStudent(student);
     }
 
+    /*
+    批量添加学生账号:
+    参数说明：详情请看BulkAddStudentPackage 类的内部属性
+     */
     @Override
     @Transactional(rollbackFor=Exception.class)
     public int addMoreNewStudent(BulkAddStudentPackage basp) throws Exception{
-
-        //多low哦
+        //多low哦，但是为了精确定位到出错的位置，所以不得已而为之....
         for(NewStu ns : basp.getData()){
             try {
                 addNewStudent(new Student(ns.getAccount(), " ", ns.getName(), basp.getClassId()));
@@ -71,35 +79,33 @@ public class StudentServicelmpl implements StudentService {
         mapper.deleteStudentByClassId(classId);
     }
 
+    /*
+    更新指定学生账号的信息（姓名、学号、班级）
+     */
     @Override
     public int updateTheStudentById(String id, Student student) throws Exception{
         //Map 类型下， Mapper返回的数据类型与数据库表内属性类型有关！map.get("id")返回的是int型数据
         Map map = mapper.getTheStudentByAccount(student.getAccount());
-        if(null!=map && map.size()>0 && !((id.equals(""+map.get("id")) )) ) {
+        if(null!=map && map.size()>0 && !((id.equals(""+map.get("id")) )) ) { //更新学生账号信息时，先查询有没有相同学号，但非当前账号的存在
             throw new Exception("该学号已存在");
-            //return -1;
         }
         student.setId(id);
         return mapper.updateTheStudent(student);
     }
 
+    /*
+    更新指定学生账号的密码
+     */
     @Override
     public void updateTheStudentPWById(String id, String pw){
-
-        System.out.println(pw);
-        pw = OJPWD.OJPWDTOMD5(pw);
-        System.out.println(pw);
+        pw = OJPWD.OJPWDTOMD5(pw); //MD5加密
         mapper.updateTheStudentPWById( id, pw);
     }
 
     @Override
     public String getTheClassIdByName(String className){
-        System.out.println("#getTheClassIdByName/1");
         String result=null;
         Map map = mapper.getTheClassIdByName(className);
-        System.out.println("#getTheClassIdByName/2");
-        if(null==map)
-            System.out.println("map is null");
         result=""+map.get("id");
         System.out.println("#:"+result);
         return result;

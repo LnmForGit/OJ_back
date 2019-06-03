@@ -25,6 +25,7 @@ toastr.options = {
     "hideMethod": "fadeOut"
 }
 $(document).ready(function () {
+    console.log(experInfo.experInfo);
     // 加载时间选择器
     loadLayerDate();
     //加载富文本编辑器
@@ -54,6 +55,7 @@ function loadLayerDate() {
     if (experInfo.id != 'add'){
         startTime = experInfo.experInfo.start;
         endTime = experInfo.experInfo.end;
+        console.log(startTime );
         $('#experStartTime').val(startTime);
         $('#experEndTime').val(endTime);
     }else{
@@ -165,7 +167,8 @@ function loadPreSelectQuestion() {
                     "render":function (data,type,row) {
                         var a="";
 
-                        a+="<a  onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25' href='/problemsMn/problemDetails' style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+                        a+="<a  onclick='setId(\""+row.id+"\")' data-toggle='modal' data-target='#myModa25'  style='margin-right:15px; margin-bottom: -1px;'>"+row.name+"</a>"
+
                         return a
                     },
                     "targets":1,
@@ -173,6 +176,11 @@ function loadPreSelectQuestion() {
             });
         }
     })
+}
+
+function setId(id){
+    $('#id').val(id);
+    problemDetails();
 }
 
 function loadSelectedQuestion() {
@@ -213,12 +221,12 @@ function loadSelectedQuestion() {
 
 
 function preSelect(radio, id, name) {
-    var isSelected = false
+    var isSelected = false;
     for (var i=0; i<selectedQueList.length; i++){
         if(id == selectedQueList[i].id){
-            isSelected = true
+            isSelected = true;
             toastr.warning("","该题目已经被选择")
-            break
+            break;
         }
     }
     if (!isSelected) {

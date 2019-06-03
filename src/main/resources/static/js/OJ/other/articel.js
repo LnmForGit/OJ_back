@@ -11,9 +11,11 @@ function reply_btn(id,level) {
 
     $(".reply_btn").click(function(){
         $(".reply_textarea").remove();
-        $(this).parent().append("<div class='reply_textarea'><textarea class='content' placeholder='在这里发表你的观点...' name='' cols='100' rows='5' ></textarea><br/><input type='submit' value='发表' onclick='addreplyson("+id+","+level+")'/> <a class='emotion'>表情</a></div>");
+        $(this).parent().append("<div class='reply_textarea'><textarea wrap='hard' class='content' placeholder='在这里发表你的观点...' name='' cols='100' rows='5' ></textarea><br/><input type='submit' value='发表' onclick='addreplyson("+id+","+level+")'/></div>");
     });
 }
+
+
 function showarticel() {
     console.log(Postinfo)
     $("#title").html(Postinfo.post.title);
@@ -91,6 +93,7 @@ function replyListPage(page){
             '<a class="reply_btn" onclick="reply_btn('+replyList[i].id+','+replyList[i].level+')">回复('+ replyList[i].sum+')</a>|\n' +
             '                                        <i class="fa fa-thumbs-up"></i><a onclick="replyzan('+replyList[i].id+')">赞('+replyList[i].zannum+')</a></div>\n' +
             '                                </div>\n';
+        console.log(replysoninfo(replyList[i].id))
         Test+=replysoninfo(replyList[i].id);
         Test+='                            </div>\n' +
             '                        </li>\n';
@@ -108,7 +111,7 @@ function replysoninfo(level) {
         data:JSON.stringify({
             level:level
         }),success(result){
-
+            console.log(result)
            for(var j in result){
                newtest+=' <div class="media">\n' +
                    '                            <a class="pull-left" href="#">\n' +
@@ -116,7 +119,7 @@ function replysoninfo(level) {
                    '                            </a>\n' +
                    '                            <div class="media-body">\n' +
                    '                                <h4 class="media-heading">'+result[j].name+' 回复 '+ result[j].replyedname+'</h4>\n' +
-                   '<p>'+result[j].content+'</p>\n'+
+                   '<p>'+result[j].content.replace(/\n/g,'<br/>')+'</p>\n'+
                    '<span ><i class="fa fa-clock-o"></i>发表于 :'+formatTime(result[j].time)+'</span>\n'+
                    '<div class="small text-right">\n' +
                    '                                    <div><i class="fa fa-comments-o"> </i>' +
@@ -189,14 +192,20 @@ function postzan() {
             post_id:Postinfo.post.id,
         }),success(result){
             if(result ==0){
-           swal("点赞成功！");
-
+                swal("点赞成功！");
+                zan=$('#zan').html();
+                $('#zan').html("");
+                $('#zan').html( parseInt(zan)+1);
+                $("#iszan").html("已赞");
             }else{
                 swal("取消点赞！");
+                zan=$('#zan').html();
+                $('#zan').html("");
+                $('#zan').html( parseInt(zan)-1);
+
+                $("#iszan").html("点赞");
             }
-            setTimeout( function(){
-                history.go(0);
-            }, 1* 1000 );
+
 
         }
     })
@@ -216,9 +225,6 @@ function replyzan(id){
             }else{
                 swal("取消点赞！");
             }
-            setTimeout( function(){
-                history.go(0);
-            }, 500 );
 
         }
     })

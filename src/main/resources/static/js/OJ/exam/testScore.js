@@ -159,7 +159,6 @@ function loadQuestionList(t){
         dataTable.DataTable().destroy();
     }
     dataTable.DataTable({
-        "searching":false,
         "paging": false,
         "serverSide": false,
         "autoWidth" : false,

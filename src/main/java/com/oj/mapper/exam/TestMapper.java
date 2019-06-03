@@ -131,7 +131,9 @@ public interface TestMapper {
    //获取当前正在进行的（实验/考试）
     @Select("select id testId, from_unixtime(end) testEDate from teach_test where unix_timestamp(now()) between start and end ")
     public List<Map> getCurrentTestList();
-
+    //删除编号的IP数据
+    @Delete("delete from teach_test_submit where id=#{Id}")
+    public void deleteTargetIpData(String Id);
     //************************************************* 相似度
     //获取指定考试的提交数据（代码、学生信息）
     @Select("select  id,problem_id,user_id,submit_code from teach_submit_code where test_id= #{testId} and accuracy=1 order by problem_id, id")
